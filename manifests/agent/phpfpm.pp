@@ -20,7 +20,7 @@ class zabbix::agent::phpfpm (
       $cgi-fcgi = 'fcgi'
       if $php_fpm_sock == undef {
         if $::facts['os']['release']['major'] == '8' {
-          $php_fpm_sock = /run/php-fpm/www.sock
+          $php_fpm_sock = '/run/php-fpm/www.sock'
         }
         else {
           $php_fpm_sock = '127.0.0.1:9000'
@@ -31,10 +31,10 @@ class zabbix::agent::phpfpm (
       $cgi-fcgi = 'libcgi-bin'
       if $php_fpm_sock == undef {
         if $::facts['os']['release']['major'] == '10' {
-          $php_fpm_sock = /run/php/php7.3-fpm.sock
+          $php_fpm_sock = '/run/php/php7.3-fpm.sock'
         }
         else {
-          $php_fpm_sock = /run/php/php7.0-fpm.sock
+          $php_fpm_sock = '/run/php/php7.0-fpm.sock'
         }
       }
     }
