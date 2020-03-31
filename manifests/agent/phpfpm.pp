@@ -18,7 +18,7 @@ class zabbix::agent::phpfpm (
     owner   => root,
     group   => root,
     mode    => '0644',
-    source => 'puppet:///modules/zabbix/agent/php-fpm/php-fpm.conf',
+    source  => 'puppet:///modules/zabbix/agent/php-fpm/php-fpm.conf',
     require => [
       Package['zabbix-agent'],
       File["${dir_zabbix_agent_libdir}/php-fpm.sh"],
@@ -28,10 +28,10 @@ class zabbix::agent::phpfpm (
   }
 
   file { "${dir_zabbix_agent_libdir}/php-fpm.sh" :
-    ensure => file,
-    owner  => root,
-    group  => root,
-    mode   => '0755',
+    ensure  => file,
+    owner   => root,
+    group   => root,
+    mode    => '0755',
     content => template('zabbix/agent/php-fpm.sh.erb'),
   }
 
