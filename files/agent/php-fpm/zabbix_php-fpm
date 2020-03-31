@@ -1,2 +1,0 @@
-# Zabbix sensor for php-fpm
-zabbix ALL=(root) NOPASSWD: /usr/libexec/zabbix-agent/php-fpm.sh
