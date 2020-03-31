@@ -35,7 +35,7 @@ class zabbix::agent::phpfpm (
     content => template('zabbix/agent/php-fpm.sh.erb'),
   }
 
-  file { "/etc/sudoers.d/zabbix_php-fpm" :
+  file { '/etc/sudoers.d/zabbix_php-fpm' :
     ensure => file,
     owner  => root,
     group  => root,
