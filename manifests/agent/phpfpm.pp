@@ -6,7 +6,7 @@
 class zabbix::agent::phpfpm (
   $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
-  $php_fpm_sock	           = 'undef'
+  $php_fpm_sock            = 'undef'
 ) inherits zabbix::agent {
 
   if $php_fpm_sock == undef {
