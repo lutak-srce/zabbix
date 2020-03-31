@@ -11,13 +11,13 @@ class zabbix::agent::phpfpm (
 
   case $::osfamily {
     default: {
-      $cgi-fcgi = 'fcgi'
+      $cgi_fcgi = 'fcgi'
       if $php_fpm_sock == undef {
         $php_fpm_sock = '127.0.0.1:9000'
       }
     }
     /(RedHat|redhat|amazon)/: {
-      $cgi-fcgi = 'fcgi'
+      $cgi_fcgi = 'fcgi'
       if $php_fpm_sock == undef {
         if $::facts['os']['release']['major'] == '8' {
           $php_fpm_sock = '/run/php-fpm/www.sock'
@@ -28,7 +28,7 @@ class zabbix::agent::phpfpm (
       }
     }
     /(Debian|debian|Ubuntu|ubuntu)/: {
-      $cgi-fcgi = 'libcgi-bin'
+      $cgi_fcgi = 'libcgi-bin'
       if $php_fpm_sock == undef {
         if $::facts['os']['release']['major'] == '10' {
           $php_fpm_sock = '/run/php/php7.3-fpm.sock'
@@ -42,7 +42,7 @@ class zabbix::agent::phpfpm (
 
   package { 'cgi-fcgi' :
     ensure =>  present,
-    name   => $cgi-fcgi,
+    name   => $cgi_fcgi,
   }
 
   ::sudoers::allowed_command { 'zabbix_php-fpm':
