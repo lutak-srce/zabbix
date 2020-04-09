@@ -35,11 +35,11 @@ class zabbix::agent::lld (
   }
 
   file { "${dir_zabbix_agent_libdir}/lld-macro" :
-    ensure  => file,
-    owner   => root,
-    group   => root,
-    mode    => '0755',
-    source  => 'puppet:///modules/zabbix/agent/lld/lld-macro',
-    notify  => Service['zabbix-agent'],
+    ensure => file,
+    owner  => root,
+    group  => root,
+    mode   => '0755',
+    source => 'puppet:///modules/zabbix/agent/lld/lld-macro',
+    notify => Service['zabbix-agent'],
   }
 }
