@@ -19,11 +19,11 @@ class zabbix::agent::tcp (
   }
 
   file { "${dir_zabbix_agent_modules}/tcp_count.so" :
-    ensure  => file,
-    owner   => root,
-    group   => root,
-    mode    => '0644',
-    source  => $module,
-    notify  => Service['zabbix-agent'],
+    ensure => file,
+    owner  => root,
+    group  => root,
+    mode   => '0644',
+    source => $module,
+    notify => Service['zabbix-agent'],
   }
 }
