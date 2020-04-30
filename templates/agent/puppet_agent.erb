@@ -119,10 +119,10 @@ for run_report_file in possible_run_report:
                     for line in report_data:
                         m = re.match("^%s: (.+)$" % i, line)
                         if m:
-                            dict_state["%s" % i ] = m.group(1)
+                            dict_state[i] = m.group(1)
                             break
             except Exception as e:
-                dict_state["%s" % i ] = "unknown"
+                dict_state[i] = "unknown"
                 pass
 
 if len(sys.argv) == 2:
