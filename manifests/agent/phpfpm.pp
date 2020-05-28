@@ -16,7 +16,7 @@ class zabbix::agent::phpfpm (
         $_php_fpm_sock = '127.0.0.1:9000'
       }
       else {
-	$_php_fpm_sock = $php_fpm_sock
+        $_php_fpm_sock = $php_fpm_sock
       }
     }
     /(RedHat|redhat|amazon)/: {
