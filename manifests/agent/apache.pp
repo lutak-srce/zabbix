@@ -28,10 +28,10 @@ class zabbix::agent::apache (
   }
 
   file { "${dir_zabbix_agent_libdir}/apache2.pl" :
-    ensure  => file,
-    owner   => root,
-    group   => root,
-    mode    => '0755',
+    ensure => file,
+    owner  => root,
+    group  => root,
+    mode   => '0755',
     source => 'puppet:///modules/zabbix/agent/apache2.pl',
   }
 
