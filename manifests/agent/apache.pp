@@ -12,7 +12,7 @@ class zabbix::agent::apache (
   package { 'curl':
     ensure => present,
   }
-	
+
   ::sudoers::allowed_command { 'zabbix_apache2':
     command          => "${dir_zabbix_agent_libdir}/apache2.pl",
     user             => 'zabbix',
@@ -39,7 +39,7 @@ class zabbix::agent::apache (
     group   => root,
     mode    => '0755',
     source  => 'puppet:///modules/zabbix/agent/apache2.pl',
-		require => [
+    require => [
       Package['curl'],
     ],
     notify  => Service['zabbix-agent'],
