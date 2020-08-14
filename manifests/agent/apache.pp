@@ -8,7 +8,6 @@ class zabbix::agent::apache (
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
 ) inherits zabbix::agent {
 
-
   package { 'curl':
     ensure => present,
   }
