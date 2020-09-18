@@ -3,7 +3,7 @@ export SCRIPT_NAME=/status SCRIPT_FILENAME=/status REQUEST_METHOD=GET
 case $1 in
 
   active_processes)
-    /bin/cgi-fcgi -bind -connect <%= @_php_fpm_sock %> | grep "active processes" | grep -v max | cut -d":" -f2 | xargs
+    /bin/cgi-fcgi -bind -connect <%= @_php_fpm_sock %> | grep "active processes" | grep -v max | cut -d":" -f2 | tr -d " "
     ;;
 
   ping)
@@ -11,11 +11,11 @@ case $1 in
     ;;
 
   accepted_conn)
-    /bin/cgi-fcgi -bind -connect <%= @_php_fpm_sock %> | grep "accepted conn" | cut -d":" -f2 | xargs
+    /bin/cgi-fcgi -bind -connect <%= @_php_fpm_sock %> | grep "accepted conn" | cut -d":" -f2 | tr -d " "
     ;;
 
   idle_processes)
-    /bin/cgi-fcgi -bind -connect <%= @_php_fpm_sock %> | grep "idle processes" | cut -d":" -f2 | xargs
+    /bin/cgi-fcgi -bind -connect <%= @_php_fpm_sock %> | grep "idle processes" | cut -d":" -f2 | tr -d " "
     ;;
 
   latency)
@@ -23,11 +23,11 @@ case $1 in
     ;;
 
   listen_queue_len)
-    /bin/cgi-fcgi -bind -connect <%= @_php_fpm_sock %> | grep "listen queue len" | cut -d":" -f2 | xargs
+    /bin/cgi-fcgi -bind -connect <%= @_php_fpm_sock %> | grep "listen queue len" | cut -d":" -f2 | tr -d " "
     ;;
 
   max_children_reached)
-    /bin/cgi-fcgi -bind -connect <%= @_php_fpm_sock %> | grep "max children reached" | cut -d":" -f2 | xargs
+    /bin/cgi-fcgi -bind -connect <%= @_php_fpm_sock %> | grep "max children reached" | cut -d":" -f2 | tr -d " "
     ;;
 
   *)
