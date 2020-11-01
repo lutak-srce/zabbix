@@ -6,17 +6,11 @@
 class zabbix::agent::apache (
   $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
+  $status_address = 'localhost'
 ) inherits zabbix::agent {
 
   package { 'curl':
     ensure => present,
-  }
-
-  ::sudoers::allowed_command { 'zabbix_apache2':
-    command          => "${dir_zabbix_agent_libdir}/apache2.pl",
-    user             => 'zabbix',
-    require_password => false,
-    comment          => 'Zabbix sensor for apache2 server-status.',
   }
 
   file { "${dir_zabbix_agentd_confd}/apache2.conf" :
@@ -37,7 +31,7 @@ class zabbix::agent::apache (
     owner   => root,
     group   => root,
     mode    => '0755',
-    source  => 'puppet:///modules/zabbix/agent/apache2.pl',
+    content => template('zabbix/agent/apache2.pl.erb'),
     require => [
       Package['curl'],
     ],
