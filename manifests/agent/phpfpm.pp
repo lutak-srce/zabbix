@@ -54,12 +54,7 @@ class zabbix::agent::phpfpm (
     name   => $cgi_fcgi,
   }
 
-  ::sudoers::allowed_command { 'zabbix_php-fpm':
-    command          => "${dir_zabbix_agent_libdir}/php-fpm.sh",
-    user             => 'zabbix',
-    require_password => false,
-    comment          => 'Zabbix sensor for monitoring php-fpm.',
-  }
+  User <| title == zabbix |> { groups +> "apache" }
 
   file { "${dir_zabbix_agentd_confd}/php-fpm.conf" :
     ensure  => file,

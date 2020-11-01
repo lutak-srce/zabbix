@@ -89,9 +89,11 @@ class zabbix::agent (
     require => Package['zabbix-agent'],
   }
 
-  user { 'zabbix':
+  @user { 'zabbix':
     require => Package['zabbix-agent'],
   }
+
+  User <| title == zabbix |>
 
   # autoload configs from zabbix::agent::configs from hiera
   if ( $autoload_configs == true ) {
