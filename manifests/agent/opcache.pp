@@ -23,11 +23,11 @@ class zabbix::agent::opcache (
   }
 
   file { "${dir_zabbix_agent_libdir}/zabbix-opcache.pl" :
-    ensure => file,
-    owner  => root,
-    group  => root,
-    mode   => '0755',
-    source => 'puppet:///modules/zabbix/agent/zabbix-opcache.pl',
+    ensure  => file,
+    owner   => root,
+    group   => root,
+    mode    => '0755',
+    source  => 'puppet:///modules/zabbix/agent/zabbix-opcache.pl',
     require =>  [
       Package['zabbix-agent'],
     ],

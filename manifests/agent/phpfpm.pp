@@ -54,7 +54,7 @@ class zabbix::agent::phpfpm (
     name   => $cgi_fcgi,
   }
 
-  User <| title == zabbix |> { groups +> "apache" }
+  User <| title == zabbix |> { groups +> 'apache' }
 
   file { "${dir_zabbix_agentd_confd}/php-fpm.conf" :
     ensure  => file,
