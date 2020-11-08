@@ -7,6 +7,7 @@ class zabbix::agent::opcache (
   $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
   $opcache_stats_loc           = 'https://localhost/opcache_stats.php',
+  $opcache_stats_dir           = '/var/www/'
 ) inherits zabbix::agent {
 
   file { "${dir_zabbix_agentd_confd}/opcache.conf" :
@@ -32,5 +33,11 @@ class zabbix::agent::opcache (
       Package['zabbix-agent'],
     ],
 
+  file { "${opcache_stats_dir}/opcache_stats.php" :
+    ensure  => file,
+    owner   => root,
+    group   => root,
+    mode    => '0755',
+    source  => 'puppet:///modules/zabbix/agent/opcache_stats.php',
   }
 }
