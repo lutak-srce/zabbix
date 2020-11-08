@@ -35,10 +35,10 @@ class zabbix::agent::opcache (
   }
 
   file { "${opcache_stats_dir}/opcache_stats.php" :
-    ensure  => file,
-    owner   => root,
-    group   => root,
-    mode    => '0755',
-    source  => 'puppet:///modules/zabbix/agent/opcache/opcache_stats.php',
+    ensure => file,
+    owner  => root,
+    group  => root,
+    mode   => '0755',
+    source => 'puppet:///modules/zabbix/agent/opcache/opcache_stats.php',
   }
 }
