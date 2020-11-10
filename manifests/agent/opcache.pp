@@ -6,9 +6,10 @@
 class zabbix::agent::opcache (
   $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
-  $opcache_stats_loc           = 'https://localhost/opcache_stats.php',
-  $opcache_stats_dir           = '/var/www',
+  $host                    = 'localhost',
 ) inherits zabbix::agent {
+
+  include apache
 
   file { "${dir_zabbix_agentd_confd}/opcache.conf" :
     ensure  => file,
@@ -34,11 +35,25 @@ class zabbix::agent::opcache (
     ],
   }
 
-  file { "${opcache_stats_dir}/opcache_stats.php" :
-    ensure => file,
-    owner  => root,
-    group  => root,
-    mode   => '0755',
-    source => 'puppet:///modules/zabbix/agent/opcache/opcache_stats.php',
+  file { "${apache::confd_dir}/opcache_stats.conf" :
+    ensure  => file,
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    content => template('zabbix/agent/opcache_stats.conf.erb'),
+    require => [
+      Package['zabbix-agent'],
+      File["${dir_zabbix_agent_libdir}/zabbix-opcache.pl"],
+    ],
+    notify  => Service['zabbix-agent'],
+  }
+
+  file { "${dir_zabbix_agent_libdir}/opcache_stats.php" :
+    ensure  => file,
+    owner   => root,
+    group   => root,
+    mode    => '0755',
+    source  => 'puppet:///modules/zabbix/agent/opcache/opcache_stats.php',
+    notify  => Class['apache::service'],
   }
 }

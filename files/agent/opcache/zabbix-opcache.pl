@@ -3,13 +3,12 @@
 use LWP::UserAgent;
 use strict;
 
-my $path = shift or die "Usage: $0 path mem/hit";
-my $item = shift or die "Usage: $0 path mem/hit";
+my $host = shift or die "Usage: $0 host mem/hit";
+my $item = shift or die "Usage: $0 host mem/hit";
 my $timeout = 10;
-my $hostname = 'localhost';
 $ENV{PERL_LWP_SSL_VERIFY_HOSTNAME} = 0;
 my $ua = LWP::UserAgent->new(timeout=>$timeout);
-my $res = $ua->get("$path");
+my $res = $ua->get("https://$host/opcache-stats");
 if (!$res->is_success) {
     die("Retrieving data failed: ".$res->status_line);
 }
