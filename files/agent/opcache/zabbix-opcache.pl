@@ -10,7 +10,7 @@ $ENV{PERL_LWP_SSL_VERIFY_HOSTNAME} = 0;
 my $ua = LWP::UserAgent->new(timeout=>$timeout);
 my $res = $ua->get("https://$host/opcache-stats");
 if (!$res->is_success) {
-    die("Retrieving data failed: ".$res->status_line);
+  die("Retrieving data failed: ".$res->status_line);
 }
 
 my @values = split('\n', $res->content);
