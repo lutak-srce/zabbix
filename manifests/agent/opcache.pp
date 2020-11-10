@@ -49,11 +49,11 @@ class zabbix::agent::opcache (
   }
 
   file { "${dir_zabbix_agent_libdir}/opcache_stats.php" :
-    ensure  => file,
-    owner   => root,
-    group   => root,
-    mode    => '0755',
-    source  => 'puppet:///modules/zabbix/agent/opcache/opcache_stats.php',
-    notify  => Class['apache::service'],
+    ensure => file,
+    owner  => root,
+    group  => root,
+    mode   => '0755',
+    source => 'puppet:///modules/zabbix/agent/opcache/opcache_stats.php',
+    notify => Class['apache::service'],
   }
 }
