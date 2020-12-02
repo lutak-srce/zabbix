@@ -1,0 +1,3 @@
+# opcache sensor for zabbix
+UserParameter=opcache.opcache_used_memory,<%= @dir_zabbix_agent_libdir %>/zabbix-opcache.pl <%= @host %> mem
+UserParameter=opcache.opcache_hit_rate,<%= @dir_zabbix_agent_libdir %>/zabbix-opcache.pl <%= @host %> hit
