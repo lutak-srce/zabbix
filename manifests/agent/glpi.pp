@@ -33,7 +33,7 @@ class zabbix::agent::glpi (
     owner  => root,
     group  => root,
     mode   => '0755',
-    source => "${script_source}",
+    source => ${script_source},
   }
 
   package { 'python-pip':
