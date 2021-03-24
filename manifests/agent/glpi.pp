@@ -6,7 +6,7 @@
 class zabbix::agent::glpi (
   $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
-  $script_source           = 'glpi_to_zabbix_api.py',
+  $script_source           = 'puppet:///modules/zabbix/agent/glpi/glpi_to_zabbix_api.py',
   $glpi_url                = 'https://localhost/glpi',
   $glpi_username           = 'api',
   $glpi_password           = 'api',
@@ -23,17 +23,17 @@ class zabbix::agent::glpi (
     content => template('zabbix/agent/glpi-to-zabbix.erb'),
     require => [
       Package['zabbix-agent'],
-      File["${dir_zabbix_agent_libdir}/${script_source}"],
+      File["${dir_zabbix_agent_libdir}/glpi_to_zabbix_api.py"],
       Package['pyzabbix'],
     ],
   }
 
-  file { "${dir_zabbix_agent_libdir}/${script_source}" :
+  file { "${dir_zabbix_agent_libdir}/glpi_to_zabbix_api.py" :
     ensure => file,
     owner  => root,
     group  => root,
     mode   => '0755',
-    source => 'puppet:///modules/zabbix/agent/glpi/${script_source}',
+    source => "${script_source}",
   }
 
   package { 'python-pip':
