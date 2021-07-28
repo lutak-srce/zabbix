@@ -47,15 +47,16 @@ my $qwaiting = 0;
 my $cpu_run = 0;
 my $cpu_qw = 0;
 
-foreach(@lines){
-  my @fields = split(/ +/); 
-  if($fields[5] =~ /^R?r$/gi){
+foreach my $line (@lines){
+  $line =~ s/^\s+|\s+$//g;
+  my @fields = split(/ +/, $line); 
+  if($fields[4] =~ /^R?r$/gi){
     $running++;
-    $cpu_run += $fields[9];
+    $cpu_run += $fields[8];
   }
-  if($fields[5] =~ /qw/gi){
+  if($fields[4] =~ /qw/gi){
     $qwaiting++;
-    $cpu_qw += $fields[8];
+    $cpu_qw += $fields[7];
   }
 }
 
