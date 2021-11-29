@@ -22,4 +22,13 @@ class zabbix::agent::mysql::slave (
     password_hash => mysql::password('*DCF0B12208AA8B60055A57AF91EAE4702832791B'),
   }
 
+  mysql_grant { 'zabbix@localhost/*.*':
+    ensure     => present,
+    privileges => ['REPLICATION CLIENT'],
+    table => '*.*',
+    user => 'zabbix@localhost',
+    options => ['NONE'],
+
+  }
+
 }
