@@ -17,4 +17,9 @@ class zabbix::agent::mysql::slave (
     notify  => Service['zabbix-agent'],
   }
 
+  mysql_user { '[zabbix-agentd@localhost]':
+    ensure        => present,
+    password_hash => mysql::password('*DCF0B12208AA8B60055A57AF91EAE4702832791B'),
+  }
+
 }
