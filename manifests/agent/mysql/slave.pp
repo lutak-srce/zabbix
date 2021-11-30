@@ -25,10 +25,9 @@ class zabbix::agent::mysql::slave (
   mysql_grant { 'zabbix@localhost/*.*':
     ensure     => present,
     privileges => ['REPLICATION CLIENT'],
-    table => '*.*',
-    user => 'zabbix@localhost',
-    options => ['NONE'],
-
+    table      => '*.*',
+    user       => 'zabbix@localhost',
+    options    => ['NONE'],
   }
 
 }
