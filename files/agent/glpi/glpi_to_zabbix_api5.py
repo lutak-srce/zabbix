@@ -512,8 +512,8 @@ class Zabbix:
         :param glpi_users_with_groups: dict which contains users' names and the
         groups they are assigned to.
         """
-        try:
-            for key, value in glpi_users_with_groups.items():
+        for key, value in glpi_users_with_groups.items():
+            try:
                 if not any(d.get('alias', None) == key for d in self.users):
                     name = [
                         d.get('firstname') for d in glpi_users
@@ -619,18 +619,27 @@ class Zabbix:
                         ][0]
                         if usrtype == '3':
                             self.server.user.update(
-                                userid=usrid, usrgrps=usrgrpids
+                                userid=usrid, usrgrps=usrgrpids,
+                                passwd=generate_random_alphanum_string(30)
                             )
                         else:
                             if len(usrgrplist) > 1:
                                 self.server.user.update(
-                                    userid=usrid, usrgrps=usrgrpids, type=2
+                                    userid=usrid, usrgrps=usrgrpids, type=2,
+                                    passwd=generate_random_alphanum_string(30)
                                 )
                             else:
                                 self.server.user.update(
-                                    userid=usrid, usrgrps=usrgrpids, type=1
+                                    userid=usrid, usrgrps=usrgrpids, type=1,
+                                    passwd=generate_random_alphanum_string(30)
                                 )
 
+            except Exception, e:
+                raise ZabbixException(
+                    'Error handling user %s: %s' % (key, str(e))
+                )
+
+        try:
             # Default Zabbix users
             defaultusersalias = ['guest', 'apiuser', 'nagios', 'Admin']
             default_users = [
@@ -648,7 +657,7 @@ class Zabbix:
                     self.server.user.delete(item['userid'])
 
         except Exception, e:
-            raise ZabbixException('Error handing users: ' + str(e))
+            raise ZabbixException('Error handling users: ' + str(e))
 
     def delete_usergroups(self):
         """
