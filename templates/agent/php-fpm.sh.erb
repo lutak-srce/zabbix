@@ -1,37 +1,47 @@
 #!/bin/bash
-export SCRIPT_NAME=/status SCRIPT_FILENAME=/status REQUEST_METHOD=GET
+export SCRIPT_NAME=/status SCRIPT_FILENAME=/status REQUEST_METHOD=GET SOCK=<%= @_php_fpm_sock %>
+
+function socket-connection {
+  timeout 5s cgi-fcgi -bind -connect $SOCK
+}
+
+function cutr {
+  cut -d":" -f2 | tr -d " "
+}
+
 case $1 in
 
   active_processes)
-    /bin/cgi-fcgi -bind -connect <%= @_php_fpm_sock %> | grep "active processes" | grep -v max | cut -d":" -f2 | tr -d " "
+    socket-connection | grep "active processes" | grep -v max | cutr
     ;;
 
   ping)
-    SCRIPT_NAME=/ping SCRIPT_FILENAME=/ping REQUEST_METHOD=GET /bin/cgi-fcgi -bind -connect <%= @_php_fpm_sock %> | grep pong
+    SCRIPT_NAME=/ping SCRIPT_FILENAME=/ping REQUEST_METHOD=GET socket-connection | grep pong
     ;;
 
   accepted_conn)
-    /bin/cgi-fcgi -bind -connect <%= @_php_fpm_sock %> | grep "accepted conn" | cut -d":" -f2 | tr -d " "
+    socket-connection | grep "accepted conn" | cutr
     ;;
 
   idle_processes)
-    /bin/cgi-fcgi -bind -connect <%= @_php_fpm_sock %> | grep "idle processes" | cut -d":" -f2 | tr -d " "
+    socket-connection | grep "idle processes" | cutr
     ;;
 
   latency)
-    ts=$(date +%s%N); /bin/cgi-fcgi -bind -connect <%= @_php_fpm_sock %> > /dev/null; echo $((($(date +%s%N) - $ts)/1000000))
+    ts=$(date +%s%N); socket-connection > /dev/null; echo $((($(date +%s%N) - $ts)/1000000))
     ;;
 
   listen_queue_len)
-    /bin/cgi-fcgi -bind -connect <%= @_php_fpm_sock %> | grep "listen queue len" | cut -d":" -f2 | tr -d " "
+    socket-connection | grep "listen queue len" | cutr
     ;;
 
   max_children_reached)
-    /bin/cgi-fcgi -bind -connect <%= @_php_fpm_sock %> | grep "max children reached" | cut -d":" -f2 | tr -d " "
+    socket-connection | grep "max children reached" | cutr
     ;;
 
   *)
     echo "Invalid argument"
     exit 1
     ;;
+
 esac
