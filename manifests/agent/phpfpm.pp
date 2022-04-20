@@ -32,12 +32,16 @@ class zabbix::agent::phpfpm (
       else {
         $_php_fpm_sock = $php_fpm_sock
       }
+      User <| title == zabbix |> { groups +> 'apache' }
     }
     /(Debian|debian|Ubuntu|ubuntu)/: {
       $cgi_fcgi = 'libfcgi-bin'
       if $php_fpm_sock == undef {
         if $::facts['os']['release']['major'] == '10' {
           $_php_fpm_sock = '/run/php/php7.3-fpm.sock'
+        }
+        if $::facts['os']['release']['major'] == '11' {
+          $_php_fpm_sock = '/run/php/php7.4-fpm.sock'
         }
         else {
           $_php_fpm_sock = '/run/php/php7.0-fpm.sock'
@@ -46,6 +50,7 @@ class zabbix::agent::phpfpm (
       else {
         $_php_fpm_sock = $php_fpm_sock
       }
+      User <| title == zabbix |> { groups +> 'www-data' }
     }
   }
 
@@ -53,8 +58,6 @@ class zabbix::agent::phpfpm (
     ensure => present,
     name   => $cgi_fcgi,
   }
-
-  User <| title == zabbix |> { groups +> 'apache' }
 
   file { "${dir_zabbix_agentd_confd}/php-fpm.conf" :
     ensure  => file,
