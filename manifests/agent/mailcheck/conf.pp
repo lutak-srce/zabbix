@@ -6,7 +6,8 @@ define zabbix::agent::mailcheck::conf (
   $options                 = '',
   $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
-  $mail_host               = 'imap.srce.hr',
+  $imap_host               = 'imap.srce.hr',
+  $smtp_host               = 'smtp.srce.hr',
   $mail_username           = '',
   $mail_password           = '',
 ) {

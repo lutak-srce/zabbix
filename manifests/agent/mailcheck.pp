@@ -13,6 +13,15 @@ class zabbix::agent::mailcheck (
     require => Package['zabbix-agent'],
   }
 
+  file { "/etc/msmtprc":
+    ensure => file,
+    owner  => root,
+    group  => root,
+    mode   => '0644',
+    source => 'puppet:///modules/zabbix/agent/mailcheck/msmtprc',
+    require => Package['msmtp'],
+  }
+
   file { "${dir_zabbix_agent_libdir}/mail_check.php":
     ensure => file,
     owner  => root,
