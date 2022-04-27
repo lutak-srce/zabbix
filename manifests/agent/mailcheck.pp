@@ -8,6 +8,11 @@ class zabbix::agent::mailcheck (
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
 ) inherits zabbix::agent {
 
+  package { 'msmtp':
+    ensure  => present,
+    require => Package['zabbix-agent'],
+  }
+
   file { "${dir_zabbix_agent_libdir}/mail_check.php":
     ensure => file,
     owner  => root,
