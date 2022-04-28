@@ -7,7 +7,6 @@ define zabbix::agent::mailcheck::conf (
   $imap_host,
   $mail_password,
   $mail_username,
-  $options,
   $smtp_host,
 ) {
 
