@@ -1,4 +1,3 @@
 # Checks mail sending and receiving
-# Make sure you have correctly setup the SMTP parameters in php.ini!
 UserParameter=mail.send[<%= @smtp_host %>],/usr/bin/php <%= @dir_zabbix_agent_libdir %>/mail_send.php <%= @imap_host %> <%= @smtp_host %> <%= @mail_username %> <%= @mail_password %>
 UserParameter=mail.receive[<%= @smtp_host %>],/usr/bin/php <%= @dir_zabbix_agent_libdir %>/mail_check.php <%= @imap_host %> <%= @mail_username %> <%= @mail_password %>
