@@ -27,18 +27,15 @@ import re
 
 possible_state_files = [
     "/opt/puppetlabs/puppet/public/last_run_summary.yaml",
-    "/var/lib/puppet/state/last_run_summary.yaml"
+    "/opt/puppetlabs/puppet/cache/state/last_run_summary.yaml"
 ]
 
 possible_run_report = [
-    "/opt/puppetlabs/puppet/cache/state/last_run_report.yaml",
-    "/var/lib/puppet/state/last_run_report.yaml"
+    "/opt/puppetlabs/puppet/cache/state/last_run_report.yaml"
 ]
 possible_disable_check_files = [
-    "/opt/puppetlabs/puppet/cache/state/agent_disabled.lock",
-    "/var/lib/puppet/state/agent_disabled.lock"
+    "/opt/puppetlabs/puppet/cache/state/agent_disabled.lock"
 ]
-
 
 # Workaround for antique puppet releases
 def identifiy_trim_spaces(file_name):
