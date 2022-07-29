@@ -22,12 +22,26 @@ class zabbix::agent::mysql::slave (
     password_hash => mysql::password('*DCF0B12208AA8B60055A57AF91EAE4702832791B'),
   }
 
-  mysql_grant { 'zabbix@localhost/*.*':
-    ensure     => present,
-    privileges => ['REPLICATION CLIENT'],
-    table      => '*.*',
-    user       => 'zabbix@localhost',
-    options    => ['NONE'],
+
+  # packages on CentOS 8
+  if $facts['os']['family'] == 'Debian' and $facts['os']['release']['major'] > '10' {
+    mysql_grant { 'zabbix@localhost/*.*':
+      ensure     => present,
+      privileges => ['BINLOG MONITOR', 'SLAVE MONITOR'],
+      table      => '*.*',
+      user       => 'zabbix@localhost',
+      options    => ['NONE'],
+    }
+  }
+
+  else {
+    mysql_grant { 'zabbix@localhost/*.*':
+      ensure     => present,
+      privileges => ['REPLICATION CLIENT'],
+      table      => '*.*',
+      user       => 'zabbix@localhost',
+      options    => ['NONE'],
+    }
   }
 
 }
