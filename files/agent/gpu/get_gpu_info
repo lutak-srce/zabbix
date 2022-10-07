@@ -51,6 +51,26 @@ for item in SMI_OUTPUT:
         prev2_item = prev_item
         prev_item = item
 
+# nvlink
+gpu_receive = []
+gpu_transmit = []
+for igpu in range(NUM_GPUS):
+    receive = 0
+    transmit = 0
+    query = "nvidia-smi nvlink -gt d -i %i" % igpu
+    NVLINK_OUTPUT = check_output(query.split(" ")).decode('utf8').split("\n")
+    for item in NVLINK_OUTPUT:
+        if 'Data Rx' in item:
+            beg = item.index('Data Rx') + 9
+            end = item.index('KiB') - 1
+            receive += int(item[beg:end])
+        if 'Data Tx' in item:
+            beg = item.index('Data Tx') + 9
+            end = item.index('KiB') - 1
+            transmit += int(item[beg:end])
+    gpu_receive.append(str(receive))
+    gpu_transmit.append(str(transmit))
+
 # build string, formatted:
 # hostname variable value\n
 s = ''
@@ -61,6 +81,8 @@ for i in range(NUM_GPUS):
         s += '- ' + 'gpu.memfree[' + str(i) + '] ' + str(gpu_memfree[i]) + '\n'
         s += '- ' + 'gpu.memused[' + str(i) + '] ' + str(gpu_memused[i]) + '\n'
         s += '- ' + 'gpu.memtotal[' + str(i) + '] ' + str(gpu_memtotal[i]) + '\n'
+        s += '- ' + 'gpu.receive[' + str(i) + '] ' + str(gpu_receive[i]) + '\n'
+        s += '- ' + 'gpu.transmit[' + str(i) + '] ' + str(gpu_transmit[i]) + '\n'
 s = s[:-1]
 
 p = Popen([ZABBIX_SENDER, "-c", ZABBIX_CONFD, "-i", "-"], stdout=PIPE, stdin=PIPE, stderr = STDOUT)
