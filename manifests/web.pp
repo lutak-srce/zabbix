@@ -24,6 +24,7 @@ class zabbix::web (
   $maintenance_mode   = false,
   $maintenance_ip     = [ '127.0.0.1' ],
   $manage_apache      = true,
+  $manage_apache_conf = true,
   $manage_php         = false,
   $max_execution_time = '300',
   $memory_limit       = '128M',
@@ -63,9 +64,11 @@ class zabbix::web (
     content => template('zabbix/zabbix.conf.php.erb'),
   }
 
-  file { "${::apache::confd_dir}/zabbix.conf":
-    content => template('zabbix/zabbix.conf.erb'),
-    require => Package['zabbix-web'],
+  if ( $manage_apache_conf ) {
+    file { "${::apache::confd_dir}/zabbix.conf":
+      content => template('zabbix/zabbix.conf.erb'),
+      require => Package['zabbix-web'],
+    }
   }
 
   if $manage_maintenance {
