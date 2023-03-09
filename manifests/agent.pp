@@ -38,7 +38,7 @@ class zabbix::agent (
     owner   => $file_owner,
     group   => $file_group,
     mode    => $file_mode,
-    require => Package['zabbix-agent'],
+    require => Package[$package],
     notify  => Service[$service],
   }
 
@@ -51,7 +51,7 @@ class zabbix::agent (
     ensure  => running,
     name    => $service,
     enable  => true,
-    require => Package['zabbix-agent'],
+    require => Package[$package],
   }
 
   file { 'zabbix_agentd.conf':
@@ -86,11 +86,11 @@ class zabbix::agent (
 
   # compatibilty needed for zabbix agent sensors (sudoers)
   group { 'zabbix':
-    require => Package['zabbix-agent'],
+    require => Package[$package],
   }
 
   user { 'zabbix':
-    require => Package['zabbix-agent'],
+    require => Package[$package],
   }
 
   # autoload configs from zabbix::agent::configs from hiera
