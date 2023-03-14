@@ -24,7 +24,7 @@ class zabbix::agent::ntp (
     owner   => root,
     group   => root,
     content => template('zabbix/agent/ntp.conf.erb'),
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
   }
 
 }
