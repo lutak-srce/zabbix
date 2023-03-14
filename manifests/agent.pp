@@ -13,7 +13,7 @@ class zabbix::agent (
   $file_mode                = $::zabbix::params::agent_file_mode,
   $purge_conf_dir           = $::zabbix::params::agent_purge_conf_dir,
   $file_zabbix_agentd_conf  = $::zabbix::params::file_zabbix_agentd_conf,
-  $erb_zabbix_agentd_conf   = 'zabbix/zabbix_agentd.conf.erb',
+  $erb_zabbix_agentd_conf   = $::zabbix::params::erb_zabbix_agentd_conf,
   $dir_zabbix_agentd_confd  = $::zabbix::params::dir_zabbix_agentd_confd,
   $dir_zabbix_agent_libdir  = $::zabbix::params::dir_zabbix_agent_libdir,
   $dir_zabbix_agent_modules = $::zabbix::params::dir_zabbix_agent_modules,
@@ -42,19 +42,19 @@ class zabbix::agent (
     notify  => Service[$service],
   }
 
-  package { $package :
+  package { $package:
     ensure => $version,
-    alias  => 'zabbix-agent',
+    alias  => $package,
   }
 
-  service { 'zabbix-agent':
+  service { $service:
     ensure  => running,
     name    => $service,
     enable  => true,
     require => Package[$package],
   }
 
-  file { 'zabbix_agentd.conf':
+  file { $file_zabbix_agentd_conf:
     path    => $file_zabbix_agentd_conf,
     content => template($erb_zabbix_agentd_conf),
   }
