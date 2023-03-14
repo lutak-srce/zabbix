@@ -154,21 +154,21 @@ class zabbix::params {
       
       if $agent_package == 'zabbix-agent2' {
         
-        $agent_package            = 'zabbix-agent2'
-        $agent_service            = 'zabbix-agent2'
-        $file_zabbix_agentd_conf  = '/etc/zabbix/zabbix_agent2.conf'
-        $erb_zabbix_agentd_conf   = 'zabbix/zabbix_agent2.conf.erb'
-        $dir_zabbix_agentd_confd  = '/etc/zabbix/zabbix_agent2.d'
-        $zabbix_agentd_logfile    = '/var/log/zabbix-agent/zabbix_agent2.log'
-
-      } else {
-
         $agent_package            = 'zabbix-agent'
         $agent_service            = 'zabbix-agent'
         $file_zabbix_agentd_conf  = '/etc/zabbix/zabbix_agentd.conf'
         $erb_zabbix_agentd_conf   = 'zabbix/zabbix_agentd.conf.erb'
         $dir_zabbix_agentd_confd  = '/etc/zabbix/zabbix_agentd.conf.d'
         $zabbix_agentd_logfile    = '/var/log/zabbix-agent/zabbix_agentd.log'
+
+      } else {
+
+        $agent_package            = 'zabbix-agent2'
+        $agent_service            = 'zabbix-agent2'
+        $file_zabbix_agentd_conf  = '/etc/zabbix/zabbix_agent2.conf'
+        $erb_zabbix_agentd_conf   = 'zabbix/zabbix_agent2.conf.erb'
+        $dir_zabbix_agentd_confd  = '/etc/zabbix/zabbix_agent2.d'
+        $zabbix_agentd_logfile    = '/var/log/zabbix-agent/zabbix_agent2.log'
 
       }
       
