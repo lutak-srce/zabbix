@@ -24,11 +24,11 @@ class zabbix::agent::ib (
     mode    => '0644',
     content => template('zabbix/agent/ib.conf.erb'),
     require => [
-      Package['zabbix-agent'],
+      Package[$package],
       Package['infiniband-diags'],
       File["${dir_zabbix_agent_libdir}/zabbix-ib.pl"],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
   }
 
   file { "${dir_zabbix_agent_libdir}/zabbix-ib.pl" :

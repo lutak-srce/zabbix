@@ -22,7 +22,7 @@ class zabbix::agent::iptables (
   package { 'zabbix-agent_iptables':
     ensure  => present,
     name    => $plugin_package,
-    require => Package['zabbix-agent'],
+    require => Package[$package],
   }
 
 }

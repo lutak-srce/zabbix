@@ -22,7 +22,7 @@ class zabbix::agent::glpi (
     mode    => '0750',
     content => template('zabbix/agent/glpi-to-zabbix.erb'),
     require => [
-      Package['zabbix-agent'],
+      Package[$package],
       File["${dir_zabbix_agent_libdir}/glpi_to_zabbix_api.py"],
       Package['pyzabbix'],
     ],

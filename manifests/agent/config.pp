@@ -12,7 +12,7 @@ define zabbix::agent::config (
 
   $service_to_notify = $notify_service ? {
     default => undef,
-    true    => Service['zabbix-agent'],
+    true    => Service[$service],
   }
 
   file { "${dir_zabbix_agentd_confd}/${name}.conf":

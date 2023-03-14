@@ -15,12 +15,12 @@ class zabbix::agent::sge (
     mode    => '0644',
     content => template('zabbix/agent/sge.conf.erb'),
     require => [
-      Package['zabbix-agent'],
+      Package[$package],
       File["${dir_zabbix_agent_libdir}/sge.pl"],
       File["${dir_zabbix_agent_libdir}/sge-lld.pl"],
       Package['perl-JSON'],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
   }
 
   package { 'perl-JSON':

@@ -10,7 +10,7 @@ class zabbix::agent::mysql (
 
   package { 'zabbix-agent_mysql':
     ensure  => present,
-    require => Package['zabbix-agent'],
+    require => Package[$package],
   }
 
   file { "${dir_zabbix_agentd_confd}/mysql.conf" :
@@ -19,7 +19,7 @@ class zabbix::agent::mysql (
     group   => root,
     content => template('zabbix/agent/mysql.conf.erb'),
     require => Package['zabbix-agent_mysql'],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
   }
 
 }

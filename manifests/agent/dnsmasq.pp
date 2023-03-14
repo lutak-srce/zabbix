@@ -14,7 +14,7 @@ class zabbix::agent::dnsmasq (
     owner   => root,
     group   => root,
     content => template('zabbix/agent/dnsmasq.conf.erb'),
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
     require => [ Package['dnsmasq'] ],
   }
 

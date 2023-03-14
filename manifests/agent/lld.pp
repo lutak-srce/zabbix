@@ -20,8 +20,8 @@ class zabbix::agent::lld (
     owner   => root,
     group   => root,
     content => template('zabbix/lld/lld.conf.erb'),
-    notify  => Service['zabbix-agent'],
-    require => Package['zabbix-agent'],
+    notify  => Service[$service],
+    require => Package[$package],
   }
 
   file { "${dir_zabbix_agent_libdir}/lld-blockdev" :
@@ -30,7 +30,7 @@ class zabbix::agent::lld (
     group   => root,
     mode    => '0755',
     source  => 'puppet:///modules/zabbix/agent/lld/lld-blockdev',
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
     require => ::Sudoers::Allowed_command['zabbix_sudo_multipath'],
   }
 
@@ -40,6 +40,6 @@ class zabbix::agent::lld (
     group  => root,
     mode   => '0755',
     source => 'puppet:///modules/zabbix/agent/lld/lld-macro',
-    notify => Service['zabbix-agent'],
+    notify => Service[$service],
   }
 }

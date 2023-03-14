@@ -22,8 +22,8 @@ class zabbix::agent::puppet_agent (
     owner   => root,
     group   => root,
     content => template('zabbix/agent/puppet_agent.conf.erb'),
-    notify  => Service['zabbix-agent'],
-    require => Package['zabbix-agent'],
+    notify  => Service[$service],
+    require => Package[$package],
   }
 
   file { "${dir_zabbix_agent_libdir}/puppet_agent" :
@@ -32,7 +32,7 @@ class zabbix::agent::puppet_agent (
     group   => root,
     mode    => '0755',
     content => template('zabbix/agent/puppet_agent.erb'),
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
     require => ::Sudoers::Allowed_command['zabbix_puppet_agent'],
   }
 

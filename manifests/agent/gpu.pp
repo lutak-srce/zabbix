@@ -15,12 +15,12 @@ class zabbix::agent::gpu (
     mode    => '0644',
     content => template('zabbix/agent/gpu.conf.erb'),
     require => [
-      Package['zabbix-agent'],
+      Package[$package],
       File["${dir_zabbix_agent_libdir}/get_gpu_info"],
       File["${dir_zabbix_agent_libdir}/get_gpus_info.sh"],
       Package['python35u'],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
   }
 
   file { "${dir_zabbix_agent_libdir}/get_gpu_info" :

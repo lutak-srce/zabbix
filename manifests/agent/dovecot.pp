@@ -11,7 +11,7 @@ class zabbix::agent::dovecot (
 
   package { 'libdovecot-zabbix-agent':
     ensure  => present,
-    require => Package['zabbix-agent'],
+    require => Package[$package],
   }
 
 }

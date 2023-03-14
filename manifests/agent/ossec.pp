@@ -21,7 +21,7 @@ class zabbix::agent::ossec (
     owner   => root,
     group   => root,
     content => template('zabbix/agent/ossec.conf.erb'),
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
     require => Package[$server_package],
   }
 

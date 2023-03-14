@@ -15,7 +15,7 @@ class zabbix::agent::pkgupgrades (
         owner   => root,
         group   => root,
         content => template('zabbix/agent/pkgupgrades-rhel.conf.erb'),
-        notify  => Service['zabbix-agent'],
+        notify  => Service[$service],
       }
     }
     /(Debian|debian|Ubuntu|ubuntu)/: {
@@ -24,7 +24,7 @@ class zabbix::agent::pkgupgrades (
         owner   => root,
         group   => root,
         content => template('zabbix/agent/pkgupgrades-debian.conf.erb'),
-        notify  => Service['zabbix-agent'],
+        notify  => Service[$service],
       }
     }
   }

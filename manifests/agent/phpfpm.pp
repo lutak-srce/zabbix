@@ -66,11 +66,11 @@ class zabbix::agent::phpfpm (
     mode    => '0644',
     content => template('zabbix/agent/php-fpm.conf.erb'),
     require => [
-      Package['zabbix-agent'],
+      Package[$package],
       File["${dir_zabbix_agent_libdir}/php-fpm.sh"],
       Package['cgi-fcgi'],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
   }
 
   file { "${dir_zabbix_agent_libdir}/php-fpm.sh" :

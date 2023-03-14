@@ -21,9 +21,9 @@ class zabbix::agent::apache (
     content => template('zabbix/agent/apache2.conf.erb'),
     require => [
       File["${dir_zabbix_agent_libdir}/apache2.pl"],
-      Package['zabbix-agent'],
+      Package[$package],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
   }
 
   file { "${dir_zabbix_agent_libdir}/apache2.pl" :
@@ -35,7 +35,7 @@ class zabbix::agent::apache (
     require => [
       Package['curl'],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
   }
 
 }

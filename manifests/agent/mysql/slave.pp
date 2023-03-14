@@ -14,7 +14,7 @@ class zabbix::agent::mysql::slave (
     owner   => root,
     group   => root,
     content => template('zabbix/agent/mysql-slave.conf.erb'),
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
   }
 
   mysql_user { 'zabbix@localhost':

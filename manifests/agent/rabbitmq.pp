@@ -22,14 +22,14 @@ class zabbix::agent::rabbitmq (
     mode    => '0644',
     content => template('zabbix/agent/rabbitmq.conf.erb'),
     require => [
-      Package['zabbix-agent'],
+      Package[$package],
       File["${dir_zabbix_agent_libdir}/api.py"],
       File["${dir_zabbix_agent_libdir}/list_rabbit_nodes.sh"],
       File["${dir_zabbix_agent_libdir}/list_rabbit_queues.sh"],
       File["${dir_zabbix_agent_libdir}/rabbitmq-status.sh"],
       File["${dir_zabbix_agent_libdir}/.rab.auth"],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
   }
 
   file { "${dir_zabbix_agent_libdir}/api.py" :

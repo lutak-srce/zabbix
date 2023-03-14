@@ -15,10 +15,10 @@ class zabbix::agent::beegfs (
     mode    => '0644',
     source  =>  'puppet:///modules/zabbix/agent/beegfs/beegfs.conf',
     require => [
-      Package['zabbix-agent'],
+      Package[$package],
       File["${dir_zabbix_agent_libdir}/zabbix-beegfs.pl"],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
   }
 
   file { "${dir_zabbix_agent_libdir}/zabbix-beegfs.pl" :
@@ -28,7 +28,7 @@ class zabbix::agent::beegfs (
     mode    => '0755',
     source  => 'puppet:///modules/zabbix/agent/beegfs/zabbix-beegfs.pl',
     require =>  [
-      Package['zabbix-agent'],
+      Package[$package],
       Package['perl-JSON'],
     ],
   }

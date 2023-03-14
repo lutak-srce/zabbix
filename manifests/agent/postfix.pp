@@ -11,7 +11,7 @@ class zabbix::agent::postfix (
 
   package { 'libpostfix-zabbix-agent':
     ensure  => present,
-    require => Package['zabbix-agent'],
+    require => Package[$package],
   }
 
 }

@@ -12,7 +12,7 @@ class zabbix::agent::net_overruns (
     owner   => root,
     group   => root,
     source  => 'puppet:///modules/zabbix/agent/net_overruns.conf',
-    notify  => Service['zabbix-agent'],
-    require => Package['zabbix-agent'],
+    notify  => Service[$service],
+    require => Package[$package],
   }
 }

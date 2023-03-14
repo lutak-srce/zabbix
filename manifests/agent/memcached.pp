@@ -14,7 +14,7 @@ class zabbix::agent::memcached (
     owner   => root,
     group   => root,
     content => template('zabbix/agent/memcached.conf.erb'),
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
   }
 
   file { "${dir_zabbix_agent_libdir}/memcached.pl" :
@@ -23,7 +23,7 @@ class zabbix::agent::memcached (
     group  => root,
     mode   => '0755',
     source => 'puppet:///modules/zabbix/agent/memcached.pl',
-    notify => Service['zabbix-agent'],
+    notify => Service[$service],
   }
 
 }

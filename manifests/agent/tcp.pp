@@ -14,8 +14,8 @@ class zabbix::agent::tcp (
     owner   => root,
     group   => root,
     source  => 'puppet:///modules/zabbix/agent/tcp.conf',
-    notify  => Service['zabbix-agent'],
-    require => [ Package['zabbix-agent'], File["${dir_zabbix_agent_modules}/tcp_count.so"] ],
+    notify  => Service[$service],
+    require => [ Package[$package], File["${dir_zabbix_agent_modules}/tcp_count.so"] ],
   }
 
   file { "${dir_zabbix_agent_modules}/tcp_count.so" :
@@ -24,6 +24,6 @@ class zabbix::agent::tcp (
     group  => root,
     mode   => '0644',
     source => $module,
-    notify => Service['zabbix-agent'],
+    notify => Service[$service],
   }
 }

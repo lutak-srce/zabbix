@@ -15,10 +15,10 @@ class zabbix::agent::elasticsearch (
     mode    => '0644',
     content => template('zabbix/agent/elasticsearch.conf.erb'),
     require => [
-      Package['zabbix-agent'],
+      Package[$package],
       File["${dir_zabbix_agent_libdir}/elasticsearch.rb"],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
   }
 
   file { "${dir_zabbix_agent_libdir}/elasticsearch.rb" :

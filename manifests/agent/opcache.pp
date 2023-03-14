@@ -18,10 +18,10 @@ class zabbix::agent::opcache (
     mode    => '0644',
     content => template('zabbix/agent/opcache.conf.erb'),
     require => [
-      Package['zabbix-agent'],
+      Package[$package],
       File["${dir_zabbix_agent_libdir}/zabbix-opcache.pl"],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
   }
 
   file { "${dir_zabbix_agent_libdir}/zabbix-opcache.pl" :
@@ -31,7 +31,7 @@ class zabbix::agent::opcache (
     mode    => '0755',
     source  => 'puppet:///modules/zabbix/agent/opcache/zabbix-opcache.pl',
     require =>  [
-      Package['zabbix-agent'],
+      Package[$package],
     ],
   }
 
@@ -42,10 +42,10 @@ class zabbix::agent::opcache (
     mode    => '0644',
     content => template('zabbix/agent/opcache_stats.conf.erb'),
     require => [
-      Package['zabbix-agent'],
+      Package[$package],
       File["${dir_zabbix_agent_libdir}/zabbix-opcache.pl"],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
   }
 
   file { "${dir_zabbix_agent_libdir}/opcache_stats.php" :

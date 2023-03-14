@@ -21,10 +21,10 @@ class zabbix::agent::mdraid (
     group   => root,
     content => template('zabbix/agent/mdraid.conf.erb'),
     require => [
-      Package['zabbix-agent'],
+      Package[$package],
       File["${dir_zabbix_agent_libdir}/check_mdraid"],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
   }
 
   file { "${dir_zabbix_agent_libdir}/check_mdraid" :

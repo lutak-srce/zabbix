@@ -39,7 +39,7 @@ class zabbix::agent::ssh (
     owner   => root,
     group   => root,
     content => template('zabbix/agent/ssh.conf.erb'),
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
     require => ::Sudoers::Allowed_command['zabbix_ssh'],
   }
 

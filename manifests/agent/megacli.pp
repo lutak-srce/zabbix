@@ -9,7 +9,7 @@ class zabbix::agent::megacli (
 
   package { 'zabbix-agent_megacli':
     ensure  => present,
-    require => Package['zabbix-agent'],
+    require => Package[$package],
   }
 
 }

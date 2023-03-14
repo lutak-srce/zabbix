@@ -17,7 +17,7 @@ class zabbix::agent::mailcheck (
     owner   => root,
     group   => root,
     content => template('zabbix/agent/mailcheck.conf.erb'),
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
     #require => [ Package['php-cli'] ],
   }
 

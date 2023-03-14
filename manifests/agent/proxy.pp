@@ -22,7 +22,7 @@ class zabbix::agent::proxy (
     group   => root,
     mode    => '0644',
     content => template('zabbix/agent/proxy.conf.erb'),
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
     require => ::Sudoers::Allowed_command['zabbix_proxy'],
   }
 
@@ -32,7 +32,7 @@ class zabbix::agent::proxy (
     group   => root,
     mode    => '0755',
     source  => 'puppet:///modules/zabbix/agent/proxy.pl',
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
     require => ::Sudoers::Allowed_command['zabbix_proxy'],
   }
 

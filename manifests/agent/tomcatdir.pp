@@ -15,10 +15,10 @@ class zabbix::agent::tomcatdir (
     mode    => '0644',
     content => template('zabbix/agent/tomcatdir.conf.erb'),
     require => [
-      Package['zabbix-agent'],
+      Package[$package],
       File["${dir_zabbix_agent_libdir}/tomcat-dir.jar"],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$service],
   }
 
   file { "${dir_zabbix_agent_libdir}/tomcat-dir.jar" :

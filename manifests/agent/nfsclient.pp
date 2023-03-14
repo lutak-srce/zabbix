@@ -16,7 +16,7 @@ class zabbix::agent::nfsclient (
         group   => root,
         mode    => '0644',
         content => template('zabbix/agent/nfsclient.conf.erb'),
-        notify  => Service['zabbix-agent'],
+        notify  => Service[$service],
       }
     }
 
