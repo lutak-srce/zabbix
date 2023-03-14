@@ -42,6 +42,7 @@ class zabbix::params {
   # install package depending on major version
   case $::osfamily {
     default: {
+
       $get_package              = 'zabbix-get'
       $get_version              = 'present'
       $sender_package           = 'zabbix-sender'
@@ -143,6 +144,14 @@ class zabbix::params {
       $web_dir_zabbix_php       = '/etc/zabbix/web'
     }
     /(Debian|debian|Ubuntu|ubuntu)/: {
+      
+      $get_package              = 'zabbix-get'
+      $get_version              = 'present'
+      $sender_package           = 'zabbix-sender'
+      $sender_version           = 'present'
+      $agent_version            = 'present'
+      $agent_status             = 'enabled'
+      
       if $agent_package == 'zabbix-agent2' {
         
         $agent_package            = 'zabbix-agent2'
@@ -162,13 +171,6 @@ class zabbix::params {
         $zabbix_agentd_logfile    = '/var/log/zabbix-agent/zabbix_agentd.log'
 
       }
-      $get_package              = 'zabbix-get'
-      $get_version              = 'present'
-      $sender_package           = 'zabbix-sender'
-      $sender_version           = 'present'
-      $agent_version            = 'present'
-      $agent_status             = 'enabled'
-      
       
       
       $dir_zabbix_agent_libdir  = '/usr/lib/zabbix-agent'
