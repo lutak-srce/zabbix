@@ -5,6 +5,7 @@
 #
 class zabbix::agent (
 
+  $package                  = $::zabbix::params::agent_package,
   if $package == 'zabbix-agent2' {
 
     $package                  = 'zabbix-agent2',
@@ -18,7 +19,6 @@ class zabbix::agent (
 
   } else {
 
-    $package                  = $::zabbix::params::agent_package,
     $version                  = $::zabbix::params::agent_version,
     $service                  = $::zabbix::params::agent_service,
     $file_zabbix_agentd_conf  = $::zabbix::params::file_zabbix_agentd_conf,
