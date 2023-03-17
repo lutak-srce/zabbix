@@ -66,15 +66,18 @@ class zabbix::agent (
     purge   => $purge_conf_dir,
   }
 
-  file { 'zabbix_agent_libdir':
-    ensure => directory,
-    path   => $dir_zabbix_agent_libdir,
-  }
+  if $package != 'zabbix-agent2' {
+    
+    file { 'zabbix_agent_libdir':
+      ensure => directory,
+      path   => $dir_zabbix_agent_libdir,
+    }
 
-  file { 'zabbix_agent_modules':
-    ensure  => directory,
-    path    => $dir_zabbix_agent_modules,
-    require => File['zabbix_agent_libdir'],
+    file { 'zabbix_agent_modules':
+      ensure  => directory,
+      path    => $dir_zabbix_agent_modules,
+      require => File['zabbix_agent_libdir'],
+    }
   }
 
   # enable zabbix plugins to run sudo
