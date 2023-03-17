@@ -7,6 +7,7 @@ define zabbix::agent::config (
   $settings,
   $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
   $notify_service         = true,
+  $package = $::zabbix::agent::package,
 ) {
   include ::zabbix::agent
 
