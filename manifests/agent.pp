@@ -47,7 +47,7 @@ class zabbix::agent (
     $erb_zabbix_agentd_conf   = 'zabbix/zabbix_agent2.conf.erb',
     $dir_zabbix_agentd_confd  = '/etc/zabbix/zabbix_agent2.d',
     $zabbix_agentd_logfile    = 'var/log/zabbix/zabbix_agent2.log',
-    $zabbix_agent_pidfile     = '/var/run/zabbix/zabbix_agent2.pid',
+    $zabbix_agent_pidfile     = '/var/run/zabbix/zabbix_agent2.pid'
   }
   
   File {
