@@ -40,7 +40,6 @@ class zabbix::agent (
 ) inherits zabbix::params {
 
   if ($package == 'zabbix-agent2') {
-    $package                  = 'zabbix-agent2'
     $version                  = 'zabbix-agent2'
     $service                  = 'zabbix-agent2'
     $file_zabbix_agentd_conf  = '/etc/zabbix/zabbix_agent2.conf'
