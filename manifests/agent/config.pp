@@ -25,6 +25,7 @@ define zabbix::agent::config (
       mode    => '0644',
       require => File['/etc/zabbix/zabbix_agent2.d'],
       notify  => $service_to_notify,
+    }
 
   } else {
 
