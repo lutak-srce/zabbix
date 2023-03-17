@@ -39,8 +39,7 @@ class zabbix::agent (
   $autoload_configs         = false,
 ) inherits zabbix::params {
 
-  if $package == 'zabbix-agent2' {
-
+  if ($package == 'zabbix-agent2') {
     $package                  = 'zabbix-agent2',
     $version                  = 'zabbix-agent2',
     $service                  = 'zabbix-agent2',
@@ -49,7 +48,6 @@ class zabbix::agent (
     $dir_zabbix_agentd_confd  = '/etc/zabbix/zabbix_agent2.d',
     $zabbix_agentd_logfile    = 'var/log/zabbix/zabbix_agent2.log',
     $zabbix_agent_pidfile     = '/var/run/zabbix/zabbix_agent2.pid',
-
   }
   
   File {
