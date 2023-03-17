@@ -47,6 +47,34 @@ class zabbix::agent (
     $dir_zabbix_agentd_confd  = '/etc/zabbix/zabbix_agent2.d'
     $zabbix_agentd_logfile    = 'var/log/zabbix/zabbix_agent2.log'
     $zabbix_agent_pidfile     = '/var/run/zabbix/zabbix_agent2.pid'
+
+    file { '/etc/zabbix/zabbix_agent2.conf':
+    path    => '/etc/zabbix/zabbix_agent2.conf',
+    content => template(zabbix/zabbix_agent2.conf.erb),
+    }
+    file { 'zabbix_agent2_confd':
+    ensure  => directory,
+    path    => '/etc/zabbix/zabbix_agent2.d',
+    recurse => $purge_conf_dir,
+    purge   => $purge_conf_dir,
+    }
+  } else {
+
+    file { $file_zabbix_agentd_conf:
+    path    => $file_zabbix_agentd_conf,
+    content => template($erb_zabbix_agentd_conf),
+    }
+    file { 'zabbix_agent_confd':
+    ensure  => directory,
+    path    => $dir_zabbix_agentd_confd,
+    recurse => $purge_conf_dir,
+    purge   => $purge_conf_dir,
+    }
+    file { 'zabbix_agent_modules':
+    ensure  => directory,
+    path    => $dir_zabbix_agent_modules,
+    require => File['zabbix_agent_libdir'],
+    }
   }
   
   File {
@@ -69,28 +97,10 @@ class zabbix::agent (
     enable  => true,
     require => Package[$package],
   }
-
-  file { $file_zabbix_agentd_conf:
-    path    => $file_zabbix_agentd_conf,
-    content => template($erb_zabbix_agentd_conf),
-  }
-
-  file { 'zabbix_agent_confd':
-    ensure  => directory,
-    path    => $dir_zabbix_agentd_confd,
-    recurse => $purge_conf_dir,
-    purge   => $purge_conf_dir,
-  }
-
+ 
   file { 'zabbix_agent_libdir':
     ensure => directory,
     path   => $dir_zabbix_agent_libdir,
-  }
-
-  file { 'zabbix_agent_modules':
-    ensure  => directory,
-    path    => $dir_zabbix_agent_modules,
-    require => File['zabbix_agent_libdir'],
   }
 
   # enable zabbix plugins to run sudo
