@@ -4,21 +4,41 @@
 # This module manages zabbix-agent
 #
 class zabbix::agent (
-  $package                  = $::zabbix::params::agent_package,
-  $version                  = $::zabbix::params::agent_version,
-  $service                  = $::zabbix::params::agent_service,
+
+  if $package == 'zabbix-agent2' {
+
+    $package                  = 'zabbix-agent2',
+    $version                  = 'zabbix-agent2',
+    $service                  = 'zabbix-agent2',
+    $file_zabbix_agentd_conf  = '/etc/zabbix/zabbix_agent2.conf',
+    $erb_zabbix_agentd_conf   = 'zabbix/zabbix_agent2.conf.erb',
+    $dir_zabbix_agentd_confd  = '/etc/zabbix/zabbix_agent2.d',
+    $zabbix_agentd_logfile    = 'var/log/zabbix/zabbix_agent2.log',
+    $zabbix_agent_pidfile     = '/var/run/zabbix/zabbix_agent2.pid',
+
+  } else {
+
+    $package                  = $::zabbix::params::agent_package,
+    $version                  = $::zabbix::params::agent_version,
+    $service                  = $::zabbix::params::agent_service,
+    $file_zabbix_agentd_conf  = $::zabbix::params::file_zabbix_agentd_conf,
+    $erb_zabbix_agentd_conf   = $::zabbix::params::erb_zabbix_agentd_conf,
+    $dir_zabbix_agentd_confd  = $::zabbix::params::dir_zabbix_agentd_confd,
+    $zabbix_agentd_logfile    = $::zabbix::params::zabbix_agentd_logfile,
+    $zabbix_agent_pidfile     = $::zabbix::params::zabbix_agent_pidfile,
+
+  }
+  
   $status                   = $::zabbix::params::agent_status,
   $file_owner               = $::zabbix::params::agent_file_owner,
   $file_group               = $::zabbix::params::agent_file_group,
   $file_mode                = $::zabbix::params::agent_file_mode,
   $purge_conf_dir           = $::zabbix::params::agent_purge_conf_dir,
-  $file_zabbix_agentd_conf  = $::zabbix::params::file_zabbix_agentd_conf,
-  $erb_zabbix_agentd_conf   = $::zabbix::params::erb_zabbix_agentd_conf,
-  $dir_zabbix_agentd_confd  = $::zabbix::params::dir_zabbix_agentd_confd,
+  
   $dir_zabbix_agent_libdir  = $::zabbix::params::dir_zabbix_agent_libdir,
   $dir_zabbix_agent_modules = $::zabbix::params::dir_zabbix_agent_modules,
-  $zabbix_agentd_logfile    = $::zabbix::params::zabbix_agentd_logfile,
-  $zabbix_agent_pidfile     = $::zabbix::params::zabbix_agent_pidfile,
+  
+  
   $server_name              = 'mon',
   $server_active            = 'mon',
   $buffersend               = 5,
