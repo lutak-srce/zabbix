@@ -7,7 +7,6 @@ define zabbix::agent::config (
   $settings,
   $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
   $notify_service         = true,
-  $package = $::zabbix::agent::package,
 ) {
   include ::zabbix::agent
 
@@ -16,29 +15,14 @@ define zabbix::agent::config (
     true    => Service[$service],
   }
 
-  if ($package == 'zabbix-agent2') {
-
-    file { "/etc/zabbix/zabbix_agent2.d/${name}.conf":
-      ensure  => file,
-      content => template('zabbix/custom.conf.erb'),
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
-      require => File['/etc/zabbix/zabbix_agent2.d'],
-      notify  => $service_to_notify,
-    }
-
-  } else {
-
-    file { "${dir_zabbix_agentd_confd}/${name}.conf":
-      ensure  => file,
-      content => template('zabbix/custom.conf.erb'),
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
-      require => File[$dir_zabbix_agentd_confd],
-      notify  => $service_to_notify,
-    }
+  file { "${dir_zabbix_agentd_confd}/${name}.conf":
+    ensure  => file,
+    content => template('zabbix/custom.conf.erb'),
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    require => File[$dir_zabbix_agentd_confd],
+    notify  => $service_to_notify,
   }
 
 }
