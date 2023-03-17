@@ -50,7 +50,7 @@ class zabbix::agent (
 
     file { '/etc/zabbix/zabbix_agent2.conf':
     path    => '/etc/zabbix/zabbix_agent2.conf',
-    content => template(zabbix/zabbix_agent2.conf.erb),
+    content => template('zabbix/zabbix_agent2.conf.erb'),
     }
     file { 'zabbix_agent2_confd':
     ensure  => directory,
