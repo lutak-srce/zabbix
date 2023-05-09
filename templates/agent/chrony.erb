@@ -1,0 +1,5 @@
+# chronyd
+UserParameter=chrony.offset,/usr/bin/chronyc tracking|grep "Last offset"|awk '{print $4}'
+UserParameter=chrony.syncstatus,/usr/bin/chronyc tracking|grep "Leap status"|awk '{print $4}'
+UserParameter=chrony.delay,/usr/bin/chronyc tracking|grep "Root delay"|awk '{print $4}'
+UserParameter=chrony.servers,/usr/bin/chronyc activity|grep "sources online"|awk '{print $1}'
