@@ -1,6 +1,6 @@
 <% if @osfamily == 'RedHat' and @operatingsystemmajrelease > '7' -%>
 #!/usr/libexec/platform-python
-<% elsif @operatingsystem == 'Debian' and @operatingsystemmajrelease > '10' or @operatingsystem == 'Ubunutu' -%>
+<% elsif @operatingsystem == 'Debian' and @operatingsystemmajrelease > '10' or @operatingsystem == 'Ubuntu' -%>
 #!/usr/bin/env python3
 <% else -%>
 #!/usr/bin/env python
