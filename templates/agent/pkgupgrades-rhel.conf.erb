@@ -1,2 +1,2 @@
 # package upgrades
-UserParameter=pkg.upgrades,yum -q check-update | sed '/^$/d' | wc -l && yum -q clean metadata
+UserParameter=pkg.upgrades,yum -y -q check-update | sed '/^$/d' | wc -l && yum -q clean metadata
