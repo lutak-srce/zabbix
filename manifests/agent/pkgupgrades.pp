@@ -17,6 +17,13 @@ class zabbix::agent::pkgupgrades (
         content => template('zabbix/agent/pkgupgrades-rhel.conf.erb'),
         notify  => Service['zabbix-agent'],
       }
+      
+      ::sudoers::allowed_command { 'zabbix_yum':
+        command          => "/usr/bin/yum -y -q check-update",
+        user             => 'zabbix',
+        require_password => false,
+        comment          => 'Zabbix sensor for monitoring packages pending upgrade.',
+      }
     }
     /(Debian|debian|Ubuntu|ubuntu)/: {
       file { "${dir_zabbix_agentd_confd}/pkgupgrades.conf" :
