@@ -18,7 +18,7 @@ class zabbix::agent::pkgupgrades (
         notify  => Service['zabbix-agent'],
       }
       
-      ::sudoers::allowed_command { 'zabbix_ssh':
+      ::sudoers::allowed_command { 'zabbix_yum':
         command          => "/usr/bin/yum -y -q check-update",
         user             => 'zabbix',
         require_password => false,
