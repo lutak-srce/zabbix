@@ -38,8 +38,8 @@ class zabbix::agent::postgres (
 
   # Cron job for grant connect
   file { '/etc/cron.d/zbx_grant_connect':
-    content => "* */12 * * * root /usr/bin/psql -t -c \"SELECT format('GRANT CONNECT ON DATABASE %I TO ${zbx_monitor_user};', datname) FROM pg_database\" | /usr/bin/psql -U postgres\n",
-    require => Exec['add_${zbx_monitor_user}_user'],
+    content => "* */12 * * * root su -c 'cd /tmp && /usr/bin/psql -t -c \"SELECT format('\''GRANT CONNECT ON DATABASE \%I TO ${zbx_monitor_user};'\'', datname) FROM pg_database\" | /usr/bin/psql -U postgres > /dev/null 2>&1' postgres\n",
+    require => Exec["add_${zbx_monitor_user}_user"],
   }
 
   # Ensure the directory exists
