@@ -24,17 +24,17 @@ class zabbix::agent::postgresql (
     }
 
     postgresql::server::grant { "pg_monitor to ${zbx_monitor_user}":
-      role     => $zbx_monitor_user,
-      object   => 'DATABASE',
+      role       => $zbx_monitor_user,
+      object     => 'DATABASE',
       privileges => 'pg_monitor',
-      require  => Postgresql::Server::Role[$zbx_monitor_user],
+      require    => Postgresql::Server::Role[$zbx_monitor_user],
     }
 
     file { $dir_zabbix_pg_template:
-      ensure => directory,
-      owner  => 'zabbix',
-      group  => 'zabbix',
-      mode   => '0770',
+      ensure  => directory,
+      owner   => 'zabbix',
+      group   => 'zabbix',
+      mode    => '0770',
       require => Package['zabbix-agent'],
     }
 
@@ -64,7 +64,7 @@ class zabbix::agent::postgresql (
 
   } else {
 
-    warning('Class postgresql::globals is not included. zabbix::agent::postgres will not be applied.')
+    warning('Class postgresql::globals is not included. zabbix::agent::postgresql will not be applied.')
 
   }
 }
