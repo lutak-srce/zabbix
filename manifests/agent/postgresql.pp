@@ -8,7 +8,11 @@ class zabbix::agent::postgresql (
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
   $dir_zabbix_pg_template  = "${dir_zabbix_agent_libdir}/postgresql",
   $zbx_monitor_user        = 'zbx_monitor',
-  $zbx_monitor_password    = undef,
+  $zbx_monitor_password    = lookup({
+    'name' => 'zabbix::agent::postgresql::zbx_monitor_password',
+    'merge' => { 'strategy' => 'deep' },
+    'default_value' => 'undef'
+    }),
 
 ) inherits zabbix::agent {
 
