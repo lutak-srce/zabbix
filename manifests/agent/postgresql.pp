@@ -40,7 +40,7 @@ class zabbix::agent::postgresql (
       source  => 'puppet:///modules/zabbix/agent/postgresql',
       owner   => 'zabbix',
       group   => 'zabbix',
-      mode    => '0770',
+      mode    => '0655',
       require => Package['zabbix-agent'],
     }
 
