@@ -51,7 +51,7 @@ class zabbix::agent::postgresql (
     file { "${dir_zabbix_agentd_confd}/postgresql.conf":
       ensure  => file,
       content => template('zabbix/agent/postgresql.conf.erb'),
-      require => Exec["${dir_zabbix_pg_template}"],
+      require => File["$dir_zabbix_pg_template"],
     }
 
     postgresql::server::pg_hba_rule { 'zbx_monitor_localhost':
