@@ -60,7 +60,7 @@ class zabbix::agent::postgresql (
 
   } else {
 
-    fail('Class profile::postgresql is not included. zabbix::agent::postgresql will not be applied.')
+    fail('Error: class profile::postgresql is not included. zabbix::agent::postgresql will not be applied.')
 
   }
 }
