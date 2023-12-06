@@ -16,9 +16,9 @@ class zabbix::agent::postgresql (
     message => $zbx_monitor_password,
   }
 
-  if $zbx_monitor_password == undef or $zbx_monitor_password == '' {
-    fail('Error: zbx_monitor_password is not defined.')
-  }
+#  if $zbx_monitor_password == undef or $zbx_monitor_password == '' {
+#    fail('Error: zbx_monitor_password is not defined.')
+#  }
 
   if defined(Class["profile::postgresql"]) {
   
