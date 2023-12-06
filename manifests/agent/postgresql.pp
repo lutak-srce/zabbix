@@ -11,7 +11,7 @@ class zabbix::agent::postgresql (
   $zbx_monitor_password    = lookup({
     'name' => 'zabbix::agent::postgresql::zbx_monitor_password',
     'merge' => { 'strategy' => 'deep' },
-    'default_value' => 'undef'
+    'default_value' => undef,
     }),
 
 ) inherits zabbix::agent {
