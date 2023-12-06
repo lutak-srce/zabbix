@@ -8,7 +8,8 @@ class zabbix::agent::postgresql (
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
   $dir_zabbix_pg_template  = "${dir_zabbix_agent_libdir}/postgresql",
   $zbx_monitor_user        = 'zbx_monitor',
-  $zbx_monitor_password,
+#  $zbx_monitor_password,
+  $zbx_monitor_password    = 'Passw0rd',
 ) inherits zabbix::agent {
 
 #  if $zbx_monitor_password == undef or $zbx_monitor_password == '' {
