@@ -20,7 +20,7 @@ class zabbix::agent::postgresql (
     fail('Error: zbx_monitor_password is not defined.')
   }
 
-  if defined(Class["profile::postgresql"]) {
+  if defined(Class['postgresql::server']) {
   
     postgresql::server::role { $zbx_monitor_user:
       ensure        => 'present',
@@ -60,7 +60,7 @@ class zabbix::agent::postgresql (
 
   } else {
 
-    fail('Error: class profile::postgresql is not included. zabbix::agent::postgresql will not be applied.')
+    fail('Error: class postgresql::server is not included. zabbix::agent::postgresql will not be applied.')
 
   }
 }
