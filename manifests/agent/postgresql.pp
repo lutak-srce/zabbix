@@ -52,7 +52,7 @@ class zabbix::agent::postgresql (
 
     file { "${dir_zabbix_agentd_confd}/postgresql.conf":
       ensure  => file,
-      content => template('zabbix/postgresql.conf.erb'),
+      content => template('zabbix/agent/postgresql.conf.erb'),
       require => Exec["${dir_zabbix_pg_template}/postgresql"],
     }
 
