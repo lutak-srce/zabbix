@@ -55,7 +55,7 @@ class zabbix::agent::postgresql (
       database    => 'all',
       user        => "${zbx_monitor_user}",
       address     => '127.0.0.1/32',
-      auth_method => 'trust',
+      auth_method => 'md5',
     }
 
   } else {
