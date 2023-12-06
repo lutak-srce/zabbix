@@ -26,7 +26,7 @@ class zabbix::agent::postgresql (
 
     postgresql::server::grant_role { "grant_pg_monitor_to_${zbx_monitor_user}":
       role    => $zbx_monitor_user,
-      role    => 'pg_monitor',
+      group   => 'pg_monitor',
       require => Postgresql::Server::Role[$zbx_monitor_user],
     }
 
