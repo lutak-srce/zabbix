@@ -16,13 +16,9 @@ class zabbix::agent::postgresql (
 
 ) inherits zabbix::agent {
 
-  notify { 'Output variable':
-    message => $zbx_monitor_password,
+  if $zbx_monitor_password == undef or $zbx_monitor_password == '' {
+    fail('Error: zbx_monitor_password is not defined.')
   }
-
-#  if $zbx_monitor_password == undef or $zbx_monitor_password == '' {
-#    fail('Error: zbx_monitor_password is not defined.')
-#  }
 
   if defined(Class["profile::postgresql"]) {
   
@@ -64,7 +60,7 @@ class zabbix::agent::postgresql (
 
   } else {
 
-    warning('Class postgresql::globals is not included. zabbix::agent::postgresql will not be applied.')
+    fail('Class profile::postgresql is not included. zabbix::agent::postgresql will not be applied.')
 
   }
 }
