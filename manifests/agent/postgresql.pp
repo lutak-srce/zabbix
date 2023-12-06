@@ -30,13 +30,13 @@ class zabbix::agent::postgresql (
       require => Postgresql::Server::Role[$zbx_monitor_user],
     }
 
-#    file { $dir_zabbix_pg_template:
-#      ensure  => directory,
-#      owner   => 'zabbix',
-#      group   => 'zabbix',
-#      mode    => '0770',
-#      require => Package['zabbix-agent'],
-#    }
+    file { $dir_zabbix_pg_template:
+      ensure  => directory,
+      owner   => 'zabbix',
+      group   => 'zabbix',
+      mode    => '0770',
+      require => Package['zabbix-agent'],
+    }
 
     file { "${dir_zabbix_pg_template}":
       ensure  => directory,
