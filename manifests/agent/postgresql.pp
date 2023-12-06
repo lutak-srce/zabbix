@@ -9,20 +9,19 @@ class zabbix::agent::postgresql (
   $dir_zabbix_pg_template  = "${dir_zabbix_agent_libdir}/postgresql",
   $zbx_monitor_user        = 'zbx_monitor',
 #  $zbx_monitor_password,
-  $zbx_monitor_password    = 'Passw0rd',
+  $zbx_monitor_password    = 'md5d332e7e15a1a05a3b58c704d28bd14bf',
 ) inherits zabbix::agent {
 
 #  if $zbx_monitor_password == undef or $zbx_monitor_password == '' {
 #    fail('Error: zbx_monitor_password is not defined.')
 #  }
 
-#  if class_exists('profile::postgresql') {
   if defined(Class["profile::postgresql"]) {
   
     postgresql::server::role { $zbx_monitor_user:
-      ensure   => 'present',
-      password => $zbx_monitor_password,
-      require  => Class['postgresql::server'],
+      ensure        => 'present',
+      password_hash => $zbx_monitor_password,
+      require       => Class['postgresql::server'],
     }
 
     postgresql::server::grant { "pg_monitor to ${zbx_monitor_user}":
