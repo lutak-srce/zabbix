@@ -8,13 +8,13 @@ class zabbix::agent::postgresql (
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
   $dir_zabbix_pg_template  = "${dir_zabbix_agent_libdir}/postgresql",
   $zbx_monitor_user        = 'zbx_monitor',
-#  $zbx_monitor_password,
-  $zbx_monitor_password    = 'md5d332e7e15a1a05a3b58c704d28bd14bf',
+  $zbx_monitor_password    = undef,
+
 ) inherits zabbix::agent {
 
-#  if $zbx_monitor_password == undef or $zbx_monitor_password == '' {
-#    fail('Error: zbx_monitor_password is not defined.')
-#  }
+  if $zbx_monitor_password == undef or $zbx_monitor_password == '' {
+    fail('Error: zbx_monitor_password is not defined.')
+  }
 
   if defined(Class["profile::postgresql"]) {
   
