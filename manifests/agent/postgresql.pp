@@ -12,6 +12,10 @@ class zabbix::agent::postgresql (
 
 ) inherits zabbix::agent {
 
+  notify { 'Output variable':
+    message => $zbx_monitor_password,
+  }
+
   if $zbx_monitor_password == undef or $zbx_monitor_password == '' {
     fail('Error: zbx_monitor_password is not defined.')
   }
