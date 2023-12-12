@@ -20,47 +20,41 @@ class zabbix::agent::postgresql (
     fail('Error: zbx_monitor_password is not defined.')
   }
 
-  if defined(Class['profile::postgresql']) {
+  require ::postgresql::server
   
-    postgresql::server::role { $zbx_monitor_user:
-      ensure        => 'present',
-      password_hash => $zbx_monitor_password,
-      require       => Class['profile::postgresql'],
-    }
+  postgresql::server::role { $zbx_monitor_user:
+    ensure        => 'present',
+    password_hash => $zbx_monitor_password,
+    require       => Class['postgresql::server'],
+  }
 
-    postgresql::server::grant_role { "grant_pg_monitor_to_${zbx_monitor_user}":
-      role    => $zbx_monitor_user,
-      group   => 'pg_monitor',
-      require => Postgresql::Server::Role[$zbx_monitor_user],
-    }
+  postgresql::server::grant_role { "grant_pg_monitor_to_${zbx_monitor_user}":
+    role    => $zbx_monitor_user,
+    group   => 'pg_monitor',
+    require => Postgresql::Server::Role[$zbx_monitor_user],
+  }
 
-    file { "$dir_zabbix_pg_template":
-      ensure  => directory,
-      recurse => true,
-      source  => 'puppet:///modules/zabbix/agent/postgresql',
-      owner   => 'zabbix',
-      group   => 'zabbix',
-      mode    => '0655',
-      require => Package['zabbix-agent'],
-    }
+  file { "$dir_zabbix_pg_template":
+    ensure  => directory,
+    recurse => true,
+    source  => 'puppet:///modules/zabbix/agent/postgresql',
+    owner   => 'zabbix',
+    group   => 'zabbix',
+    mode    => '0655',
+    require => Package['zabbix-agent'],
+  }
 
-    file { "${dir_zabbix_agentd_confd}/postgresql.conf":
-      ensure  => file,
-      content => template('zabbix/agent/postgresql.conf.erb'),
-      require => File["$dir_zabbix_pg_template"],
-    }
+  file { "${dir_zabbix_agentd_confd}/postgresql.conf":
+    ensure  => file,
+    content => template('zabbix/agent/postgresql.conf.erb'),
+    require => File["$dir_zabbix_pg_template"],
+  }
 
-    postgresql::server::pg_hba_rule { 'zbx_monitor_localhost':
-      type        => 'host',
-      database    => 'all',
-      user        => "${zbx_monitor_user}",
-      address     => '127.0.0.1/32',
-      auth_method => 'md5',
-    }
-
-  } else {
-
-    fail('Error: class profile::postgresql is not included. zabbix::agent::postgresql will not be applied.')
-
+  postgresql::server::pg_hba_rule { 'zbx_monitor_localhost':
+    type        => 'host',
+    database    => 'all',
+    user        => "${zbx_monitor_user}",
+    address     => '127.0.0.1/32',
+    auth_method => 'md5',
   }
 }
