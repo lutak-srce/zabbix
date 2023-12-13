@@ -19,12 +19,12 @@ class zabbix::agent::postgresql (
     fail('Error: zbx_monitor_password is not defined.')
   }
 
-  if defined(Class['postgresql']) {
+  if defined(Class['profile::postgresql']) {
   
     postgresql::server::role { $zbx_monitor_user:
       ensure        => 'present',
       password_hash => $zbx_monitor_password,
-      require       => Class['postgresql'],
+      require       => Class['profile::postgresql'],
     }
 
     postgresql::server::grant_role { "grant_pg_monitor_to_${zbx_monitor_user}":
@@ -66,7 +66,7 @@ class zabbix::agent::postgresql (
       file { "/usr/bin/pg_isready":
         ensure => 'link',
         target => "/usr/pgsql-${version}/bin/pg_isready",
-        require => Class['postgresql'],
+        require => Class['profile::postgresql'],
       }
     }
 
