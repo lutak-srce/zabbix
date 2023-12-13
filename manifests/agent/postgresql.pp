@@ -13,25 +13,32 @@ class zabbix::agent::postgresql (
     'merge' => { 'strategy' => 'deep' },
     'default_value' => undef,
     }),
-
 ) inherits zabbix::agent {
 
   if $zbx_monitor_password == undef or $zbx_monitor_password == '' {
     fail('Error: zbx_monitor_password is not defined.')
   }
 
-  if defined(Class['profile::postgresql']) {
+  if defined(Class['postgresql']) {
   
     postgresql::server::role { $zbx_monitor_user:
       ensure        => 'present',
       password_hash => $zbx_monitor_password,
-      require       => Class['profile::postgresql'],
+      require       => Class['postgresql'],
     }
 
     postgresql::server::grant_role { "grant_pg_monitor_to_${zbx_monitor_user}":
       role    => $zbx_monitor_user,
       group   => 'pg_monitor',
       require => Postgresql::Server::Role[$zbx_monitor_user],
+    }
+
+    postgresql::server::pg_hba_rule { 'zbx_monitor_localhost':
+      type        => 'host',
+      database    => 'all',
+      user        => "${zbx_monitor_user}",
+      address     => '127.0.0.1/32',
+      auth_method => 'md5',
     }
 
     file { "$dir_zabbix_pg_template":
@@ -50,17 +57,22 @@ class zabbix::agent::postgresql (
       require => File["$dir_zabbix_pg_template"],
     }
 
-    postgresql::server::pg_hba_rule { 'zbx_monitor_localhost':
-      type        => 'host',
-      database    => 'all',
-      user        => "${zbx_monitor_user}",
-      address     => '127.0.0.1/32',
-      auth_method => 'md5',
+    # Retrieve the version from hieradata
+    $version = hiera('postgresql::globals::version')
+
+    # Check the OS family
+    if $facts['os']['family'] == 'RedHat' {
+      # Create the symbolic link
+      file { "/usr/bin/pg_isready":
+        ensure => 'link',
+        target => "/usr/pgsql-${version}/bin/pg_isready",
+        require => Class['postgresql'],
+      }
     }
 
   } else {
 
-    fail('Error: class profile::postgresql is not included. zabbix::agent::postgresql will not be applied.')
+    fail('Error: class postgresql is not included. zabbix::agent::postgresql will not be applied.')
 
   }
 }
