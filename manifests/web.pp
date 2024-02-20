@@ -16,6 +16,7 @@ class zabbix::web (
   $dbname             = 'zabbix',
   $dbuser             = 'zabbix',
   $dbpass             = 'secret',
+  $double             = false,
   $server_host        = 'localhost',
   $server_port        = '10051',
   $server_name        = '',
