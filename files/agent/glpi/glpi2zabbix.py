@@ -24,7 +24,7 @@ class ZabbixException(Exception):
         self.msg = msg
 
     def __str__(self):
-        return 'Zabbix: ' + str(self.msg)
+        return f"Zabbix: {str(self.msg)}"
 
 
 class WarningException(Exception):
@@ -44,7 +44,8 @@ def logger_setup():
     logfile.setLevel(logging.INFO)
     logfile.setFormatter(
         logging.Formatter(
-            '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        )
     )
 
     logger.addHandler(logfile)
@@ -347,10 +348,11 @@ class GLPI:
 
 
 class Zabbix:
-    def __init__(self, url, username, password):
+    def __init__(self, url, username, password, logger):
         self.url = strip_trailing_slash(url)
         self.username = username
         self.password = password
+        self.logger = logger
         self.server = None
         self.users = None
         self.usergroups = None
@@ -378,17 +380,24 @@ class Zabbix:
         try:
             self.server = ZabbixAPI(self.url)
             self.server.login(self.username, self.password)
-            self._get_initial_data()
 
         except ZabbixAPIException as e:
-            raise ZabbixException(msg='Error during login: ' + str(e))
+            raise ZabbixException(msg=f"Error during login: {str(e)}")
+
+        else:
+            try:
+                self._get_initial_data()
+
+            except ZabbixException as e:
+                self.logout()
+                raise ZabbixException(msg=str(e))
 
     def logout(self):
         try:
             self.server.user.logout()
 
         except ZabbixAPIException as e:
-            raise ZabbixException(msg='Error during logout: ' + str(e))
+            raise ZabbixException(msg=f"Error during logout: {str(e)}")
 
     def _get_hosts(self):
         try:
@@ -409,34 +418,45 @@ class Zabbix:
             return self.server.user.get(output='extend')
 
         except ZabbixAPIException as e:
-            raise ZabbixException(msg='Error fetching users: ' + str(e))
+            raise ZabbixException(msg=f"Error fetching users: {str(e)}")
 
     def _get_usergroups(self):
         try:
             return self.server.usergroup.get(selectRights=1)
 
         except ZabbixAPIException as e:
-            raise ZabbixException(msg='Error fetching user groups: ' + str(e))
+            raise ZabbixException(msg=f"Error fetching user groups: {str(e)}")
 
     def create_hostgroups(self, glpi_hostgroups):
         """
         Creating hostgroups for hosts existing on Zabbix.
         :param glpi_hostgroups: list of unique host groups' names from GLPI
         """
-        try:
-            new_hostgroup = list()
-            for item in glpi_hostgroups:
-                # if it does not exist, create it
-                if not any(
-                        d.get('name', None) == item for d in self.hostgroups
-                ):
+        new_hostgroup = list()
+        skipped_hostgroup = list()
+        for item in glpi_hostgroups:
+            # if it does not exist, create it
+            if not any(
+                    d.get('name', None) == item for d in self.hostgroups
+            ):
+                try:
                     self.server.hostgroup.create(name=item)
                     new_hostgroup.append(item)
 
-            self.new_hostgroups = new_hostgroup
+                except ZabbixAPIException as e:
+                    self.logger.warning(
+                        f"Zabbix: Host group {item} not created: {str(e)}"
+                    )
+                    skipped_hostgroup.append(item)
+                    continue
 
-        except Exception as e:
-            raise ZabbixException(msg='Error creating host groups: ' + str(e))
+        if len(skipped_hostgroup) > 0:
+            raise ZabbixException(
+                f"Host group(s) {', '.join(skipped_hostgroup)} not created"
+            )
+
+        else:
+            self.new_hostgroups = new_hostgroup
 
     def update_hosts_groups(self, glpi_hosts, glpi_computertypes):
         """
@@ -444,9 +464,9 @@ class Zabbix:
         :param glpi_hosts: list detailed hosts from GLPI
         :param glpi_computertypes: list of computer types as defined in GLPI
         """
-        try:
-            glpi_group_pattern = re.compile('\d{3}-\d{2}-\d{3}')
-            for item in glpi_hosts:
+        glpi_group_pattern = re.compile('\d{3}-\d{2}-\d{3}')
+        for item in glpi_hosts:
+            try:
                 zabbix_host_id = [
                     d.get('hostid') for d in self.hosts
                     if d.get('name') == item['name']
@@ -465,49 +485,68 @@ class Zabbix:
                     continue
 
                 else:
-                    zabbix_hostgroup_with_host = self.server.hostgroup.get(
-                        hostids=zabbix_host_id
-                    )
-
-                    zabbix_hostgroup_names = set(
-                        item['name'] for item in zabbix_hostgroup_with_host
-                    )
-
-                    update = list(glpi_hostgroup.union(zabbix_hostgroup_names))
-                    if update != zabbix_hostgroup_names:
-                        zabbix_hostgroup_update = list()
-                        for i in update:
-                            # skip computer types and groups named after
-                            # services (pattern above) which are not in
-                            # glpi_hostgroup
-                            if i in glpi_computertypes and i not in \
-                                    glpi_hostgroup \
-                                    or re.match(glpi_group_pattern, i) \
-                                    and i not in glpi_hostgroup:
-                                pass
-
-                            else:
-                                x2 = [
-                                    d.get('groupid') for d in self.hostgroups
-                                    if d.get('name') == i
-                                ]
-                                if x2:
-                                    zabbix_hostgroup_update.append(
-                                        {'groupid': int(x2[0])}
-                                    )
-
-                        self.server.host.update(
-                            hostid=zabbix_host_id,
-                            groups=sorted(
-                                zabbix_hostgroup_update,
-                                key=lambda k: k["groupid"]
-                            )
+                    try:
+                        zabbix_hostgroup_with_host = self.server.hostgroup.get(
+                            hostids=zabbix_host_id
                         )
 
-        except Exception as e:
-            raise ZabbixException(
-                msg='Error updating hosts with host groups: ' + str(e)
-            )
+                    except ZabbixAPIException as e:
+                        self.logger.warning(
+                            f"Zabbix: Skipping host {item['name']}: "
+                            f"Unable to fetch its host groups: {str(e)}"
+                        )
+                        continue
+
+                    else:
+                        zabbix_hostgroup_names = set(
+                            item['name'] for item in zabbix_hostgroup_with_host
+                        )
+
+                        update = list(
+                            glpi_hostgroup.union(zabbix_hostgroup_names)
+                        )
+                        if update != zabbix_hostgroup_names:
+                            zabbix_hostgroup_update = list()
+                            for i in update:
+                                # skip computer types and groups named after
+                                # services (pattern above) which are not in
+                                # glpi_hostgroup
+                                if i in glpi_computertypes and i not in \
+                                        glpi_hostgroup \
+                                        or re.match(glpi_group_pattern, i) \
+                                        and i not in glpi_hostgroup:
+                                    pass
+
+                                else:
+                                    x2 = [
+                                        d.get('groupid') for d in
+                                        self.hostgroups
+                                        if d.get('name') == i
+                                    ]
+                                    if x2:
+                                        zabbix_hostgroup_update.append(
+                                            {'groupid': int(x2[0])}
+                                        )
+
+                            self.server.host.update(
+                                hostid=zabbix_host_id,
+                                groups=sorted(
+                                    zabbix_hostgroup_update,
+                                    key=lambda k: k["groupid"]
+                                )
+                            )
+
+            except IndexError:
+                self.logger.warning(
+                    f"Zabbix: Host {item['name']} not updated: "
+                    f"Host not registered in Zabbix"
+                )
+                continue
+
+            except ZabbixAPIException as e:
+                self.logger.warning(
+                    f"Zabbix: Unable to update host {item['name']}: {str(e)}"
+                )
 
     def remove_empty_hostgroups(self):
         """
@@ -516,6 +555,12 @@ class Zabbix:
         try:
             hostgroups_with_hosts = self.server.hostgroup.get(real_hosts=1)
 
+        except ZabbixAPIException as e:
+            self.logger.warning(
+                f"Zabbix: Unable to determine empty host groups: {str(e)}"
+            )
+
+        else:
             # some groups SHOULD NOT be deleted
             not_deletable = \
                 ['Templates', 'Hypervisors', 'Virtual machines'] + \
@@ -537,12 +582,15 @@ class Zabbix:
 
             if empty_hostgroups:
                 for item in empty_hostgroups:
-                    self.server.hostgroup.delete(int(item['groupid']))
+                    try:
+                        self.server.hostgroup.delete(int(item['groupid']))
 
-        except Exception as e:
-            raise ZabbixException(
-                msg='Error removing empty host groups: ' + str(e)
-            )
+                    except ZabbixAPIException as e:
+                        self.logger.warning(
+                            f"Zabbix: Unable to delete host group "
+                            f"{item['name']}: {str(e)}"
+                        )
+                        continue
 
     def update_usergroups(self):
         """
@@ -553,6 +601,13 @@ class Zabbix:
             # update host groups
             self.hostgroups = self._get_hostgroups()
 
+        except ZabbixException as e:
+            self.logger.warning("User groups not updated")
+            raise ZabbixException(
+                f"Unable to fetch updated host groups: {str(e)[44:]}"
+            )
+
+        else:
             if self.new_hostgroups:
                 # Updating user groups with the same name as newly created host
                 # group (if it exists)
@@ -566,10 +621,18 @@ class Zabbix:
                         if d.get('name') == item
                     ]
                     if usrid:
-                        self.server.usergroup.update(
-                            usrgrpid=usrid[0],
-                            rights={'permission': 3, 'id': grpid[0]}
-                        )
+                        try:
+                            self.server.usergroup.update(
+                                usrgrpid=usrid[0],
+                                rights={'permission': 3, 'id': grpid[0]}
+                            )
+
+                        except ZabbixAPIException as e:
+                            self.logger.warning(
+                                f"Zabbix: Error updating user group "
+                                f"{item}: {str(e)}"
+                            )
+                            continue
 
             # Checking if 'Guest' user group needs updating
             guestrights = [
@@ -589,9 +652,6 @@ class Zabbix:
                     usrgrpid=self.guestid, rights=guest_rights
                 )
 
-        except Exception as e:
-            raise ZabbixException(msg='Error updating user groups' + str(e))
-
     def create_usergroups(self, glpi_usergroups):
         """
         Creating user groups if they do not exist in Zabbix. If the host group
@@ -599,15 +659,15 @@ class Zabbix:
         created user group.
         :param glpi_usergroups: unique user groups from GLPI
         """
-        try:
-            for item in glpi_usergroups:
-                if not any(
-                        d.get('name', None) == item for d in self.usergroups
-                ):
-                    hostgrpid = [
-                        d.get('groupid') for d in self.hostgroups
-                        if d.get('name') == item
-                    ]
+        for item in glpi_usergroups:
+            if not any(
+                    d.get('name', None) == item for d in self.usergroups
+            ):
+                hostgrpid = [
+                    d.get('groupid') for d in self.hostgroups
+                    if d.get('name') == item
+                ]
+                try:
                     if hostgrpid:
                         self.server.usergroup.create(
                             name=item,
@@ -616,8 +676,11 @@ class Zabbix:
                     else:
                         self.server.usergroup.create(name=item)
 
-        except Exception as e:
-            raise ZabbixException(msg='Error creating user groups: ' + str(e))
+                except ZabbixAPIException as e:
+                    self.logger.warning(
+                        f"Zabbix: Unable to create user group {item}: {str(e)}"
+                    )
+                    continue
 
     def handle_users(self, glpi_users, glpi_users_with_groups):
         """
@@ -631,44 +694,48 @@ class Zabbix:
         groups they are assigned to.
         """
         for key, value in glpi_users_with_groups.items():
-            try:
-                if not any(d.get('username', None) == key for d in self.users):
-                    name = [
-                        d.get('firstname') for d in glpi_users
-                        if key == d.get('name')
+            if not any(d.get('username', None) == key for d in self.users):
+                name = [
+                    d.get('firstname') for d in glpi_users
+                    if key == d.get('name')
+                ]
+
+                if name:
+                    name = name[0]
+
+                else:
+                    name = ''
+
+                surname = [
+                    d.get('realname') for d in glpi_users
+                    if key == d.get('name')
+                ]
+
+                if surname:
+                    surname = surname[0]
+
+                else:
+                    surname = ''
+
+                grpid = list()
+                for item in value:
+                    x = [
+                        d.get('usrgrpid') for d in self.usergroups
+                        if item == d.get('name')
                     ]
-                    if name:
-                        name = name[0]
-                    else:
-                        name = ''
+                    if x:
+                        grpid.append({'usrgrpid': int(x[0])})
 
-                    surname = [
-                        d.get('realname') for d in glpi_users
-                        if key == d.get('name')
-                    ]
-                    if surname:
-                        surname = surname[0]
-                    else:
-                        surname = ''
+                # all the users are members of 'Guests' usergroup
+                grpid.append({'usrgrpid': int(self.guestid)})
 
-                    grpid = list()
-                    for item in value:
-                        x = [
-                            d.get('usrgrpid') for d in self.usergroups
-                            if item == d.get('name')
-                        ]
-                        if x:
-                            grpid.append({'usrgrpid': int(x[0])})
+                if len(grpid) == 1:
+                    usertype = 1    # Zabbix user
 
-                    # all the users are members of 'Guests' usergroup
-                    grpid.append({'usrgrpid': int(self.guestid)})
+                else:
+                    usertype = 2    # Zabbix admin
 
-                    if len(grpid) == 1:
-                        usertype = 1    # Zabbix user
-
-                    else:
-                        usertype = 2    # Zabbix admin
-
+                try:
                     self.server.user.create(
                         username=key,
                         passwd=generate_random_alphanum_string(30),
@@ -676,46 +743,78 @@ class Zabbix:
                         name=name, surname=surname, roleid=usertype
                     )
 
-                else:
-                    usrid = [
-                        d.get('userid') for d in self.users if
-                        key == d.get('username')
-                    ][0]
+                except ZabbixAPIException as e:
+                    self.logger.warning(
+                        f"Zabbix: Unable to create user {key}: {str(e)}"
+                    )
+                    continue
 
-                    # Check if name and surname are equal in GLPI and Zabbix:
-                    glpi_name = [
-                        d.get('firstname') for d in glpi_users
-                        if key == d.get('name')
-                    ]
+            else:
+                usrid = [
+                    d.get('userid') for d in self.users if
+                    key == d.get('username')
+                ][0]
 
-                    if glpi_name:
-                        glpi_name = glpi_name[0]
+                # Check if name and surname are equal in GLPI and Zabbix:
+                glpi_name = [
+                    d.get('firstname') for d in glpi_users
+                    if key == d.get('name')
+                ]
 
-                    zabbix_name = [
-                        d.get('name') for d in self.users
-                        if key == d.get('username')
-                    ][0]
+                if glpi_name:
+                    glpi_name = glpi_name[0]
 
-                    if glpi_name != zabbix_name:
+                zabbix_name = [
+                    d.get('name') for d in self.users
+                    if key == d.get('username')
+                ][0]
+
+                if glpi_name != zabbix_name:
+                    try:
                         self.server.user.update(userid=usrid, name=glpi_name)
 
-                    glpi_surname = [
-                        d.get('realname') for d in glpi_users
-                        if key == d.get('name')
-                    ]
+                    except ZabbixAPIException as e:
+                        self.logger.warning(
+                            f"Zabbix: Unable to update name of user {key}: "
+                            f"{str(e)}"
+                        )
 
-                    if glpi_surname:
-                        glpi_surname = glpi_surname[0]
-                    zabbix_surname = [
-                        d.get('surname') for d in self.users
-                        if key == d.get('username')
-                    ][0]
-                    if glpi_surname != zabbix_surname:
+                glpi_surname = [
+                    d.get('realname') for d in glpi_users
+                    if key == d.get('name')
+                ]
+
+                if glpi_surname:
+                    glpi_surname = glpi_surname[0]
+                zabbix_surname = [
+                    d.get('surname') for d in self.users
+                    if key == d.get('username')
+                ][0]
+                if glpi_surname != zabbix_surname:
+                    try:
                         self.server.user.update(
                             userid=usrid, surname=glpi_surname
                         )
 
+                    except ZabbixAPIException as e:
+                        self.logger.warning(
+                            f"Zabbix: Unable to update surname of user {key}: "
+                            f"{str(e)}"
+                        )
+
+                try:
                     usrgrp = self.server.usergroup.get(userids=usrid)
+
+                except ZabbixAPIException as e:
+                    self.logger.warning(
+                        f"Zabbix: Unable to fetch user groups of user {key}: "
+                        f"{str(e)}"
+                    )
+                    self.logger.warning(
+                        f"Skipping user group analysis for user {key}"
+                    )
+
+                else:
                     usrgrpset = set()
                     for i in usrgrp:
                         usrgrpset.add(i['name'])
@@ -737,68 +836,84 @@ class Zabbix:
                             d.get('type') for d in self.users
                             if d.get('username') == key
                         ][0]
-                        if usrtype == '3':
-                            self.server.user.update(
-                                userid=usrid,
-                                usrgrps=sorted(
-                                    usrgrpids, key=lambda k: [k["usrgrpid"]]
-                                ),
-                                passwd=generate_random_alphanum_string(30)
-                            )
-                        else:
-                            if len(usrgrplist) > 1:
+                        try:
+                            if usrtype == '3':
                                 self.server.user.update(
                                     userid=usrid,
                                     usrgrps=sorted(
-                                        usrgrpids, key=lambda k: k["usrgrpid"]
+                                        usrgrpids, key=lambda k: [k["usrgrpid"]]
                                     ),
-                                    roleid=2,
                                     passwd=generate_random_alphanum_string(30)
                                 )
                             else:
-                                self.server.user.update(
-                                    userid=usrid,
-                                    usrgrps=sorted(
-                                        usrgrpids, key=lambda k: k["usrgrpid"]
-                                    ),
-                                    roleid=1,
-                                    passwd=generate_random_alphanum_string(30)
-                                )
+                                if len(usrgrplist) > 1:
+                                    self.server.user.update(
+                                        userid=usrid,
+                                        usrgrps=sorted(
+                                            usrgrpids,
+                                            key=lambda k: k["usrgrpid"]
+                                        ),
+                                        roleid=2,
+                                        passwd=generate_random_alphanum_string(
+                                            30
+                                        )
+                                    )
+                                else:
+                                    self.server.user.update(
+                                        userid=usrid,
+                                        usrgrps=sorted(
+                                            usrgrpids,
+                                            key=lambda k: k["usrgrpid"]
+                                        ),
+                                        roleid=1,
+                                        passwd=generate_random_alphanum_string(
+                                            30
+                                        )
+                                    )
 
-            except Exception as e:
-                raise ZabbixException(
-                    'Error handling user %s: %s' % (key, str(e))
-                )
+                        except ZabbixAPIException as e:
+                            self.logger.warning(
+                                f"Zabbix: Unable to update user groups of user "
+                                f"{key}: {str(e)}"
+                            )
 
-        try:
-            # Default Zabbix users
-            defaultusersalias = ['guest', 'apiuser', 'nagios', 'Admin']
-            default_users = [
-                d for d in self.users if d.get('username') in defaultusersalias
-            ]
-            superadmin = [d for d in self.users if d.get('type') == '3']
-            default_users = default_users + superadmin
+        # Default Zabbix users
+        defaultusersalias = ['guest', 'apiuser', 'nagios', 'Admin']
+        default_users = [
+            d for d in self.users if d.get('username') in defaultusersalias
+        ]
+        superadmin = [d for d in self.users if d.get('type') == '3']
+        default_users = default_users + superadmin
 
-            # Remove users from Zabbix which don't exist on GLPI (except the
-            # default ones)
-            for item in self.users:
-                if not any(
-                        d.get('name', None) == item['username'] for d in
-                        glpi_users
-                ) and item not in default_users:
+        # Remove users from Zabbix which don't exist on GLPI (except the
+        # default ones)
+        for item in self.users:
+            if not any(
+                    d.get('name', None) == item['username'] for d in
+                    glpi_users
+            ) and item not in default_users:
+                try:
                     self.server.user.delete(item['userid'])
 
-        except Exception as e:
-            raise ZabbixException('Error handling users: ' + str(e))
+                except ZabbixAPIException as e:
+                    self.logger.warning(
+                        f"Zabbix: User {item['username']} not deleted: {str(e)}"
+                    )
+                    continue
 
     def delete_usergroups(self):
         """
         Remove empty user groups, except for the default ones.
         """
+        # Returns the users from the user group in the users property.
         try:
-            # Returns the users from the user group in the users property.
             usergroups = self.server.usergroup.get(selectUsers=1)
 
+        except ZabbixAPIException as e:
+            self.logger.warning(f"Zabbix: Error fetching user groups: {str(e)}")
+            self.logger.warning("Skipping deletion of user groups")
+
+        else:
             # Default Zabbix usergroups
             default_usergroup_name = [
                 'Guests', 'API', 'Debug', 'Disabled',
@@ -811,10 +926,14 @@ class Zabbix:
             # If user group is empty, remove it
             for item in usergroups:
                 if not item['users'] and item not in default_usergroups:
-                    self.server.usergroup.delete(item['usrgrpid'])
+                    try:
+                        self.server.usergroup.delete(item['usrgrpid'])
 
-        except Exception as e:
-            raise ZabbixException(msg='Error deleting user groups: ' + str(e))
+                    except ZabbixAPIException as e:
+                        self.logger.warning(
+                            f"Zabbix: Error deleting user group "
+                            f"{item['name']}: {str(e)}"
+                        )
 
 
 def main():
@@ -865,7 +984,8 @@ def main():
     zabbix = Zabbix(
         url=zabbix_url,
         username=zabbix_username,
-        password=zabbix_password
+        password=zabbix_password,
+        logger=logger
     )
 
     try:
