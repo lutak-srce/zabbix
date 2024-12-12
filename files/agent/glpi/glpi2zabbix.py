@@ -833,11 +833,11 @@ class Zabbix:
                                 usrgrpids.append({'usrgrpid': int(x1[0])})
 
                         usrtype = [
-                            d.get('type') for d in self.users
+                            d.get('roleid') for d in self.users
                             if d.get('username') == key
                         ][0]
                         try:
-                            if usrtype == '3':
+                            if usrtype == "3":
                                 self.server.user.update(
                                     userid=usrid,
                                     usrgrps=sorted(
