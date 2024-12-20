@@ -9,7 +9,7 @@ class zabbix::params {
   $ensure         = 'present'
   $server_name    = 'mon'
   $server_active  = 'mon'
-  $client_name    = $::fqdn
+  $client_name    = $facts['networking']['fqdn']
 
   # module specific settings (agent)
   $agent_file_owner     = 'root'
@@ -40,7 +40,7 @@ class zabbix::params {
   $my_class         = undef
 
   # install package depending on major version
-  case $::osfamily {
+  case $facts['os']['family'] {
     default: {
       $get_package              = 'zabbix-get'
       $get_version              = 'present'

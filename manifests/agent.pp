@@ -23,7 +23,7 @@ class zabbix::agent (
   $server_active            = 'mon',
   $buffersend               = 5,
   $buffersize               = 100,
-  $client_name              = $::fqdn,
+  $client_name              = $facts['networking']['fqdn'],
   $timeout                  = '30',
   $tls_connect              = 'unencrypted',
   $tls_accept               = 'unencrypted',

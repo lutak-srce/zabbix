@@ -8,7 +8,7 @@ class zabbix::repo::ubuntu (
   include ::apt
   ::apt::source { 'zabbix':
     location          => "http://repo.zabbix.com/zabbix/${version}/ubuntu",
-    release           => $::lsbdistcodename,
+    release           => $facts['os']['distro']['codename'],
     repos             => 'main',
     required_packages => 'debian-keyring debian-archive-keyring',
     key               => '79EA5ED4',

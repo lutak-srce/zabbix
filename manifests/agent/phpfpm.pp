@@ -9,7 +9,7 @@ class zabbix::agent::phpfpm (
   $php_fpm_sock            = undef,
 ) inherits zabbix::agent {
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     default: {
       $cgi_fcgi = 'fcgi'
       if $php_fpm_sock == undef {
