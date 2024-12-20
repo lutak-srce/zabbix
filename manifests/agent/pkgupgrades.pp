@@ -7,7 +7,7 @@ class zabbix::agent::pkgupgrades (
   $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
 ) inherits zabbix::agent {
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     default: {}
     /(RedHat|redhat|amazon)/: {
       file { "${dir_zabbix_agentd_confd}/pkgupgrades.conf" :

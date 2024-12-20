@@ -26,7 +26,7 @@ class zabbix::proxy (
   $dbsocket                = false,
   $dbsocket_path           = '/var/lib/mysql/mysql.sock',
   $server                  = '127.0.0.1',
-  $client_name             = $::fqdn,
+  $client_name             = $facts['networking']['fqdn'],
   $tls_connect             = 'unencrypted',
   $tls_accept              = 'unencrypted',
   $tls_ca_file             = undef,

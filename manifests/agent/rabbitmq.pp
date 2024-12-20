@@ -11,8 +11,8 @@ class zabbix::agent::rabbitmq (
   $rabbitmq_protocol       = 'http',
   $rabbitmq_hostname       = 'localhost',
   $rabbitmq_port           = '15672',
-  $node                    = $::fqdn,
-  $senderhostname          = $::fqdn,
+  $node                    = $facts['networking']['fqdn'],
+  $senderhostname          = $facts['networking']['fqdn'],
 ) inherits zabbix::agent {
 
   file { "${dir_zabbix_agentd_confd}/rabbitmq.conf" :
