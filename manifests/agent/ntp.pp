@@ -7,7 +7,7 @@ class zabbix::agent::ntp (
   $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
 ) inherits zabbix::agent {
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     /(RedHat|redhat)/: {
 
       $ntpq_bin = '/usr/sbin/ntpq'

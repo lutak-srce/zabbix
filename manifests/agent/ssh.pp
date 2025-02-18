@@ -8,12 +8,12 @@ class zabbix::agent::ssh (
   $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
 ) inherits zabbix::agent {
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     default: {
       $lsof_bin = '/usr/sbin/lsof'
     }
     /(RedHat|redhat|amazon)/: {
-      case $::operatingsystemrelease {
+      case $facts['os']['release']['full'] {
         default: {
           $lsof_bin = '/usr/sbin/lsof'
         }

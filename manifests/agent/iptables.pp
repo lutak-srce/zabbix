@@ -7,7 +7,7 @@ class zabbix::agent::iptables (
   $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
 ) inherits zabbix::agent {
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     default: {
       $plugin_package = 'zabbix-agent_iptables'
     }

@@ -7,7 +7,7 @@ class zabbix::repo (
   $version = '2.2',
 ) inherits zabbix::params {
 
-  case $::operatingsystem {
+  case $facts['os']['name'] {
     default         : {}
     /Ubuntu/        : {
       class { '::zabbix::repo::ubuntu':
