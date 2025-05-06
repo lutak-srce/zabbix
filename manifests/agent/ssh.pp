@@ -15,10 +15,10 @@ class zabbix::agent::ssh (
     /(RedHat|redhat|amazon)/: {
       case $facts['os']['release']['full'] {
         default: {
-          $lsof_bin = '/usr/sbin/lsof'
-        }
-        /^8.*/: {
           $lsof_bin = '/usr/bin/lsof'
+        }
+        /^(5|6|7).*/: {
+          $lsof_bin = '/usr/sbin/lsof'
         }
       }
     }
