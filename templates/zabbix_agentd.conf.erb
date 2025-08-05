@@ -174,7 +174,7 @@ Hostname=<%= @client_name %>
 # Range: 1-3600
 # Default:
 # BufferSend=5
-BufferSend=360
+BufferSend=<%= @buffersend %>
 
 ### Option: BufferSize
 #	Maximum number of values in a memory buffer. The agent will send
@@ -184,7 +184,7 @@ BufferSend=360
 # Range: 2-65535
 # Default:
 # BufferSize=100
-BufferSize=500
+BufferSize=<%= @buffersize %>
 
 ### Option: MaxLinesPerSecond
 #	Maximum number of new lines the agent will send per second to Zabbix Server
