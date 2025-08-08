@@ -307,7 +307,7 @@ Include=<%= @dir_zabbix_agentd_confd %>/*.conf
 # Default:/tmp/agent.plugin.sock
 # PluginSocket=
 
-<% if @pluginsocket %>PluginSocket=<%= @pluginsocket %><% end %>
+<% if @plugin_socket %>PluginSocket=<%= @plugin_socket %><% end %>
 
 ####### USER-DEFINED MONITORED PARAMETERS #######
 
@@ -350,7 +350,7 @@ Include=<%= @dir_zabbix_agentd_confd %>/*.conf
 # Default:
 # ControlSocket=
 
-<% if @controlsocket %>ControlSocket=<%= @controlsocket %><% end %>
+<% if @control_socket %>ControlSocket=<%= @control_socket %><% end %>
 
 ####### TLS-RELATED PARAMETERS #######
 

@@ -62,8 +62,8 @@ class zabbix::params {
       $server_status              = 'enabled'
       $zabbix_server_logfile      = '/var/log/zabbix/zabbix_server.log'
       $zabbix_server_pidfile      = '/var/run/zabbix/zabbix_server.pid'
-      $pluginsocket               = undef
-      $controlsocket              = undef
+      $plugin_socket              = undef
+      $control_socket             = undef
       $zabbix_agent_pidfile       = '/var/run/zabbix/zabbix_agentd.pid'
       $fpinglocation              = '/usr/bin/fping'
       $fping6location             = '/usr/bin/fping6'
@@ -118,8 +118,8 @@ class zabbix::params {
         $zabbix_server_pidfile    = '/var/run/zabbixsrv/zabbix_server.pid'
         $zabbix_agent_pidfile     = '/var/run/zabbix/zabbix_agentd.pid'
       }
-      $pluginsocket               = undef
-      $controlsocket              = undef
+      $plugin_socket              = undef
+      $control_socket             = undef
       $fpinglocation              = '/usr/sbin/fping'
       $fping6location             = '/usr/sbin/fping6'
       $alert_scripts_path         = '/var/lib/zabbixsrv/alertscripts'
@@ -168,8 +168,8 @@ class zabbix::params {
       $zabbix_server_logfile      = '/var/log/zabbix/zabbix_server.log'
       $zabbix_server_pidfile      = '/var/run/zabbix/zabbix_server.pid'
       $zabbix_agent_pidfile       = '/var/run/zabbix/zabbix_agentd.pid'
-      $pluginsocket               = undef
-      $controlsocket              = undef
+      $plugin_socket              = undef
+      $control_socket             = undef
       $fpinglocation              = '/usr/bin/fping'
       $fping6location             = '/usr/bin/fping6'
       $alert_scripts_path         = '/usr/lib/zabbix/alertscripts'
