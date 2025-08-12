@@ -1,6 +1,6 @@
-<% if facts['os']['family'] == 'RedHat' and facts['os']['release']['major'] > '7' -%>
+<% if @facts['os']['family'] == 'RedHat' and @facts['os']['release']['major'] > '7' -%>
 #!/usr/libexec/platform-python
-<% elsif facts['os']['name'] == 'Debian' and facts['os']['release']['major'] > '10' or facts['os']['name'] == 'Ubuntu' -%>
+<% elsif @facts['os']['name'] == 'Debian' and @facts['os']['release']['major'] > '10' or @facts['os']['name'] == 'Ubuntu' -%>
 #!/usr/bin/env python3
 <% else -%>
 #!/usr/bin/env python
