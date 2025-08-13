@@ -10,6 +10,18 @@ class zabbix::agent::postfix (
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
 ) inherits zabbix::agent {
 
+  case $facts['os']['family'] {
+    default: {
+      # No action taken. Install logtail & pflogsumm manually
+    }
+    /(Debian|Ubuntu)/: {
+      package { ['logtail', 'pflogsumm']:
+        ensure => installed,
+        before => File["${dir_zabbix_agent_libdir}/postfix.pl"],
+      }
+    }
+  }
+
   sudoers::allowed_command { 'zabbix_postfix' :
     command          => "${dir_zabbix_agent_libdir}/postfix.pl",
     user             => 'zabbix',
