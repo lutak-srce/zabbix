@@ -10,17 +10,7 @@ class zabbix::agent::dovecot (
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
 ) inherits zabbix::agent {
 
-  case $facts['os']['family'] {
-    default: {
-      # No action taken. Install logtail manually
-    }
-    /(Debian|Ubuntu)/: {
-      package { ['logtail']:
-        ensure => installed,
-        before => File["${dir_zabbix_agent_libdir}/dovecot.pl"],
-      }
-    }
-  }
+  include zabbix::agent::logtail
 
   file { "${dir_zabbix_agentd_confd}/dovecot.conf" :
     ensure  => file,
