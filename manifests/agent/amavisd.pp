@@ -12,6 +12,18 @@ class zabbix::agent::amavisd (
 
   include zabbix::agent::logtail
 
+  case $facts['os']['family'] {
+    default: {
+      # No action taken. Install libdbi-perl manually
+    }
+    /(Debian|Ubuntu)/: {
+      package { 'libdbi-perl':
+        ensure => installed,
+        before => File["${dir_zabbix_agent_libdir}/amavisd.pl"],
+      }
+    }
+  }
+
   file { "${dir_zabbix_agentd_confd}/amavisd.conf" :
     ensure  => file,
     owner   => root,
