@@ -5,23 +5,25 @@
 # directory.
 define zabbix::agent::config (
   $settings,
-  $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
-  $notify_service         = true,
+  $conf_dir       = $::zabbix::agent::conf_dir,
+  $agent_service  = $::zabbix::agent::service_state,
+  $agent_package  = $::zabbix::agent::agent_package,
+  $notify_service = true,
 ) {
   include ::zabbix::agent
 
   $service_to_notify = $notify_service ? {
     default => undef,
-    true    => Service['zabbix-agent'],
+    true    => Service[$agent_service],
   }
 
-  file { "${dir_zabbix_agentd_confd}/${name}.conf":
+  file { "${conf_dir}/${name}.conf":
     ensure  => file,
     content => template('zabbix/custom.conf.erb'),
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    require => File[$dir_zabbix_agentd_confd],
+    require => File[$conf_dir],
     notify  => $service_to_notify,
   }
 

@@ -4,7 +4,9 @@
 # This module installs zabbix mdraid sensor
 #
 class zabbix::agent::mdraid (
-  $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
+  $conf_dir                = $::zabbix::agent::conf_dir,
+  $agent_service           = $::zabbix::agent::service_state,
+  $agent_package           = $::zabbix::agent::agent_package,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
 ) inherits zabbix::agent {
 
@@ -15,16 +17,16 @@ class zabbix::agent::mdraid (
     comment          => 'Zabbix mdadm --detail listing',
   }
 
-  file { "${dir_zabbix_agentd_confd}/mdraid.conf" :
+  file { "${conf_dir}/mdraid.conf" :
     ensure  => file,
     owner   => root,
     group   => root,
     content => template('zabbix/agent/mdraid.conf.erb'),
     require => [
-      Package['zabbix-agent'],
+      Package[$agent_package],
       File["${dir_zabbix_agent_libdir}/check_mdraid"],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$agent_service],
   }
 
   file { "${dir_zabbix_agent_libdir}/check_mdraid" :

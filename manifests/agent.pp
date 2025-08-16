@@ -15,7 +15,6 @@ class zabbix::agent (
   $file_zabbix_agentd_conf    = $::zabbix::params::file_zabbix_agentd_conf,
   $erb_zabbix_agentd_conf     = 'zabbix/zabbix_agentd.conf.erb',
   $dir_zabbix_agentd_confd    = $::zabbix::params::dir_zabbix_agentd_confd,
-  $dir_zabbix_agent2_pluginsd = $::zabbix::params::dir_zabbix_agent2_pluginsd,
   $dir_zabbix_agent_libdir    = $::zabbix::params::dir_zabbix_agent_libdir,
   $dir_zabbix_agent_modules   = $::zabbix::params::dir_zabbix_agent_modules,
   $zabbix_agentd_logfile      = $::zabbix::params::zabbix_agentd_logfile,
@@ -34,39 +33,95 @@ class zabbix::agent (
   $tls_cert_file              = undef,
   $tls_key_file               = undef,
   $autoload_configs           = false,
+  Enum['1', '2'] $variant     = '1',
+
+  # params for conf_dir override on Debian/Ubuntu when using zabbix repo
+  $repo                       = false,
+  $dir_zabbix_agentd_d        = $::zabbix::params::dir_zabbix_agentd_d,
+
+  # zabbix agent 2 params
+  $agent2_package             = $::zabbix::params::agent2_package,
+  $agent2_service             = $::zabbix::params::agent2_service,
+  $dir_zabbix_agent2_d        = $::zabbix::params::dir_zabbix_agent2_d,
+  $file_zabbix_agent2_conf    = $::zabbix::params::file_zabbix_agent2_conf,
+  $erb_zabbix_agent2_conf     = 'zabbix/zabbix_agent2.conf.erb',
+  $dir_zabbix_agent2_pluginsd = $::zabbix::params::dir_zabbix_agent2_pluginsd,
+  $zabbix_agent2_logfile      = $::zabbix::params::zabbix_agent2_logfile,
+  $zabbix_agent2_pidfile      = $::zabbix::params::zabbix_agent2_pidfile,
+  $purge_plugins_dir          = false,
+
 ) inherits zabbix::params {
+
+  if $variant == '2' {
+    $agent_package    = $::zabbix::agent::agent2_package
+    $service_state    = $::zabbix::agent::agent2_service
+    $conf_dir         = $::zabbix::agent::dir_zabbix_agent2_d
+    $conf_file        = $::zabbix::agent::file_zabbix_agent2_conf
+    $agent_template   = $::zabbix::agent::erb_zabbix_agent2_conf
+    $agent_pidfile    = $::zabbix::agent::zabbix_agent2_pidfile
+    $agent_logfile    = $::zabbix::agent::zabbix_agent2_logfile
+    $agent_purge      = $::zabbix::agent::package
+  } elsif $variant == '1' and $repo == true {
+      $agent_package    = $::zabbix::agent::package
+      $service_state    = $::zabbix::agent::service
+      $conf_dir         = $::zabbix::agent::dir_zabbix_agentd_d
+      $conf_file        = $::zabbix::agent::file_zabbix_agentd_conf
+      $agent_template   = $::zabbix::agent::erb_zabbix_agentd_conf
+      $agent_pidfile    = $::zabbix::agent::zabbix_agent_pidfile
+      $agent_logfile    = $::zabbix::agent::zabbix_agentd_logfile
+      $agent_purge      = $::zabbix::agent::agent2_package
+    } else {
+        $agent_package    = $::zabbix::agent::package
+        $service_state    = $::zabbix::agent::service
+        $conf_dir         = $::zabbix::agent::dir_zabbix_agentd_confd
+        $conf_file        = $::zabbix::agent::file_zabbix_agentd_conf
+        $agent_template   = $::zabbix::agent::erb_zabbix_agentd_conf
+        $agent_pidfile    = $::zabbix::agent::zabbix_agent_pidfile
+        $agent_logfile    = $::zabbix::agent::zabbix_agentd_logfile
+        $agent_purge      = $::zabbix::agent::agent2_package
+  }
 
   File {
     ensure  => file,
     owner   => $file_owner,
     group   => $file_group,
     mode    => $file_mode,
-    require => Package['zabbix-agent'],
-    notify  => Service[$service],
+    require => Package[$agent_package],
+    notify  => Service[$service_state],
   }
 
-  package { $package :
+  package { $agent_package :
     ensure => $version,
-    alias  => 'zabbix-agent',
   }
 
-  service { 'zabbix-agent':
+  package { "purge conflicting agent variant ${agent_purge}":
+    ensure => purged,
+    name   => $agent_purge,
+    before => Package[$agent_package],
+  }
+
+  service { $service_state:
     ensure  => running,
-    name    => $service,
     enable  => true,
-    require => Package['zabbix-agent'],
+    require => Package[$agent_package],
   }
 
-  file { 'zabbix_agentd.conf':
-    path    => $file_zabbix_agentd_conf,
-    content => template($erb_zabbix_agentd_conf),
+  file { $conf_file:
+    content => template($agent_template),
   }
 
-  file { 'zabbix_agent_confd':
+  file { $conf_dir:
     ensure  => directory,
-    path    => $dir_zabbix_agentd_confd,
     recurse => $purge_conf_dir,
     purge   => $purge_conf_dir,
+  }
+
+  if $::zabbix::agent::agent_variant == '1' {
+    file { $dir_zabbix_agent2_pluginsd:
+      ensure  => directory,
+      recurse => $purge_plugins_dir,
+      purge   => $purge_plugins_dir,
+    }
   }
 
   file { 'zabbix_agent_libdir':
@@ -89,11 +144,11 @@ class zabbix::agent (
 
   # compatibilty needed for zabbix agent sensors (sudoers)
   group { 'zabbix':
-    require => Package['zabbix-agent'],
+    require => Package[$agent_package],
   }
 
   user { 'zabbix':
-    require => Package['zabbix-agent'],
+    require => Package[$agent_package],
   }
 
   # autoload configs from zabbix::agent::configs from hiera

@@ -4,7 +4,9 @@
 # This module installs zabbix iptables plugin
 #
 class zabbix::agent::iptables (
-  $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
+  $conf_dir = $::zabbix::agent::conf_dir,
+  $agent_service           = $::zabbix::agent::service_state,
+  $agent_package           = $::zabbix::agent::agent_package,
 ) inherits zabbix::agent {
 
   case $facts['os']['family'] {
@@ -22,7 +24,7 @@ class zabbix::agent::iptables (
   package { 'zabbix-agent_iptables':
     ensure  => present,
     name    => $plugin_package,
-    require => Package['zabbix-agent'],
+    require => Package[$agent_package],
   }
 
 }

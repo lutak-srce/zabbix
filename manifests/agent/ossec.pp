@@ -4,8 +4,10 @@
 # This module installs zabbix ossec/wazuh sensor
 #
 class zabbix::agent::ossec (
-  $server_package = 'wazuh-manager',
-  $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
+  $server_package          = 'wazuh-manager',
+  $conf_dir                = $::zabbix::agent::conf_dir,
+  $agent_service           = $::zabbix::agent::service_state,
+  $agent_package           = $::zabbix::agent::agent_package,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
 ) inherits zabbix::agent {
 
@@ -16,12 +18,12 @@ class zabbix::agent::ossec (
     comment          => 'Zabbix sensor for monitoring OSSEC/Wazuh agents.',
   }
 
-  file { "${dir_zabbix_agentd_confd}/ossec.conf":
+  file { "${conf_dir}/ossec.conf":
     ensure  => file,
     owner   => root,
     group   => root,
     content => template('zabbix/agent/ossec.conf.erb'),
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$agent_service],
     require => Package[$server_package],
   }
 

@@ -4,23 +4,25 @@
 # This module installs Zabbix GPU sensor
 #
 class zabbix::agent::gpu (
-  $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
+  $conf_dir                = $::zabbix::agent::conf_dir,
+  $agent_service           = $::zabbix::agent::service_state,
+  $agent_package           = $::zabbix::agent::agent_package,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
 ) inherits zabbix::agent {
 
-  file { "${dir_zabbix_agentd_confd}/gpu.conf" :
+  file { "${conf_dir}/gpu.conf" :
     ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
     content => template('zabbix/agent/gpu.conf.erb'),
     require => [
-      Package['zabbix-agent'],
+      Package[$agent_package],
       File["${dir_zabbix_agent_libdir}/get_gpu_info"],
       File["${dir_zabbix_agent_libdir}/get_gpus_info.sh"],
       Package['python35u'],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$agent_service],
   }
 
   file { "${dir_zabbix_agent_libdir}/get_gpu_info" :

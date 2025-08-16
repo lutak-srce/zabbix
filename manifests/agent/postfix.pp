@@ -6,7 +6,9 @@
 #   include zabbix::agent::postfix
 #
 class zabbix::agent::postfix (
-  $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
+  $conf_dir                = $::zabbix::agent::conf_dir,
+  $agent_service           = $::zabbix::agent::service_state,
+  $agent_package           = $::zabbix::agent::agent_package,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
 ) inherits zabbix::agent {
 
@@ -31,13 +33,13 @@ class zabbix::agent::postfix (
     require_password => false,
   }
 
-  file { "${dir_zabbix_agentd_confd}/postfix.conf" :
+  file { "${conf_dir}/postfix.conf" :
     ensure  => file,
     owner   => root,
     group   => root,
     content => template('zabbix/agent/postfix.conf.erb'),
-    notify  => Service['zabbix-agent'],
-    require => Package['zabbix-agent'],
+    notify  => Service[$agent_service],
+    require => Package[$agent_package],
   }
 
   file { "${dir_zabbix_agent_libdir}/postfix.pl" :
@@ -46,7 +48,7 @@ class zabbix::agent::postfix (
     group   => root,
     mode    => '0755',
     source  => 'puppet:///modules/zabbix/agent/postfix.pl',
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$agent_service],
     require => ::Sudoers::Allowed_command['zabbix_postfix'],
   }
 

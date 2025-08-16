@@ -4,23 +4,25 @@
 # This module installs Zabbix SGE sensor
 #
 class zabbix::agent::sge (
-  $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
+  $conf_dir                = $::zabbix::agent::conf_dir,
+  $agent_service           = $::zabbix::agent::service_state,
+  $agent_package           = $::zabbix::agent::agent_package,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
 ) inherits zabbix::agent {
 
-  file { "${dir_zabbix_agentd_confd}/sge.conf" :
+  file { "${conf_dir}/sge.conf" :
     ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
     content => template('zabbix/agent/sge.conf.erb'),
     require => [
-      Package['zabbix-agent'],
+      Package[$agent_package],
       File["${dir_zabbix_agent_libdir}/sge.pl"],
       File["${dir_zabbix_agent_libdir}/sge-lld.pl"],
       Package['perl-JSON'],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$agent_service],
   }
 
   package { 'perl-JSON':

@@ -4,18 +4,20 @@
 # Add module for TCP connections
 #
 class zabbix::agent::tcp (
-  $dir_zabbix_agentd_confd  = $::zabbix::agent::dir_zabbix_agentd_confd,
+  $conf_dir                 = $::zabbix::agent::conf_dir,
+  $agent_service            = $::zabbix::agent::service_state,
+  $agent_package            = $::zabbix::agent::agent_package,
   $dir_zabbix_agent_modules = $::zabbix::agent::dir_zabbix_agent_modules,
   $module                   = "puppet:///modules/zabbix/agent/modules/${facts[os][family]}/${facts[os][release][major]}/tcp_count.so"
 ) inherits zabbix::agent {
 
-  file { "${dir_zabbix_agentd_confd}/tcp.conf" :
+  file { "${conf_dir}/tcp.conf" :
     ensure  => file,
     owner   => root,
     group   => root,
     source  => 'puppet:///modules/zabbix/agent/tcp.conf',
-    notify  => Service['zabbix-agent'],
-    require => [ Package['zabbix-agent'], File["${dir_zabbix_agent_modules}/tcp_count.so"] ],
+    notify  => Service[$agent_service],
+    require => [ Package[$agent_package], File["${dir_zabbix_agent_modules}/tcp_count.so"] ],
   }
 
   file { "${dir_zabbix_agent_modules}/tcp_count.so" :
@@ -24,6 +26,6 @@ class zabbix::agent::tcp (
     group  => root,
     mode   => '0644',
     source => $module,
-    notify => Service['zabbix-agent'],
+    notify => Service[$agent_service],
   }
 }

@@ -5,19 +5,21 @@
 #
 class zabbix::agent::mailcheck (
   $options                 = '',
-  $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
+  $conf_dir                = $::zabbix::agent::conf_dir,
+  $agent_service           = $::zabbix::agent::service_state,
+  $agent_package           = $::zabbix::agent::agent_package,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
   $mail_host               = 'imap.srce.hr',
   $mail_username           = '',
   $mail_password           = '',
 ) inherits zabbix::agent {
 
-  file { "${dir_zabbix_agentd_confd}/mailcheck.conf":
+  file { "${conf_dir}/mailcheck.conf":
     ensure  => file,
     owner   => root,
     group   => root,
     content => template('zabbix/agent/mailcheck.conf.erb'),
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$agent_service],
     #require => [ Package['php-cli'] ],
   }
 

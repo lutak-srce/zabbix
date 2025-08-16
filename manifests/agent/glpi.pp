@@ -4,7 +4,9 @@
 # This module installs Zabbix GLPI sensor
 #
 class zabbix::agent::glpi (
-  $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
+  $conf_dir                = $::zabbix::agent::conf_dir,
+  $agent_service           = $::zabbix::agent::service_state,
+  $agent_package           = $::zabbix::agent::agent_package,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
   $script_source           = 'puppet:///modules/zabbix/agent/glpi/glpi2zabbix.py',
   $glpi_url                = 'https://localhost/glpi',
@@ -22,7 +24,7 @@ class zabbix::agent::glpi (
     mode    => '0750',
     content => template('zabbix/agent/glpi2zabbix.erb'),
     require => [
-      Package['zabbix-agent'],
+      Package[$agent_package],
       File["${dir_zabbix_agent_libdir}/glpi2zabbix.py"],
       Package['pyzabbix'],
     ],

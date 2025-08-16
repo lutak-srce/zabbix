@@ -4,7 +4,9 @@
 # This module installs Zabbix php-fpm sensor
 #
 class zabbix::agent::phpfpm (
-  $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
+  $conf_dir                = $::zabbix::agent::conf_dir,
+  $agent_service           = $::zabbix::agent::service_state,
+  $agent_package           = $::zabbix::agent::agent_package,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
   $php_fpm_sock            = undef,
 ) inherits zabbix::agent {
@@ -59,18 +61,18 @@ class zabbix::agent::phpfpm (
     name   => $cgi_fcgi,
   }
 
-  file { "${dir_zabbix_agentd_confd}/php-fpm.conf" :
+  file { "${conf_dir}/php-fpm.conf" :
     ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
     content => template('zabbix/agent/php-fpm.conf.erb'),
     require => [
-      Package['zabbix-agent'],
+      Package[$agent_package],
       File["${dir_zabbix_agent_libdir}/php-fpm.sh"],
       Package['cgi-fcgi'],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$agent_service],
   }
 
   file { "${dir_zabbix_agent_libdir}/php-fpm.sh" :

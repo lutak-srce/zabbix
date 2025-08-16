@@ -6,19 +6,21 @@
 #   include zabbix::agent::dovecot
 #
 class zabbix::agent::dovecot (
-  $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
+  $conf_dir                = $::zabbix::agent::conf_dir,
+  $agent_service           = $::zabbix::agent::service_state,
+  $agent_package           = $::zabbix::agent::agent_package,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
 ) inherits zabbix::agent {
 
   include zabbix::agent::logtail
 
-  file { "${dir_zabbix_agentd_confd}/dovecot.conf" :
+  file { "${conf_dir}/dovecot.conf" :
     ensure  => file,
     owner   => root,
     group   => root,
     content => template('zabbix/agent/dovecot.conf.erb'),
-    notify  => Service['zabbix-agent'],
-    require => Package['zabbix-agent'],
+    notify  => Service[$agent_service],
+    require => Package[$agent_package],
   }
 
   file { "${dir_zabbix_agent_libdir}/dovecot.pl" :
@@ -27,7 +29,7 @@ class zabbix::agent::dovecot (
     group  => root,
     mode   => '0755',
     source => 'puppet:///modules/zabbix/agent/dovecot.pl',
-    notify => Service['zabbix-agent'],
+    notify => Service[$agent_service],
   }
 
 }
