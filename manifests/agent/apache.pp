@@ -4,16 +4,18 @@
 # This module installs zabbix apache plugin
 #
 class zabbix::agent::apache (
-  $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
+  $conf_dir                = $::zabbix::agent::conf_dir,
+  $agent_service           = $::zabbix::agent::service_state,
+  $agent_package           = $::zabbix::agent::agent_package,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
-  $status_address = 'localhost'
+  $status_address          = 'localhost'
 ) inherits zabbix::agent {
 
   package { 'curl':
     ensure => present,
   }
 
-  file { "${dir_zabbix_agentd_confd}/apache2.conf" :
+  file { "${conf_dir}/apache2.conf" :
     ensure  => file,
     owner   => root,
     group   => root,
@@ -21,9 +23,9 @@ class zabbix::agent::apache (
     content => template('zabbix/agent/apache2.conf.erb'),
     require => [
       File["${dir_zabbix_agent_libdir}/apache2.pl"],
-      Package['zabbix-agent'],
+      Package[$agent_package],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$agent_service],
   }
 
   file { "${dir_zabbix_agent_libdir}/apache2.pl" :
@@ -35,7 +37,7 @@ class zabbix::agent::apache (
     require => [
       Package['curl'],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$agent_service],
   }
 
 }

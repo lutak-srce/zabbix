@@ -4,7 +4,9 @@
 # This module installs RabbitMQ sensor
 #
 class zabbix::agent::rabbitmq (
-  $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
+  $conf_dir                = $::zabbix::agent::conf_dir,
+  $agent_service           = $::zabbix::agent::service_state,
+  $agent_package           = $::zabbix::agent::agent_package,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
   $username                = 'use_hiera',
   $password                = 'use_hiera',
@@ -15,21 +17,21 @@ class zabbix::agent::rabbitmq (
   $senderhostname          = $facts['networking']['fqdn'],
 ) inherits zabbix::agent {
 
-  file { "${dir_zabbix_agentd_confd}/rabbitmq.conf" :
+  file { "${conf_dir}/rabbitmq.conf" :
     ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
     content => template('zabbix/agent/rabbitmq.conf.erb'),
     require => [
-      Package['zabbix-agent'],
+      Package[$agent_package],
       File["${dir_zabbix_agent_libdir}/api.py"],
       File["${dir_zabbix_agent_libdir}/list_rabbit_nodes.sh"],
       File["${dir_zabbix_agent_libdir}/list_rabbit_queues.sh"],
       File["${dir_zabbix_agent_libdir}/rabbitmq-status.sh"],
       File["${dir_zabbix_agent_libdir}/.rab.auth"],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$agent_service],
   }
 
   file { "${dir_zabbix_agent_libdir}/api.py" :

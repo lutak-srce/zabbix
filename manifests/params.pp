@@ -17,6 +17,18 @@ class zabbix::params {
   $agent_file_mode      = '0644'
   $agent_purge_conf_dir = false
 
+  # zabbix agent 2 specific settings
+  $agent2_package             = 'zabbix-agent2'
+  $agent2_service             = 'zabbix-agent2'
+  $dir_zabbix_agent2_d        = '/etc/zabbix/zabbix_agent2.d'
+  $file_zabbix_agent2_conf    = '/etc/zabbix/zabbix_agent2.conf'
+  $dir_zabbix_agent2_pluginsd = '/etc/zabbix/zabbix_agent2.d/plugins.d'
+  $zabbix_agent2_logfile      = '/var/log/zabbix/zabbix_agent2.log'
+  $zabbix_agent2_pidfile      = '/var/run/zabbix/zabbix_agent2.pid'
+
+  # zabbix repo conf_dir location
+  $dir_zabbix_agentd_d = '/etc/zabbix/zabbix_agentd.d'
+
   # module specific settings (proxy)
   $proxy_file_owner     = 'root'
   $proxy_file_group     = 'zabbix'
@@ -52,7 +64,6 @@ class zabbix::params {
       $agent_status               = 'enabled'
       $file_zabbix_agentd_conf    = '/etc/zabbix/zabbix_agentd.conf'
       $dir_zabbix_agentd_confd    = '/etc/zabbix/zabbix_agentd.d'
-      $dir_zabbix_agent2_pluginsd = '/etc/zabbix/zabbix_agent2.d/plugins.d'
       $dir_zabbix_agent_libdir    = '/usr/lib/zabbix/agent'
       $dir_zabbix_agent_modules   = '/usr/lib/zabbix/agent/modules'
       $zabbix_agentd_logfile      = '/var/log/zabbix/zabbix_agentd.log'
@@ -102,7 +113,6 @@ class zabbix::params {
       $agent_status               = 'enabled'
       $file_zabbix_agentd_conf    = '/etc/zabbix/zabbix_agentd.conf'
       $dir_zabbix_agentd_confd    = '/etc/zabbix/zabbix_agentd.d'
-      $dir_zabbix_agent2_pluginsd = '/etc/zabbix/zabbix_agent2.d/plugins.d'
       $dir_zabbix_agent_libdir    = '/usr/libexec/zabbix-agent'
       $dir_zabbix_agent_modules   = '/usr/libexec/zabbix-agent/modules'
       $zabbix_agentd_logfile      = '/var/log/zabbix/zabbix_agentd.log'
@@ -157,7 +167,6 @@ class zabbix::params {
       $agent_status               = 'enabled'
       $file_zabbix_agentd_conf    = '/etc/zabbix/zabbix_agentd.conf'
       $dir_zabbix_agentd_confd    = '/etc/zabbix/zabbix_agentd.conf.d'
-      $dir_zabbix_agent2_pluginsd = '/etc/zabbix/zabbix_agent2.d/plugins.d'
       $dir_zabbix_agent_libdir    = '/usr/lib/zabbix-agent'
       $dir_zabbix_agent_modules   = '/usr/lib/zabbix-agent/modules'
       $zabbix_agentd_logfile      = '/var/log/zabbix-agent/zabbix_agentd.log'

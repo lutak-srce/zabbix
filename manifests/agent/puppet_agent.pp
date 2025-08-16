@@ -5,7 +5,9 @@
 #
 class zabbix::agent::puppet_agent (
 
-  $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
+  $conf_dir                = $::zabbix::agent::conf_dir,
+  $agent_service           = $::zabbix::agent::service_state,
+  $agent_package           = $::zabbix::agent::agent_package,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
 
 ) inherits zabbix::agent {
@@ -17,13 +19,13 @@ class zabbix::agent::puppet_agent (
     comment          => 'Zabbix sensor for monitoring Puppet agent.',
   }
 
-  file { "${dir_zabbix_agentd_confd}/puppet_agent.conf" :
+  file { "${conf_dir}/puppet_agent.conf" :
     ensure  => file,
     owner   => root,
     group   => root,
     content => template('zabbix/agent/puppet_agent.conf.erb'),
-    notify  => Service['zabbix-agent'],
-    require => Package['zabbix-agent'],
+    notify  => Service[$agent_service],
+    require => Package[$agent_package],
   }
 
   file { "${dir_zabbix_agent_libdir}/puppet_agent" :
@@ -32,7 +34,7 @@ class zabbix::agent::puppet_agent (
     group   => root,
     mode    => '0755',
     content => template('zabbix/agent/puppet_agent.erb'),
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$agent_service],
     require => ::Sudoers::Allowed_command['zabbix_puppet_agent'],
   }
 

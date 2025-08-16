@@ -10,7 +10,7 @@
 # Default:
 # PidFile=/tmp/zabbix_agent2.pid
 
-PidFile=<%= @zabbix_agent_pidfile %>
+PidFile=<%= @agent_pidfile %>
 
 ### Option: LogType
 #	Specifies where log messages are written to:
@@ -29,7 +29,7 @@ PidFile=<%= @zabbix_agent_pidfile %>
 # Default:
 # LogFile=/tmp/zabbix_agent2.log
 
-LogFile=<%= @zabbix_agentd_logfile %>
+LogFile=<%= @agent_logfile %>
 
 ### Option: LogFileSize
 #	Maximum size of log file in MB.
@@ -286,7 +286,7 @@ Timeout=<%= @timeout %>
 # Default:
 # Include=
 
-Include=<%= @dir_zabbix_agentd_confd %>/*.conf
+Include=<%= @conf_dir %>/*.conf
 
 # Include=/usr/local/etc/zabbix_agent2.userparams.conf
 # Include=/usr/local/etc/zabbix_agent2.conf.d/

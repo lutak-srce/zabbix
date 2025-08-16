@@ -4,21 +4,23 @@
 # This module installs ElasticSearch sensor
 #
 class zabbix::agent::elasticsearch (
-  $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
+  $conf_dir                = $::zabbix::agent::conf_dir,
+  $agent_service           = $::zabbix::agent::service_state,
+  $agent_package           = $::zabbix::agent::agent_package,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
 ) inherits zabbix::agent {
 
-  file { "${dir_zabbix_agentd_confd}/elasticsearch.conf" :
+  file { "${conf_dir}/elasticsearch.conf" :
     ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
     content => template('zabbix/agent/elasticsearch.conf.erb'),
     require => [
-      Package['zabbix-agent'],
+      Package[$agent_package],
       File["${dir_zabbix_agent_libdir}/elasticsearch.rb"],
     ],
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$agent_service],
   }
 
   file { "${dir_zabbix_agent_libdir}/elasticsearch.rb" :

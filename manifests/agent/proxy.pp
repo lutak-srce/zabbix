@@ -5,7 +5,9 @@
 #
 class zabbix::agent::proxy (
   $options                 = '',
-  $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
+  $conf_dir                = $::zabbix::agent::conf_dir,
+  $agent_service           = $::zabbix::agent::service_state,
+  $agent_package           = $::zabbix::agent::agent_package,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
 ) inherits zabbix::agent {
 
@@ -16,13 +18,13 @@ class zabbix::agent::proxy (
     comment          => 'Zabbix sensor for monitoring proxy.',
   }
 
-  file { "${dir_zabbix_agentd_confd}/proxy.conf" :
+  file { "${conf_dir}/proxy.conf" :
     ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
     content => template('zabbix/agent/proxy.conf.erb'),
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$agent_service],
     require => ::Sudoers::Allowed_command['zabbix_proxy'],
   }
 
@@ -32,7 +34,7 @@ class zabbix::agent::proxy (
     group   => root,
     mode    => '0755',
     source  => 'puppet:///modules/zabbix/agent/proxy.pl',
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$agent_service],
     require => ::Sudoers::Allowed_command['zabbix_proxy'],
   }
 

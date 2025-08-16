@@ -4,7 +4,9 @@
 # This module installs zabbix ntp plugin
 #
 class zabbix::agent::ntp (
-  $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
+  $conf_dir      = $::zabbix::agent::conf_dir,
+  $agent_service = $::zabbix::agent::service_state,
+  $agent_package = $::zabbix::agent::agent_package,
 ) inherits zabbix::agent {
 
   case $facts['os']['family'] {
@@ -14,21 +16,21 @@ class zabbix::agent::ntp (
 
       case $facts['os']['release']['major'] {
         /^(8|9)/ : {
-          file { "${dir_zabbix_agentd_confd}/chrony.conf" :
+          file { "${conf_dir}/chrony.conf" :
             ensure  => file,
             owner   => root,
             group   => root,
             content => template('zabbix/agent/chrony.conf.erb'),
-            notify  => Service['zabbix-agent'],
+            notify  => Service[$agent_service],
           }
         }
         default: {
-          file { "${dir_zabbix_agentd_confd}/ntp.conf" :
+          file { "${conf_dir}/ntp.conf" :
             ensure  => file,
             owner   => root,
             group   => root,
             content => template('zabbix/agent/ntp.conf.erb'),
-            notify  => Service['zabbix-agent'],
+            notify  => Service[$agent_service],
           }
         }
       }
@@ -38,12 +40,12 @@ class zabbix::agent::ntp (
 
       $ntpq_bin = '/usr/bin/ntpq'
 
-      file { "${dir_zabbix_agentd_confd}/ntp.conf" :
+      file { "${conf_dir}/ntp.conf" :
         ensure  => file,
         owner   => root,
         group   => root,
         content => template('zabbix/agent/ntp.conf.erb'),
-        notify  => Service['zabbix-agent'],
+        notify  => Service[$agent_service],
       }
     }
 

@@ -6,7 +6,9 @@
 #   include zabbix::agent::bind
 #
 class zabbix::agent::bind (
-  $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
+  $conf_dir                = $::zabbix::agent::conf_dir,
+  $agent_service           = $::zabbix::agent::service_state,
+  $agent_package           = $::zabbix::agent::agent_package,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
 ) inherits zabbix::agent {
 
@@ -24,13 +26,13 @@ class zabbix::agent::bind (
     require_password => false,
   }
 
-  file { "${dir_zabbix_agentd_confd}/bind.conf" :
+  file { "${conf_dir}/bind.conf" :
     ensure  => file,
     owner   => root,
     group   => root,
     content => template('zabbix/agent/bind.conf.erb'),
-    notify  => Service['zabbix-agent'],
-    require => Package['zabbix-agent'],
+    notify  => Service[$agent_service],
+    require => Package[$agent_package],
   }
 
   file { "${dir_zabbix_agent_libdir}/bind.pl" :
@@ -39,7 +41,7 @@ class zabbix::agent::bind (
     group   => root,
     mode    => '0755',
     source  => 'puppet:///modules/zabbix/agent/bind.pl',
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$agent_service],
     require => [
       ::Sudoers::Allowed_command['zabbix_rndc'],
       ::Sudoers::Allowed_command['zabbix_named'],

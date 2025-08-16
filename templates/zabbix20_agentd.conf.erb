@@ -10,7 +10,7 @@
 # Default:
 # PidFile=/tmp/zabbix_agentd.pid
 
-PidFile=<%= @zabbix_agent_pidfile %>
+PidFile=<%= @agent_pidfile %>
 
 ### Option: LogFile
 #	Name of log file.
@@ -20,7 +20,7 @@ PidFile=<%= @zabbix_agent_pidfile %>
 # Default:
 # LogFile=
 
-LogFile=<%= @zabbix_agentd_logfile %>
+LogFile=<%= @agent_logfile %>
 
 ### Option: LogFileSize
 #	Maximum size of log file in MB.
@@ -217,7 +217,7 @@ Timeout=<%= @timeout %>
 # Default:
 # Include=
 
-Include=<%= @dir_zabbix_agentd_confd %>/
+Include=<%= @conf_dir %>/
 
 # Include=/usr/local/etc/zabbix_agentd.userparams.conf
 # Include=/usr/local/etc/zabbix_agentd.conf.d/
