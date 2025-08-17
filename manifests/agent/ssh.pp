@@ -1,15 +1,13 @@
+# @summary 
+#   Manages Zabbix agent configuration for sshd monitoring.
 #
-# = Class: zabbix::agent::ssh
+# @example
+#   include zabbix::agent::ssh
 #
-# This module installs zabbix ssh plugin
+# @note 
+#   This class inherits all parameters from zabbix::agent class.
 #
-class zabbix::agent::ssh (
-  $options       = '',
-  $conf_dir      = $::zabbix::agent::conf_dir,
-  $agent_service = $::zabbix::agent::service_state,
-  $agent_package = $::zabbix::agent::agent_package,
-) inherits zabbix::agent {
-
+class zabbix::agent::ssh inherits zabbix::agent {
   case $facts['os']['family'] {
     default: {
       $lsof_bin = '/usr/sbin/lsof'
@@ -36,12 +34,9 @@ class zabbix::agent::ssh (
     comment          => 'Zabbix sensor for monitoring SSH.',
   }
 
-  file { "${conf_dir}/ssh.conf" :
+  file { "${zabbix::agent::conf_dir}/ssh.conf" :
     ensure  => file,
-    owner   => root,
-    group   => root,
     content => template('zabbix/agent/ssh.conf.erb'),
-    notify  => Service[$agent_service],
     require => ::Sudoers::Allowed_command['zabbix_ssh'],
   }
 

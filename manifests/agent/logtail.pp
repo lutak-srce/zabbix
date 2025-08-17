@@ -6,7 +6,6 @@
 #   include zabbix::agent::logtail
 #
 class zabbix::agent::logtail {
-
   case $facts['os']['family'] {
     default: {
       # No action taken. Install logtail manually
@@ -17,5 +16,4 @@ class zabbix::agent::logtail {
       }
     }
   }
-
 }

@@ -1,23 +1,20 @@
+# @summary 
+#   Manages Zabbix agent configuration for counting pending upgrades.
 #
-# = Class: zabbix::agent::pkgupgrades
+# @example
+#   include zabbix::agent::pkgupgrades
 #
-# This module installs zabbix plugin for counting pending upgrades
+# @note 
+#   This class inherits all parameters from zabbix::agent class.
 #
-class zabbix::agent::pkgupgrades (
-  $conf_dir      = $::zabbix::agent::conf_dir,
-  $agent_service = $::zabbix::agent::service_state,
-  $agent_package = $::zabbix::agent::agent_package,
-) inherits zabbix::agent {
+class zabbix::agent::pkgupgrades inherits zabbix::agent {
 
   case $facts['os']['family'] {
     default: {}
     /(RedHat|redhat|amazon)/: {
-      file { "${conf_dir}/pkgupgrades.conf" :
+      file { "${zabbix::agent::conf_dir}/pkgupgrades.conf" :
         ensure  => file,
-        owner   => root,
-        group   => root,
         content => template('zabbix/agent/pkgupgrades-rhel.conf.erb'),
-        notify  => Service[$agent_service],
       }
 
       ::sudoers::allowed_command { 'zabbix_yum':
@@ -28,12 +25,9 @@ class zabbix::agent::pkgupgrades (
       }
     }
     /(Debian|debian|Ubuntu|ubuntu)/: {
-      file { "${conf_dir}/pkgupgrades.conf" :
+      file { "${zabbix::agent::conf_dir}/pkgupgrades.conf" :
         ensure  => file,
-        owner   => root,
-        group   => root,
         content => template('zabbix/agent/pkgupgrades-debian.conf.erb'),
-        notify  => Service[$agent_service],
       }
     }
   }
