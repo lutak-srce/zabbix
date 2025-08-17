@@ -35,8 +35,8 @@ class zabbix::agent (
   $autoload_configs           = false,
   Enum['1', '2'] $variant     = '1',
 
-  # params for conf_dir override on Debian/Ubuntu when using zabbix repo
-  $repo                       = false,
+  # params to override conf_dir location on Debian/Ubuntu when using official upstream Zabbix packages
+  $upstream                   = false,
   $dir_zabbix_agentd_d        = $::zabbix::params::dir_zabbix_agentd_d,
 
   # zabbix agent 2 params
@@ -61,7 +61,7 @@ class zabbix::agent (
     $agent_pidfile    = $::zabbix::agent::zabbix_agent2_pidfile
     $agent_logfile    = $::zabbix::agent::zabbix_agent2_logfile
     $agent_purge      = $::zabbix::agent::package
-  } elsif $variant == '1' and $repo == true {
+  } elsif $variant == '1' and $upstream == true {
       $agent_package    = $::zabbix::agent::package
       $service_state    = $::zabbix::agent::service
       $conf_dir         = $::zabbix::agent::dir_zabbix_agentd_d

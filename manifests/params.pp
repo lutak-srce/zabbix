@@ -26,7 +26,7 @@ class zabbix::params {
   $zabbix_agent2_logfile      = '/var/log/zabbix/zabbix_agent2.log'
   $zabbix_agent2_pidfile      = '/var/run/zabbix/zabbix_agent2.pid'
 
-  # zabbix repo conf_dir location
+  # configuration directory for Zabbix agent in official upstream packages
   $dir_zabbix_agentd_d = '/etc/zabbix/zabbix_agentd.d'
 
   # module specific settings (proxy)
