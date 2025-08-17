@@ -116,11 +116,12 @@ class zabbix::agent (
     purge   => $purge_conf_dir,
   }
 
-  if $::zabbix::agent::agent_variant == '1' {
+  if $::zabbix::agent::variant == '2' {
     file { $dir_zabbix_agent2_pluginsd:
       ensure  => directory,
       recurse => $purge_plugins_dir,
       purge   => $purge_plugins_dir,
+      require => File[$conf_dir],
     }
   }
 
