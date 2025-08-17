@@ -1,38 +1,24 @@
+# @summary 
+#   Manages Zabbix agent configuration for beegfs monitoring.
 #
-# = Class: zabbix::agent::beegfs
+# @example
+#   include zabbix::agent::beegfs
 #
-# This module installs Zabbix BeeGFS sensor
+# @note 
+#   This class inherits all parameters from zabbix::agent class.
 #
-class zabbix::agent::beegfs (
-  $conf_dir                = $::zabbix::agent::conf_dir,
-  $agent_service           = $::zabbix::agent::service_state,
-  $agent_package           = $::zabbix::agent::agent_package,
-  $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
-) inherits zabbix::agent {
-
-  file { "${conf_dir}/beegfs.conf" :
+class zabbix::agent::beegfs inherits zabbix::agent {
+  file { "${zabbix::agent::conf_dir}/beegfs.conf" :
     ensure  => file,
-    owner   => root,
-    group   => root,
-    mode    => '0644',
-    source  =>  'puppet:///modules/zabbix/agent/beegfs/beegfs.conf',
-    require => [
-      Package[$agent_package],
-      File["${dir_zabbix_agent_libdir}/zabbix-beegfs.pl"],
-    ],
-    notify  => Service[$agent_service],
+    source  => 'puppet:///modules/zabbix/agent/beegfs/beegfs.conf',
+    require => File["${zabbix::agent::dir_zabbix_agent_libdir}/zabbix-beegfs.pl"],
   }
 
-  file { "${dir_zabbix_agent_libdir}/zabbix-beegfs.pl" :
+  file { "${zabbix::agent::dir_zabbix_agent_libdir}/zabbix-beegfs.pl" :
     ensure  => file,
-    owner   => root,
-    group   => root,
     mode    => '0755',
     source  => 'puppet:///modules/zabbix/agent/beegfs/zabbix-beegfs.pl',
-    require =>  [
-      Package[$agent_package],
-      Package['perl-JSON'],
-    ],
+    require =>  Package['perl-JSON'],
   }
 
   package { 'perl-JSON':
