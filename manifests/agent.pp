@@ -116,7 +116,7 @@ class zabbix::agent (
     purge   => $purge_conf_dir,
   }
 
-  if $::zabbix::agent::variant == '2' {
+  if $variant == '2' {
     file { $dir_zabbix_agent2_pluginsd:
       ensure  => directory,
       recurse => $purge_plugins_dir,
