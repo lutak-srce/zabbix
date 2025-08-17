@@ -1,9 +1,11 @@
-#
-# @summary
-#   Install sensor for amavisd
+# @summary 
+#   Manages Zabbix agent configuration for amavisd monitoring.
 #
 # @example
 #   include zabbix::agent::amavisd
+#
+# @note 
+#   This class inherits all parameters from zabbix::agent class.
 #
 class zabbix::agent::amavisd inherits zabbix::agent {
   include zabbix::agent::logtail
