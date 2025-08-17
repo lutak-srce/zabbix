@@ -1,17 +1,15 @@
+# @summary 
+#   Manages Zabbix agent configuration for megacli monitoring.
 #
-# = Class: zabbix::agent::megacli
+# @example
+#   include zabbix::agent::megacli
 #
-# This module installs zabbix megacli plugin
+# @note 
+#   This class inherits all parameters from zabbix::agent class.
 #
-class zabbix::agent::megacli (
-  $conf_dir      = $::zabbix::agent::conf_dir,
-  $agent_service = $::zabbix::agent::service_state,
-  $agent_package = $::zabbix::agent::agent_package,
-) inherits zabbix::agent {
-
+class zabbix::agent::megacli inherits zabbix::agent {
   package { 'zabbix-agent_megacli':
     ensure  => present,
-    require => Package[$agent_package],
+    require => Package[$zabbix::agent::agent_package],
   }
-
 }

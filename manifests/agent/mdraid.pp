@@ -1,15 +1,13 @@
+# @summary 
+#   Manages Zabbix agent configuration for mdraid monitoring.
 #
-# = Class: zabbix::agent::mdraid
+# @example
+#   include zabbix::agent::mdraid
 #
-# This module installs zabbix mdraid sensor
+# @note 
+#   This class inherits all parameters from zabbix::agent class.
 #
-class zabbix::agent::mdraid (
-  $conf_dir                = $::zabbix::agent::conf_dir,
-  $agent_service           = $::zabbix::agent::service_state,
-  $agent_package           = $::zabbix::agent::agent_package,
-  $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
-) inherits zabbix::agent {
-
+class zabbix::agent::mdraid inherits zabbix::agent {
   ::sudoers::allowed_command { 'zabbix_sudo_mdadm':
     command          => '/sbin/mdadm --detail /dev/md[0-9]*',
     user             => 'zabbix',
@@ -17,25 +15,16 @@ class zabbix::agent::mdraid (
     comment          => 'Zabbix mdadm --detail listing',
   }
 
-  file { "${conf_dir}/mdraid.conf" :
+  file { "${zabbix::agent::conf_dir}/mdraid.conf":
     ensure  => file,
-    owner   => root,
-    group   => root,
     content => template('zabbix/agent/mdraid.conf.erb'),
-    require => [
-      Package[$agent_package],
-      File["${dir_zabbix_agent_libdir}/check_mdraid"],
-    ],
-    notify  => Service[$agent_service],
+    require => File["${zabbix::agent::dir_zabbix_agent_libdir}/check_mdraid"],
   }
 
-  file { "${dir_zabbix_agent_libdir}/check_mdraid" :
+  file { "${zabbix::agent::dir_zabbix_agent_libdir}/check_mdraid":
     ensure  => file,
-    owner   => root,
-    group   => root,
     mode    => '0755',
     source  => 'puppet:///modules/zabbix/agent/check_mdraid',
     require => ::Sudoers::Allowed_command['zabbix_sudo_mdadm'],
   }
-
 }

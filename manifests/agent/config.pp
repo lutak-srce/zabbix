@@ -5,9 +5,8 @@
 # directory.
 define zabbix::agent::config (
   $settings,
-  $conf_dir       = $::zabbix::agent::conf_dir,
-  $agent_service  = $::zabbix::agent::service_state,
-  $agent_package  = $::zabbix::agent::agent_package,
+  $conf_dir       = $zabbix::agent::conf_dir,
+  $agent_service  = $zabbix::agent::agent_service,
   $notify_service = true,
 ) {
   include ::zabbix::agent

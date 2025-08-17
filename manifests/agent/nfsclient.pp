@@ -1,29 +1,21 @@
+# @summary 
+#   Manages Zabbix agent configuration for nfsclient monitoring.
 #
-# = Class: zabbix::agent::nfsclient
+# @example
+#   include zabbix::agent::nfsclient
 #
-# This module installs NFS client monitoring plugin
+# @note 
+#   This class inherits all parameters from zabbix::agent class.
 #
 class zabbix::agent::nfsclient (
-  $options            = '',
-  $conf_dir           = $::zabbix::agent::conf_dir,
-  $agent_service      = $::zabbix::agent::service_state,
-  $agent_package      = $::zabbix::agent::agent_package,
-  $dir_for_monitoring = $::zabbix::agent::dir_for_monitoring,
+  $dir_for_monitoring = $zabbix::agent::dir_for_monitoring,
 ) inherits zabbix::agent {
-
-    if $dir_for_monitoring {
-      file { "${conf_dir}/nfsclient.conf":
-        ensure  => file,
-        owner   => root,
-        group   => root,
-        mode    => '0644',
-        content => template('zabbix/agent/nfsclient.conf.erb'),
-        notify  => Service[$agent_service],
-      }
+  if $dir_for_monitoring {
+    file { "${zabbix::agent::conf_dir}/nfsclient.conf":
+      ensure  => file,
+      content => template('zabbix/agent/nfsclient.conf.erb'),
     }
-
-    else {
-      notify{'!!! zabbix::agent::dir_for_monitoring must be included defined !!!': }
-    }
-
+  } else {
+    notify{'!!! zabbix::agent::dir_for_monitoring must be included defined !!!': }
+  }
 }

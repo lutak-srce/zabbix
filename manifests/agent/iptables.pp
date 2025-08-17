@@ -1,14 +1,13 @@
+# @summary 
+#   Manages Zabbix agent configuration for iptables monitoring.
 #
-# = Class: zabbix::agent::iptables
+# @example
+#   include zabbix::agent::iptables
 #
-# This module installs zabbix iptables plugin
+# @note 
+#   This class inherits all parameters from zabbix::agent class.
 #
-class zabbix::agent::iptables (
-  $conf_dir = $::zabbix::agent::conf_dir,
-  $agent_service           = $::zabbix::agent::service_state,
-  $agent_package           = $::zabbix::agent::agent_package,
-) inherits zabbix::agent {
-
+class zabbix::agent::iptables inherits zabbix::agent {
   case $facts['os']['family'] {
     default: {
       $plugin_package = 'zabbix-agent_iptables'
@@ -24,7 +23,6 @@ class zabbix::agent::iptables (
   package { 'zabbix-agent_iptables':
     ensure  => present,
     name    => $plugin_package,
-    require => Package[$agent_package],
+    require => Package[$zabbix::agent::agent_package],
   }
-
 }

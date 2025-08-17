@@ -34,7 +34,7 @@ class zabbix::agent::ssh inherits zabbix::agent {
     comment          => 'Zabbix sensor for monitoring SSH.',
   }
 
-  file { "${zabbix::agent::conf_dir}/ssh.conf" :
+  file { "${zabbix::agent::conf_dir}/ssh.conf":
     ensure  => file,
     content => template('zabbix/agent/ssh.conf.erb'),
     require => ::Sudoers::Allowed_command['zabbix_ssh'],

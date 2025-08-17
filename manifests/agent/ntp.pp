@@ -7,11 +7,6 @@
 # @note 
 #   This class inherits all parameters from zabbix::agent class.
 #
-#
-# = Class: zabbix::agent::ntp
-#
-# This module installs zabbix ntp plugin
-#
 class zabbix::agent::ntp inherits zabbix::agent {
   case $facts['os']['family'] {
     /(RedHat|redhat)/: {
@@ -19,14 +14,14 @@ class zabbix::agent::ntp inherits zabbix::agent {
       $ntpq_bin = '/usr/sbin/ntpq'
 
       case $facts['os']['release']['major'] {
-        /^(8|9)/ : {
-          file { "${zabbix::agent::conf_dir}/chrony.conf" :
+        /^(8|9)/: {
+          file { "${zabbix::agent::conf_dir}/chrony.conf":
             ensure  => file,
             content => template('zabbix/agent/chrony.conf.erb'),
           }
         }
         default: {
-          file { "${zabbix::agent::conf_dir}/ntp.conf" :
+          file { "${zabbix::agent::conf_dir}/ntp.conf":
             ensure  => file,
             content => template('zabbix/agent/ntp.conf.erb'),
           }
@@ -38,7 +33,7 @@ class zabbix::agent::ntp inherits zabbix::agent {
 
       $ntpq_bin = '/usr/bin/ntpq'
 
-      file { "${zabbix::agent::conf_dir}/ntp.conf" :
+      file { "${zabbix::agent::conf_dir}/ntp.conf":
         ensure  => file,
         content => template('zabbix/agent/ntp.conf.erb'),
       }

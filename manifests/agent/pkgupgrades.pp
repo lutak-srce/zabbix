@@ -12,7 +12,7 @@ class zabbix::agent::pkgupgrades inherits zabbix::agent {
   case $facts['os']['family'] {
     default: {}
     /(RedHat|redhat|amazon)/: {
-      file { "${zabbix::agent::conf_dir}/pkgupgrades.conf" :
+      file { "${zabbix::agent::conf_dir}/pkgupgrades.conf":
         ensure  => file,
         content => template('zabbix/agent/pkgupgrades-rhel.conf.erb'),
       }
@@ -25,7 +25,7 @@ class zabbix::agent::pkgupgrades inherits zabbix::agent {
       }
     }
     /(Debian|debian|Ubuntu|ubuntu)/: {
-      file { "${zabbix::agent::conf_dir}/pkgupgrades.conf" :
+      file { "${zabbix::agent::conf_dir}/pkgupgrades.conf":
         ensure  => file,
         content => template('zabbix/agent/pkgupgrades-debian.conf.erb'),
       }

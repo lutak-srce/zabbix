@@ -15,19 +15,20 @@ class zabbix::agent::lld inherits zabbix::agent {
     comment          => 'Zabbix LLD blockdev.',
   }
 
-  file { "${zabbix::agent::conf_dir}/lld.conf" :
+  file { "${zabbix::agent::conf_dir}/lld.conf":
     ensure  => file,
     content => template('zabbix/lld/lld.conf.erb'),
+    require => File["${zabbix::agent::dir_zabbix_agent_libdir}/lld-blockdev"],
   }
 
-  file { "${zabbix::agent::dir_zabbix_agent_libdir}/lld-blockdev" :
+  file { "${zabbix::agent::dir_zabbix_agent_libdir}/lld-blockdev":
     ensure  => file,
     mode    => '0755',
     source  => 'puppet:///modules/zabbix/agent/lld/lld-blockdev',
     require => ::Sudoers::Allowed_command['zabbix_sudo_multipath'],
   }
 
-  file { "${zabbix::agent::dir_zabbix_agent_libdir}/lld-macro" :
+  file { "${zabbix::agent::dir_zabbix_agent_libdir}/lld-macro":
     ensure => file,
     mode   => '0755',
     source => 'puppet:///modules/zabbix/agent/lld/lld-macro',

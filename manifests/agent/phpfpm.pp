@@ -1,23 +1,21 @@
+# @summary 
+#   Manages Zabbix agent configuration for php-fpm monitoring.
 #
-# = Class: zabbix::agent::phpfpm
+# @example
+#   include zabbix::agent::phpfpm
 #
-# This module installs Zabbix php-fpm sensor
+# @note 
+#   This class inherits all parameters from zabbix::agent class.
 #
 class zabbix::agent::phpfpm (
-  $conf_dir                = $::zabbix::agent::conf_dir,
-  $agent_service           = $::zabbix::agent::service_state,
-  $agent_package           = $::zabbix::agent::agent_package,
-  $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
-  $php_fpm_sock            = undef,
+  $php_fpm_sock = undef,
 ) inherits zabbix::agent {
-
   case $facts['os']['family'] {
     default: {
       $cgi_fcgi = 'fcgi'
       if $php_fpm_sock == undef {
         $_php_fpm_sock = '127.0.0.1:9000'
-      }
-      else {
+      } else {
         $_php_fpm_sock = $php_fpm_sock
       }
     }
@@ -26,12 +24,10 @@ class zabbix::agent::phpfpm (
       if $php_fpm_sock == undef {
         if $::facts['os']['release']['major'] == '8' {
           $_php_fpm_sock = '/run/php-fpm/www.sock'
-        }
-        else {
+        } else {
           $_php_fpm_sock = '127.0.0.1:9000'
         }
-      }
-      else {
+      } else {
         $_php_fpm_sock = $php_fpm_sock
       }
       User <| title == zabbix |> { groups +> 'apache' }
@@ -44,12 +40,10 @@ class zabbix::agent::phpfpm (
         }
         if $::facts['os']['release']['major'] == '11' {
           $_php_fpm_sock = '/run/php/php7.4-fpm.sock'
-        }
-        else {
+        } else {
           $_php_fpm_sock = '/run/php/php7.0-fpm.sock'
         }
-      }
-      else {
+      } else {
         $_php_fpm_sock = $php_fpm_sock
       }
       User <| title == zabbix |> { groups +> 'www-data' }
@@ -61,26 +55,18 @@ class zabbix::agent::phpfpm (
     name   => $cgi_fcgi,
   }
 
-  file { "${conf_dir}/php-fpm.conf" :
+  file { "${zabbix::agent::conf_dir}/php-fpm.conf":
     ensure  => file,
-    owner   => root,
-    group   => root,
-    mode    => '0644',
     content => template('zabbix/agent/php-fpm.conf.erb'),
     require => [
-      Package[$agent_package],
-      File["${dir_zabbix_agent_libdir}/php-fpm.sh"],
+      File["${zabbix::agent::dir_zabbix_agent_libdir}/php-fpm.sh"],
       Package['cgi-fcgi'],
     ],
-    notify  => Service[$agent_service],
   }
 
-  file { "${dir_zabbix_agent_libdir}/php-fpm.sh" :
+  file { "${zabbix::agent::dir_zabbix_agent_libdir}/php-fpm.sh":
     ensure  => file,
-    owner   => root,
-    group   => root,
     mode    => '0755',
     content => template('zabbix/agent/php-fpm.sh.erb'),
   }
-
 }

@@ -1,27 +1,23 @@
+# @summary 
+#   Manages Zabbix agent configuration for mysql monitoring.
 #
-# = Class: zabbix::agent::mysql
+# @example
+#   include zabbix::agent::mysql
 #
-# This module installs zabbix mysql sensor
+# @note 
+#   This class inherits all parameters from zabbix::agent class.
 #
 class zabbix::agent::mysql (
-  $options                 = '',
-  $agent_service           = $::zabbix::agent::service_state,
-  $agent_package           = $::zabbix::agent::agent_package,
-  $conf_dir                = $::zabbix::agent::conf_dir,
+  $options = '',
 ) inherits zabbix::agent {
-
   package { 'zabbix-agent_mysql':
     ensure  => present,
-    require => Package[$agent_package],
+    require => Package[$zabbix::agent::agent_package],
   }
 
-  file { "${conf_dir}/mysql.conf" :
+  file { "${zabbix::agent::conf_dir}/mysql.conf":
     ensure  => file,
-    owner   => root,
-    group   => root,
     content => template('zabbix/agent/mysql.conf.erb'),
     require => Package['zabbix-agent_mysql'],
-    notify  => Service[$agent_service],
   }
-
 }

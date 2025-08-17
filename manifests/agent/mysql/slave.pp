@@ -1,22 +1,18 @@
+# @summary 
+#   Manages Zabbix agent configuration for mysql slave monitoring.
 #
-# = Class: zabbix::agent::mysql::slave
+# @example
+#   include zabbix::agent::mysql::slave
 #
-# This module installs zabbix mysql slave sensor
+# @note 
+#   This class inherits all parameters from zabbix::agent class.
 #
 class zabbix::agent::mysql::slave (
-  $options                 = '',
-  $conf_dir                = $::zabbix::agent::conf_dir,
-  $agent_service           = $::zabbix::agent::service_state,
-  $agent_package           = $::zabbix::agent::agent_package,
-  $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
+  $options = '',
 ) inherits zabbix::agent {
-
-  file { "${conf_dir}/mysql-slave.conf" :
+  file { "${zabbix::agent::conf_dir}/mysql-slave.conf":
     ensure  => file,
-    owner   => root,
-    group   => root,
     content => template('zabbix/agent/mysql-slave.conf.erb'),
-    notify  => Service[$agent_service],
   }
 
   mysql_user { 'zabbix@localhost':
@@ -24,8 +20,6 @@ class zabbix::agent::mysql::slave (
     password_hash => mysql::password('*DCF0B12208AA8B60055A57AF91EAE4702832791B'),
   }
 
-
-  # packages on CentOS 8
   if $facts['os']['family'] == 'Debian' and $facts['os']['release']['major'] > '10' {
     mysql_grant { 'zabbix@localhost/*.*':
       ensure     => present,
@@ -34,9 +28,7 @@ class zabbix::agent::mysql::slave (
       user       => 'zabbix@localhost',
       options    => ['NONE'],
     }
-  }
-
-  else {
+  } else {
     mysql_grant { 'zabbix@localhost/*.*':
       ensure     => present,
       privileges => ['REPLICATION CLIENT'],
@@ -45,5 +37,4 @@ class zabbix::agent::mysql::slave (
       options    => ['NONE'],
     }
   }
-
 }

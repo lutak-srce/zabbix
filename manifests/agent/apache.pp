@@ -15,13 +15,13 @@ class zabbix::agent::apache (
     ensure => present,
   }
 
-  file { "${zabbix::agent::conf_dir}/apache2.conf" :
+  file { "${zabbix::agent::conf_dir}/apache2.conf":
     ensure  => file,
     content => template('zabbix/agent/apache2.conf.erb'),
     require => File["${zabbix::agent::dir_zabbix_agent_libdir}/apache2.pl"],
   }
 
-  file { "${zabbix::agent::dir_zabbix_agent_libdir}/apache2.pl" :
+  file { "${zabbix::agent::dir_zabbix_agent_libdir}/apache2.pl":
     ensure  => file,
     mode    => '0755',
     content => template('zabbix/agent/apache2.pl.erb'),
