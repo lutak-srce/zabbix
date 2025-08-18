@@ -34,7 +34,7 @@ class zabbix::agent::opcache (
       Package[$zabbix::agent::agent_package],
       File["${zabbix::agent::dir_zabbix_agent_libdir}/zabbix-opcache.pl"],
     ],
-    notify  => Service[$zabbix::agent::agent_service],
+    notify  => Service[$zabbix::agent::service_state],
   }
 
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/opcache_stats.php":
