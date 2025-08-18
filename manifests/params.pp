@@ -13,7 +13,7 @@ class zabbix::params {
   # conf dir common accross both Zabbix agent variants in upstream packages
   $dir_zabbix_agentd_d = '/etc/zabbix/zabbix_agentd.d'
 
-  # module specific settings (agent)
+  # agent settings
   $agent_file_owner        = 'root'
   $agent_file_group        = 'root'
   $agent_file_mode         = '0644'
@@ -30,7 +30,7 @@ class zabbix::params {
   $file_zabbix_agentd_conf = '/etc/zabbix/zabbix_agentd.conf'
   $zabbix_agent_pidfile    = '/var/run/zabbix/zabbix_agentd.pid'
 
-  # module specific settings (agent2)
+  # agent2 settings
   $agent2_package             = 'zabbix-agent2'
   $agent2_service             = 'zabbix-agent2'
   $dir_zabbix_agent2_d        = '/etc/zabbix/zabbix_agent2.d'
@@ -41,7 +41,7 @@ class zabbix::params {
   $plugin_socket              = undef
   $control_socket             = undef
 
-  # module specific settings (server)
+  # server settings
   $server_file_owner       = 'root'
   $server_file_group       = 'root'
   $server_file_mode        = '0644'
@@ -53,7 +53,7 @@ class zabbix::params {
   $file_zabbix_server_conf = '/etc/zabbix/zabbix_server.conf'
   $dir_zabbix_server_confd = '/etc/zabbix/zabbix_server.d'
 
-  # module specific settings (proxy)
+  # proxy settings
   $proxy_file_owner       = 'root'
   $proxy_file_group       = 'zabbix'
   $proxy_file_mode        = '0640'
@@ -66,7 +66,7 @@ class zabbix::params {
   $proxy_pidfile          = '/var/run/zabbix/zabbix_proxy.pid'
   $file_zabbix_proxy_conf = '/etc/zabbix/zabbix_proxy.conf'
 
-  # module specific settings (java gateway)
+  # java gateway settings
   $java_gateway_file_owner = 'root'
   $java_gateway_file_group = 'root'
   $java_gateway_file_mode  = '0644'
@@ -77,7 +77,7 @@ class zabbix::params {
   $java_gateway_status     = 'enabled'
   $file_zabbix_javagw_conf = '/etc/zabbix/zabbix_java_gateway.conf'
 
-  # web
+  # web settings
   $web_version        = 'present'
   $web_file_owner     = 'root'
   $web_file_mode      = '0640'
@@ -90,13 +90,13 @@ class zabbix::params {
   # OS family specific params
   case $facts['os']['family'] {
     /(RedHat|redhat|amazon)/: {
-      # agent
+      # agent settings
       $dir_zabbix_agentd_confd  = '/etc/zabbix/zabbix_agentd.d'
       $dir_zabbix_agent_libdir  = '/usr/libexec/zabbix-agent'
       $dir_zabbix_agent_modules = '/usr/libexec/zabbix-agent/modules'
       $zabbix_agentd_logfile    = '/var/log/zabbix/zabbix_agentd.log'
 
-      # server
+      # server settings
       $zabbix_server_logfile = '/var/log/zabbixsrv/zabbix_server.log'
       $zabbix_server_pidfile = '/var/run/zabbixsrv/zabbix_server.pid'
       $fpinglocation         = '/usr/sbin/fping'
@@ -105,18 +105,18 @@ class zabbix::params {
       $external_scripts      = '/var/lib/zabbixsrv/externalscripts'
       $tmpdir                = '/var/lib/zabbixsrv/tmp'
 
-      # web
+      # web settings
       $web_package    = 'zabbix-web'
       $web_file_group = 'root'
     }
     /(Debian|debian|Ubuntu|ubuntu)/: {
-      # agent
+      # agent settings
       $dir_zabbix_agentd_confd  = '/etc/zabbix/zabbix_agentd.conf.d'
       $dir_zabbix_agent_libdir  = '/usr/lib/zabbix-agent'
       $dir_zabbix_agent_modules = '/usr/lib/zabbix-agent/modules'
       $zabbix_agentd_logfile    = '/var/log/zabbix-agent/zabbix_agentd.log'
 
-      # server
+      # server settings
       $zabbix_server_logfile = '/var/log/zabbix/zabbix_server.log'
       $zabbix_server_pidfile = '/var/run/zabbix/zabbix_server.pid'
       $fpinglocation         = '/usr/bin/fping'
@@ -125,18 +125,18 @@ class zabbix::params {
       $external_scripts      = '/usr/lib/zabbix/externalscripts'
       $tmpdir                = '/tmp'
       
-      # web
+      # web settings
       $web_package    = 'zabbix-frontend-php'
       $web_file_group = 'www-data'
     }
     default: {
-      # agent
+      # agent settings
       $dir_zabbix_agentd_confd  = '/etc/zabbix/zabbix_agentd.d'
       $dir_zabbix_agent_libdir  = '/usr/lib/zabbix/agent'
       $dir_zabbix_agent_modules = '/usr/lib/zabbix/agent/modules'
       $zabbix_agentd_logfile    = '/var/log/zabbix/zabbix_agentd.log'
 
-      # server
+      # server settings
       $zabbix_server_logfile = '/var/log/zabbix/zabbix_server.log'
       $zabbix_server_pidfile = '/var/run/zabbix/zabbix_server.pid'
       $fpinglocation         = '/usr/bin/fping'
@@ -145,7 +145,7 @@ class zabbix::params {
       $external_scripts      = '/var/lib/zabbixsrv/externalscripts'
       $tmpdir                = '/tmp'
 
-      # web
+      # web settings
       $web_package    = 'zabbix-web'
       $web_file_group = 'root'
     }
