@@ -11,14 +11,16 @@ class zabbix::agent::tcp (
   $module = "puppet:///modules/zabbix/agent/modules/${facts[os][family]}/${facts[os][release][major]}/tcp_count.so"
 ) inherits zabbix::agent {
 
-  file { "${zabbix::agent::conf_dir}/tcp.conf":
-    ensure  => file,
-    source  => 'puppet:///modules/zabbix/agent/tcp.conf',
-    require => File["${zabbix::agent::dir_zabbix_agent_modules}/tcp_count.so"],
-  }
+  unless $zabbix::agent::variant == '2' {
+    file { "${zabbix::agent::conf_dir}/tcp.conf":
+      ensure  => file,
+      source  => 'puppet:///modules/zabbix/agent/tcp.conf',
+      require => File["${zabbix::agent::dir_zabbix_agent_modules}/tcp_count.so"],
+    }
 
-  file { "${zabbix::agent::dir_zabbix_agent_modules}/tcp_count.so":
-    ensure => file,
-    source => $module,
+    file { "${zabbix::agent::dir_zabbix_agent_modules}/tcp_count.so":
+      ensure => file,
+      source => $module,
+    }
   }
 }
