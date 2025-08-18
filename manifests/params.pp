@@ -10,7 +10,7 @@ class zabbix::params {
   $server_active = 'mon'
   $client_name   = $facts['networking']['fqdn']
 
-  # conf dir common accross both Zabbix agent variants in upstream packages
+  # conf dir in Zabbix agent upstream packages
   $dir_zabbix_agentd_d = '/etc/zabbix/zabbix_agentd.d'
 
   # agent settings
