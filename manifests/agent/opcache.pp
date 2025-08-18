@@ -23,7 +23,7 @@ class zabbix::agent::opcache (
 
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/zabbix-opcache.pl":
     ensure  => file,
-    mode    => '0755',
+    mode    => $zabbix::agent::lib_file_mode,
     source  => 'puppet:///modules/zabbix/agent/opcache/zabbix-opcache.pl',
   }
 
@@ -42,7 +42,7 @@ class zabbix::agent::opcache (
 
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/opcache_stats.php":
     ensure => file,
-    mode   => '0755',
+    mode   => $zabbix::agent::lib_file_mode,
     source => 'puppet:///modules/zabbix/agent/opcache/opcache_stats.php',
   }
 }

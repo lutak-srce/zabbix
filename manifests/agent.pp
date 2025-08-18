@@ -11,6 +11,7 @@ class zabbix::agent (
   $file_owner                 = $::zabbix::params::agent_file_owner,
   $file_group                 = $::zabbix::params::agent_file_group,
   $file_mode                  = $::zabbix::params::agent_file_mode,
+  $lib_file_mode              = $::zabbix::params::agent_lib_file_mode,
   $purge_conf_dir             = $::zabbix::params::agent_purge_conf_dir,
   $file_zabbix_agentd_conf    = $::zabbix::params::file_zabbix_agentd_conf,
   $erb_zabbix_agentd_conf     = 'zabbix/zabbix_agentd.conf.erb',

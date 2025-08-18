@@ -23,7 +23,7 @@ class zabbix::agent::mdraid inherits zabbix::agent {
 
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/check_mdraid":
     ensure  => file,
-    mode    => '0755',
+    mode    => $zabbix::agent::lib_file_mode,
     source  => 'puppet:///modules/zabbix/agent/check_mdraid',
     require => ::Sudoers::Allowed_command['zabbix_sudo_mdadm'],
   }

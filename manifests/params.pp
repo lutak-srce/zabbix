@@ -17,6 +17,7 @@ class zabbix::params {
   $agent_file_owner        = 'root'
   $agent_file_group        = 'root'
   $agent_file_mode         = '0644'
+  $agent_lib_file_mode     = '0755'
   $agent_purge_conf_dir    = false
   $get_package             = 'zabbix-get'
   $get_version             = 'present'

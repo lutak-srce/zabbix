@@ -23,14 +23,14 @@ class zabbix::agent::lld inherits zabbix::agent {
 
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/lld-blockdev":
     ensure  => file,
-    mode    => '0755',
+    mode    => $zabbix::agent::lib_file_mode,
     source  => 'puppet:///modules/zabbix/agent/lld/lld-blockdev',
     require => ::Sudoers::Allowed_command['zabbix_sudo_multipath'],
   }
 
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/lld-macro":
     ensure => file,
-    mode   => '0755',
+    mode   => $zabbix::agent::lib_file_mode,
     source => 'puppet:///modules/zabbix/agent/lld/lld-macro',
   }
 }

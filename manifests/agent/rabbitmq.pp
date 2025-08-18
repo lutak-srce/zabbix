@@ -30,22 +30,22 @@ class zabbix::agent::rabbitmq (
 
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/api.py":
     ensure => file,
-    mode   => '0755',
+    mode   => $zabbix::agent::lib_file_mode,
     source => 'puppet:///modules/zabbix/agent/rabbitmq/api.py',
   }
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/list_rabbit_nodes.sh":
     ensure => file,
-    mode   => '0755',
+    mode   => $zabbix::agent::lib_file_mode,
     source => 'puppet:///modules/zabbix/agent/rabbitmq/list_rabbit_nodes.sh',
   }
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/list_rabbit_queues.sh":
     ensure => file,
-    mode   => '0755',
+    mode   => $zabbix::agent::lib_file_mode,
     source => 'puppet:///modules/zabbix/agent/rabbitmq/list_rabbit_queues.sh',
   }
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/rabbitmq-status.sh":
     ensure => file,
-    mode   => '0755',
+    mode   => $zabbix::agent::lib_file_mode,
     source => 'puppet:///modules/zabbix/agent/rabbitmq/rabbitmq-status.sh',
   }
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/.rab.auth":

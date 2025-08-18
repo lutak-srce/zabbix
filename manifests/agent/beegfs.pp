@@ -16,7 +16,7 @@ class zabbix::agent::beegfs inherits zabbix::agent {
 
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/zabbix-beegfs.pl":
     ensure  => file,
-    mode    => '0755',
+    mode    => $zabbix::agent::lib_file_mode,
     source  => 'puppet:///modules/zabbix/agent/beegfs/zabbix-beegfs.pl',
     require =>  Package['perl-JSON'],
   }

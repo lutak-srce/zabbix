@@ -24,13 +24,13 @@ class zabbix::agent::sge inherits zabbix::agent {
 
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/sge.pl":
     ensure => file,
-    mode   => '0755',
+    mode   => $zabbix::agent::lib_file_mode,
     source => 'puppet:///modules/zabbix/agent/sge/sge.pl',
   }
 
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/sge-lld.pl":
     ensure => file,
-    mode   => '0755',
+    mode   => $zabbix::agent::lib_file_mode,
     source =>  'puppet:///modules/zabbix/agent/sge/sge-lld.pl',
   }
 }

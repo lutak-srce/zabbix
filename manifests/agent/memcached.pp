@@ -15,7 +15,7 @@ class zabbix::agent::memcached inherits zabbix::agent {
 
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/memcached.pl":
     ensure => file,
-    mode   => '0755',
+    mode   => $zabbix::agent::lib_file_mode,
     source => 'puppet:///modules/zabbix/agent/memcached.pl',
   }
 }

@@ -66,7 +66,7 @@ class zabbix::agent::phpfpm (
 
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/php-fpm.sh":
     ensure  => file,
-    mode    => '0755',
+    mode    => $zabbix::agent::lib_file_mode,
     content => template('zabbix/agent/php-fpm.sh.erb'),
   }
 }

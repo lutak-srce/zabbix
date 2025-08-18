@@ -33,13 +33,13 @@ class zabbix::agent::amavisd inherits zabbix::agent {
 
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/amavisd.pl":
     ensure => file,
-    mode   => '0755',
+    mode   => $zabbix::agent::lib_file_mode,
     source => 'puppet:///modules/zabbix/agent/amavisd.pl',
   }
 
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/check_amavis.pl":
     ensure => file,
-    mode   => '0755',
+    mode   => $zabbix::agent::lib_file_mode,
     source => 'puppet:///modules/zabbix/agent/check_amavis.pl',
   }
 }

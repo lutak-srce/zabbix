@@ -23,7 +23,7 @@ class zabbix::agent::apache (
 
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/apache2.pl":
     ensure  => file,
-    mode    => '0755',
+    mode    => $zabbix::agent::lib_file_mode,
     content => template('zabbix/agent/apache2.pl.erb'),
     require => Package['curl'],
   }

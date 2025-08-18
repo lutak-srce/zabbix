@@ -20,13 +20,13 @@ class zabbix::agent::gpu inherits zabbix::agent {
 
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/get_gpu_info":
     ensure => file,
-    mode   => '0755',
+    mode   => $zabbix::agent::lib_file_mode,
     source => 'puppet:///modules/zabbix/agent/gpu/get_gpu_info',
   }
 
   file { "${zabbix::agent::dir_zabbix_agent_libdir}/get_gpus_info.sh":
     ensure => file,
-    mode   => '0755',
+    mode   => $zabbix::agent::lib_file_mode,
     source => 'puppet:///modules/zabbix/agent/gpu/get_gpus_info.sh',
   }
 }
