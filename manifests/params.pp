@@ -110,16 +110,11 @@ class zabbix::params {
       $dir_zabbix_agent_libdir    = '/usr/libexec/zabbix-agent'
       $dir_zabbix_agent_modules   = '/usr/libexec/zabbix-agent/modules'
       $zabbix_agentd_logfile      = '/var/log/zabbix/zabbix_agentd.log'
+      $zabbix_agent_pidfile       = '/var/run/zabbix/zabbix_agentd.pid'
 
       # server
       $zabbix_server_logfile      = '/var/log/zabbixsrv/zabbix_server.log'
-      if $::facts['os']['release']['major'] == '7' {
-        $zabbix_server_pidfile    = '/run/zabbixsrv/zabbix_server.pid'
-        $zabbix_agent_pidfile     = '/run/zabbix/zabbix_agentd.pid'
-      } else {
-        $zabbix_server_pidfile    = '/var/run/zabbixsrv/zabbix_server.pid'
-        $zabbix_agent_pidfile     = '/var/run/zabbix/zabbix_agentd.pid'
-      }
+      $zabbix_server_pidfile      = '/var/run/zabbixsrv/zabbix_server.pid'
       $fpinglocation              = '/usr/sbin/fping'
       $fping6location             = '/usr/sbin/fping6'
       $alert_scripts_path         = '/var/lib/zabbixsrv/alertscripts'
