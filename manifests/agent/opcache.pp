@@ -10,7 +10,10 @@
 class zabbix::agent::opcache (
   $host = 'localhost',
 ) inherits zabbix::agent {
-  include apache
+  # The apache base class must be included first because it is used by opcache sensor
+  if ! defined(Class['apache']) {
+    fail('You must include the apache base class before using opcache sensor')
+  }
 
   file { "${zabbix::agent::conf_dir}/opcache.conf":
     ensure  => file,
