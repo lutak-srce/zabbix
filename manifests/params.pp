@@ -24,6 +24,7 @@ class zabbix::params {
   $agent_service           = 'zabbix-agent'
   $agent_status            = 'enabled'
   $file_zabbix_agentd_conf = '/etc/zabbix/zabbix_agentd.conf'
+  $zabbix_agent_pidfile    = '/var/run/zabbix/zabbix_agentd.pid'
 
   # module specific settings (agent2)
   $agent2_package             = 'zabbix-agent2'
@@ -89,7 +90,6 @@ class zabbix::params {
       $dir_zabbix_agent_libdir    = '/usr/lib/zabbix/agent'
       $dir_zabbix_agent_modules   = '/usr/lib/zabbix/agent/modules'
       $zabbix_agentd_logfile      = '/var/log/zabbix/zabbix_agentd.log'
-      $zabbix_agent_pidfile       = '/var/run/zabbix/zabbix_agentd.pid'
 
       # server
       $zabbix_server_logfile      = '/var/log/zabbix/zabbix_server.log'
@@ -110,7 +110,6 @@ class zabbix::params {
       $dir_zabbix_agent_libdir    = '/usr/libexec/zabbix-agent'
       $dir_zabbix_agent_modules   = '/usr/libexec/zabbix-agent/modules'
       $zabbix_agentd_logfile      = '/var/log/zabbix/zabbix_agentd.log'
-      $zabbix_agent_pidfile       = '/var/run/zabbix/zabbix_agentd.pid'
 
       # server
       $zabbix_server_logfile      = '/var/log/zabbixsrv/zabbix_server.log'
@@ -131,7 +130,6 @@ class zabbix::params {
       $dir_zabbix_agent_libdir    = '/usr/lib/zabbix-agent'
       $dir_zabbix_agent_modules   = '/usr/lib/zabbix-agent/modules'
       $zabbix_agentd_logfile      = '/var/log/zabbix-agent/zabbix_agentd.log'
-      $zabbix_agent_pidfile       = '/var/run/zabbix/zabbix_agentd.pid'
 
       # server
       $zabbix_server_logfile      = '/var/log/zabbix/zabbix_server.log'
