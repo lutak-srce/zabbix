@@ -31,7 +31,6 @@ class zabbix::agent2 (
   Integer              $buffer_size            = 100,
   String               $host_name              = $facts['networking']['fqdn'],
   Integer              $timeout                = 30,
-  Boolean              $autoload_configs       = false,
 
 ) {
   package { $legacy_agent:
