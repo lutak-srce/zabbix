@@ -4,10 +4,7 @@
 # @example
 #   include zabbix::agent2::plugin::smart
 #
-# @note 
-#   This class inherits all parameters from zabbix::agent2 class.
-#
-class zabbix::agent2::plugin::smart inherits zabbix::agent2 {
+class zabbix::agent2::plugin::smart {
   file { "${zabbix::agent2::plugins_d}/smart.conf":
     ensure  => file,
     owner   => $zabbix::agent2::owner,

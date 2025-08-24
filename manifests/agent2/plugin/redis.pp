@@ -4,10 +4,7 @@
 # @example
 #   include zabbix::agent2::plugin::redis
 #
-# @note 
-#   This class inherits all parameters from zabbix::agent2 class.
-#
-class zabbix::agent2::plugin::redis inherits zabbix::agent2 {
+class zabbix::agent2::plugin::redis {
   file { "${zabbix::agent2::plugins_d}/redis.conf":
     ensure  => file,
     owner   => $zabbix::agent2::owner,

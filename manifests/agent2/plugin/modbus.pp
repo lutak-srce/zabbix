@@ -4,10 +4,7 @@
 # @example
 #   include zabbix::agent2::plugin::modbus
 #
-# @note 
-#   This class inherits all parameters from zabbix::agent2 class.
-#
-class zabbix::agent2::plugin::modbus inherits zabbix::agent2 {
+class zabbix::agent2::plugin::modbus {
   file { "${zabbix::agent2::plugins_d}/modbus.conf":
     ensure  => file,
     owner   => $zabbix::agent2::owner,

@@ -4,10 +4,7 @@
 # @example
 #   include zabbix::agent2::plugin::postgresql
 #
-# @note 
-#   This class inherits all parameters from zabbix::agent2 class.
-#
-class zabbix::agent2::plugin::postgresql inherits zabbix::agent2 {
+class zabbix::agent2::plugin::postgresql {
   file { "${zabbix::agent2::plugins_d}/postgresql.conf":
     ensure  => file,
     owner   => $zabbix::agent2::owner,

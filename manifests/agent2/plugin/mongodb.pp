@@ -4,10 +4,7 @@
 # @example
 #   include zabbix::agent2::plugin::mongodb
 #
-# @note 
-#   This class inherits all parameters from zabbix::agent2 class.
-#
-class zabbix::agent2::plugin::mongodb inherits zabbix::agent2 {
+class zabbix::agent2::plugin::mongodb {
   file { "${zabbix::agent2::plugins_d}/mongodb.conf":
     ensure  => file,
     owner   => $zabbix::agent2::owner,

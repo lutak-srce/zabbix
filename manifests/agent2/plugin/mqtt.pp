@@ -4,10 +4,7 @@
 # @example
 #   include zabbix::agent2::plugin::mqtt
 #
-# @note 
-#   This class inherits all parameters from zabbix::agent2 class.
-#
-class zabbix::agent2::plugin::mqtt inherits zabbix::agent2 {
+class zabbix::agent2::plugin::mqtt {
   file { "${zabbix::agent2::plugins_d}/mqtt.conf":
     ensure  => file,
     owner   => $zabbix::agent2::owner,

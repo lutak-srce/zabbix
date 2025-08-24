@@ -4,10 +4,7 @@
 # @example
 #   include zabbix::agent2::plugin::memcached
 #
-# @note 
-#   This class inherits all parameters from zabbix::agent2 class.
-#
-class zabbix::agent2::plugin::memcached inherits zabbix::agent2 {
+class zabbix::agent2::plugin::memcached {
   file { "${zabbix::agent2::plugins_d}/memcached.conf":
     ensure  => file,
     owner   => $zabbix::agent2::owner,

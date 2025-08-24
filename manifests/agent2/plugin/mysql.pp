@@ -4,10 +4,7 @@
 # @example
 #   include zabbix::agent2::plugin::mysql
 #
-# @note 
-#   This class inherits all parameters from zabbix::agent2 class.
-#
-class zabbix::agent2::plugin::mysql inherits zabbix::agent2 {
+class zabbix::agent2::plugin::mysql {
   file { "${zabbix::agent2::plugins_d}/mysql.conf":
     ensure  => file,
     owner   => $zabbix::agent2::owner,
