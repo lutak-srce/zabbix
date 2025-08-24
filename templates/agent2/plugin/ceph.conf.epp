@@ -8,6 +8,9 @@
 # Range: false | true
 # Default:
 # Plugins.Ceph.InsecureSkipVerify=false
+<% if $zabbix::agent2::plugin::ceph::insecure_skip_verify != undef { -%>
+Plugins.Ceph.InsecureSkipVerify=<%= $zabbix::agent2::plugin::ceph::insecure_skip_verify %>
+<% } -%>
 
 ### Option: Plugins.Ceph.KeepAlive
 #	The amount of time a connection can remain idle before it is closed.
@@ -16,6 +19,9 @@
 # Range: 60-900
 # Default:
 # Plugins.Ceph.KeepAlive=300
+<% if $zabbix::agent2::plugin::ceph::keep_alive != undef { -%>
+Plugins.Ceph.InsecureSkipVerify=<%= $zabbix::agent2::plugin::ceph::keep_alive %>
+<% } -%>
 
 ### Option: Plugins.Ceph.Timeout
 #	The maximum amount of time in seconds to wait for a request to be done.
@@ -25,6 +31,9 @@
 # Range: 1-30
 # Default:
 # Plugins.Ceph.Timeout=<Global timeout>
+<% if $zabbix::agent2::plugin::ceph::timeout != undef { -%>
+Plugins.Ceph.InsecureSkipVerify=<%= $zabbix::agent2::plugin::ceph::timeout %>
+<% } -%>
 
 ### Option: Plugins.Ceph.Sessions.*.ApiKey
 #	ApiKey to be used for connection. "*" should be replaced with a session name.
@@ -32,6 +41,13 @@
 # Mandatory: no
 # Default:
 # Plugins.Ceph.Sessions.*.ApiKey=
+<%- if $zabbix::agent2::plugin::ceph::sessions { -%>
+  <%- $zabbix::agent2::plugin::ceph::sessions.each |$key, $value| { -%>
+    <%- if $key != 'default' and $value['api_key'] { -%>
+Plugins.Ceph.Sessions.<%= $key %>.ApiKey=<%= $value['api_key'] %>
+    <%- } -%>
+  <%- } -%>
+<%- } -%>
 
 ### Option: Plugins.Ceph.Sessions.*.User
 #	Username to be used for connection. "*" should be replaced with a session name.
@@ -39,6 +55,13 @@
 # Mandatory: no
 # Default:
 # Plugins.Ceph.Sessions.*.User=
+<%- if $zabbix::agent2::plugin::ceph::sessions { -%>
+  <%- $zabbix::agent2::plugin::ceph::sessions.each |$key, $value| { -%>
+    <%- if $key != 'default' and $value['user'] { -%>
+Plugins.Ceph.Sessions.<%= $key %>.User=<%= $value['user'] %>
+    <%- } -%>
+  <%- } -%>
+<%- } -%>
 
 ### Option: Plugins.Ceph.Sessions.*.Uri
 #	Uri to connect. "*" should be replaced with a session name.
@@ -50,6 +73,13 @@
 #   Embedded credentials will be ignored.
 # Default:
 # Plugins.Ceph.Sessions.*.Uri=
+<%- if $zabbix::agent2::plugin::ceph::sessions { -%>
+  <%- $zabbix::agent2::plugin::ceph::sessions.each |$key, $value| { -%>
+    <%- if $key != 'default' and $value['uri'] { -%>
+Plugins.Ceph.Sessions.<%= $key %>.Uri=<%= $value['uri'] %>
+    <%- } -%>
+  <%- } -%>
+<%- } -%>
 
 ### Option: Plugins.Ceph.Default.ApiKey
 #	ApiKey to be used for connection. Default value used if no other is specified.
@@ -57,6 +87,9 @@
 # Mandatory: no
 # Default:
 # Plugins.Ceph.Default.ApiKey=
+<%- if $zabbix::agent2::plugin::ceph::sessions and $zabbix::agent2::plugin::ceph::sessions['default'] and $zabbix::agent2::plugin::ceph::sessions['default']['api_key'] { -%>
+Plugins.Ceph.Default.ApiKey=<%= $zabbix::agent2::plugin::ceph::sessions['default']['api_key'] %>
+<% } -%>
 
 ### Option: Plugins.Ceph.Default.User
 #	Username to be used for connection. Default value used if no other is specified.
@@ -64,6 +97,9 @@
 # Mandatory: no
 # Default:
 # Plugins.Ceph.Default.User=
+<%- if $zabbix::agent2::plugin::ceph::sessions and $zabbix::agent2::plugin::ceph::sessions['default'] and $zabbix::agent2::plugin::ceph::sessions['default']['user'] { -%>
+Plugins.Ceph.Default.User=<%= $zabbix::agent2::plugin::ceph::sessions['default']['user'] %>
+<% } -%>
 
 ### Option: Plugins.Ceph.Default.Uri
 #	Uri to connect. Default value used if no other is specified.
@@ -75,3 +111,6 @@
 #   Embedded credentials will be ignored.
 # Default:
 # Plugins.Ceph.Default.Uri=
+<%- if $zabbix::agent2::plugin::ceph::sessions and $zabbix::agent2::plugin::ceph::sessions['default'] and $zabbix::agent2::plugin::ceph::sessions['default']['uri'] { -%>
+Plugins.Ceph.Default.Uri=<%= $zabbix::agent2::plugin::ceph::sessions['default']['uri'] %>
+<% } -%>

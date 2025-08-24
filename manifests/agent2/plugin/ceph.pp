@@ -4,7 +4,18 @@
 # @example
 #   include zabbix::agent2::plugin::ceph
 #
-class zabbix::agent2::plugin::ceph {
+class zabbix::agent2::plugin::ceph (
+  Optional[Boolean]                  $insecure_skip_verify = undef,
+  Optional[Integer[60,900]]          $keep_alive           = undef,
+  Optional[Integer[1,30]]            $timeout              = undef,
+  Optional[Hash[String,
+    Struct[{
+        uri     => Stdlib::HTTPSUrl,
+        user    => String[1],
+        api_key => String[1],
+    }]
+  ]]                                 $sessions             = undef,
+) {
   file { "${zabbix::agent2::plugins_d}/ceph.conf":
     ensure  => file,
     owner   => $zabbix::agent2::owner,
