@@ -50,10 +50,10 @@ class zabbix::agent2 (
   Optional[String]                                       $persistent_buffer_period = undef,
   Optional[Stdlib::Absolutepath]                         $persistent_buffer_file   = undef,
   # Advanced parameters
-  Optional[Array[String]]               $alias          = undef,
-  Optional[Integer[1,30]]               $timeout        = undef,
-  Optional[Integer[1,30]]               $plugin_timeout = undef,
-  Optional[Stdlib::Absolutepath]        $plugin_socket  = '/run/zabbix/agent.plugin.sock',
+  Optional[Array[String]]        $alias          = undef,
+  Optional[Integer[1,30]]        $timeout        = undef,
+  Optional[Integer[1,30]]        $plugin_timeout = undef,
+  Optional[Stdlib::Absolutepath] $plugin_socket  = '/run/zabbix/agent.plugin.sock',
   # User-defined monitored parameters
   Optional[Integer[0,1]]         $unsafe_user_parameters = undef,
   Optional[Array[Struct[{
