@@ -100,7 +100,6 @@ class zabbix::agent2 (
   service { $service:
     ensure  => $service_ensure,
     enable  => $service_enable,
-    require => Package[$package],
   }
 
   file { $zabbix_agent2_d:
