@@ -10,7 +10,9 @@
 # Default:
 # PidFile=/tmp/zabbix_agent2.pid
 
+<% if $zabbix::agent2::pid_file { -%>
 PidFile=<%= $zabbix::agent2::pid_file %>
+<% } -%>
 
 ### Option: LogType
 #	Specifies where log messages are written to:
@@ -21,6 +23,9 @@ PidFile=<%= $zabbix::agent2::pid_file %>
 # Mandatory: no
 # Default:
 # LogType=file
+<% if $zabbix::agent2::log_type { -%>
+LogType=<%= $zabbix::agent2::log_type %>
+<% } -%>
 
 ### Option: LogFile
 #	Log file name for LogType 'file' parameter.
@@ -29,7 +34,9 @@ PidFile=<%= $zabbix::agent2::pid_file %>
 # Default:
 # LogFile=/tmp/zabbix_agent2.log
 
+<% if $zabbix::agent2::log_file { -%>
 LogFile=<%= $zabbix::agent2::log_file %>
+<% } -%>
 
 ### Option: LogFileSize
 #	Maximum size of log file in MB.
@@ -40,7 +47,9 @@ LogFile=<%= $zabbix::agent2::log_file %>
 # Default:
 # LogFileSize=1
 
-LogFileSize=0
+<% if $zabbix::agent2::log_file_size { -%>
+LogFileSize=<%= $zabbix::agent2::log_file_size %>
+<% } -%>
 
 ### Option: DebugLevel
 #	Specifies debug level:
@@ -55,6 +64,9 @@ LogFileSize=0
 # Range: 0-5
 # Default:
 # DebugLevel=3
+<% if $zabbix::agent2::debug_level { -%>
+DebugLevel=<%= $zabbix::agent2::debug_level %>
+<% } -%>
 
 ### Option: SourceIP
 #	Source IP address for outgoing connections.
@@ -62,6 +74,9 @@ LogFileSize=0
 # Mandatory: no
 # Default:
 # SourceIP=
+<% if $zabbix::agent2::source_ip { -%>
+SourceIP=<%= $zabbix::agent2::source_ip %>
+<% } -%>
 
 ##### Passive checks related
 
@@ -79,7 +94,11 @@ LogFileSize=0
 # Default:
 # Server=
 
-Server=<%= $zabbix::agent2::server_name %>
+<% if $zabbix::agent2::server =~ Array { -%>
+Server=<%= $zabbix::agent2::server.flatten.join(',') %>
+<% } elsif $zabbix::agent2::server { -%>
+Server=<%= $zabbix::agent2::server %>
+<% } -%>
 
 ### Option: ListenPort
 #	Agent will listen on this port for connections from the server.
@@ -88,6 +107,9 @@ Server=<%= $zabbix::agent2::server_name %>
 # Range: 1024-32767
 # Default:
 # ListenPort=10050
+<% if $zabbix::agent2::listen_port { -%>
+ListenPort=<%= $zabbix::agent2::listen_port %>
+<% } -%>
 
 ### Option: ListenIP
 #	List of comma delimited IP addresses that the agent should listen on.
@@ -96,6 +118,11 @@ Server=<%= $zabbix::agent2::server_name %>
 # Mandatory: no
 # Default:
 # ListenIP=0.0.0.0
+<% if $zabbix::agent2::listen_ip =~ Array { -%>
+ListenIP=<%= $zabbix::agent2::listen_ip.flatten.join(',') %>
+<% } elsif $zabbix::agent2::listen_ip { -%>
+ListenIP=<%= $zabbix::agent2::listen_ip %>
+<% } -%>
 
 ### Option: StatusPort
 #	Agent will listen on this port for HTTP status requests.
@@ -104,6 +131,9 @@ Server=<%= $zabbix::agent2::server_name %>
 # Range: 1024-32767
 # Default:
 # StatusPort=
+<% if $zabbix::agent2::status_port { -%>
+StatusPort=<%= $zabbix::agent2::status_port %>
+<% } -%>
 
 ##### Active checks related
 
@@ -132,7 +162,11 @@ Server=<%= $zabbix::agent2::server_name %>
 # Default:
 # ServerActive=
 
+<% if $zabbix::agent2::server_active =~ Array { -%>
+ServerActive=<%= $zabbix::agent2::server_active.flatten.join(',') %>
+<% } elsif $zabbix::agent2::server_active { -%>
 ServerActive=<%= $zabbix::agent2::server_active %>
+<% } -%>
 
 ### Option: Hostname
 #	List of comma delimited unique, case sensitive hostnames.
@@ -143,7 +177,11 @@ ServerActive=<%= $zabbix::agent2::server_active %>
 # Default:
 # Hostname=
 
-Hostname=<%= $zabbix::agent2::host_name %>
+<% if $zabbix::agent2::hostname =~ Array { -%>
+Hostname=<%= $zabbix::agent2::hostname.flatten.join(',') %>
+<% } elsif $zabbix::agent2::hostname { -%>
+Hostname=<%= $zabbix::agent2::hostname %>
+<% } -%>
 
 ### Option: HostnameItem
 #	Item used for generating Hostname if it is undefined. Ignored if Hostname is defined.
@@ -152,6 +190,9 @@ Hostname=<%= $zabbix::agent2::host_name %>
 # Mandatory: no
 # Default:
 # HostnameItem=system.hostname
+<% if $zabbix::agent2::hostname_item { -%>
+HostnameItem=<%= $zabbix::agent2::hostname_item %>
+<% } -%>
 
 ### Option: HostMetadata
 #	Optional parameter that defines host metadata.
@@ -163,10 +204,11 @@ Hostname=<%= $zabbix::agent2::host_name %>
 # Range: 0-255 characters
 # Default:
 # HostMetadata=
-
-<%- if $zabbix::agent2::host_metadata { -%>
+<% if $zabbix::agent2::host_metadata =~ Array { -%>
+HostMetadata=<%= $zabbix::agent2::host_metadata.flatten.join(',') %>
+<% } elsif $zabbix::agent2::host_metadata { -%>
 HostMetadata=<%= $zabbix::agent2::host_metadata %>
-<%- } -%>
+<% } -%>
 
 ### Option: HostMetadataItem
 #	Optional parameter that defines an item used for getting host metadata.
@@ -178,6 +220,9 @@ HostMetadata=<%= $zabbix::agent2::host_metadata %>
 # Mandatory: no
 # Default:
 # HostMetadataItem=
+<% if $zabbix::agent2::host_metadata_item { -%>
+HostMetadataItem=<%= $zabbix::agent2::host_metadata_item %>
+<% } -%>
 
 ### Option: HostInterface
 #	Optional parameter that defines host interface.
@@ -189,6 +234,9 @@ HostMetadata=<%= $zabbix::agent2::host_metadata %>
 # Range: 0-255 characters
 # Default:
 # HostInterface=
+<% if $zabbix::agent2::host_interface { -%>
+HostInterface=<%= $zabbix::agent2::host_interface %>
+<% } -%>
 
 ### Option: HostInterfaceItem
 #	Optional parameter that defines an item used for getting host interface.
@@ -200,6 +248,9 @@ HostMetadata=<%= $zabbix::agent2::host_metadata %>
 # Mandatory: no
 # Default:
 # HostInterfaceItem=
+<% if $zabbix::agent2::host_interface_item { -%>
+HostInterfaceItem=<%= $zabbix::agent2::host_interface_item %>
+<% } -%>
 
 ### Option: RefreshActiveChecks
 #	How often list of active checks is refreshed, in seconds.
@@ -208,6 +259,9 @@ HostMetadata=<%= $zabbix::agent2::host_metadata %>
 # Range: 60-3600
 # Default:
 # RefreshActiveChecks=120
+<% if $zabbix::agent2::refresh_active_checks { -%>
+RefreshActiveChecks=<%= $zabbix::agent2::refresh_active_checks %>
+<% } -%>
 
 ### Option: BufferSend
 #	Do not keep data longer than N seconds in buffer.
@@ -216,8 +270,9 @@ HostMetadata=<%= $zabbix::agent2::host_metadata %>
 # Range: 1-3600
 # Default:
 # BufferSend=5
-
+<% if $zabbix::agent2::buffer_send { -%>
 BufferSend=<%= $zabbix::agent2::buffer_send %>
+<% } -%>
 
 ### Option: BufferSize
 #	Maximum number of values in a memory buffer. The agent will send
@@ -228,8 +283,9 @@ BufferSend=<%= $zabbix::agent2::buffer_send %>
 # Range: 2-65535
 # Default:
 # BufferSize=100
-
+<% if $zabbix::agent2::buffer_size { -%>
 BufferSize=<%= $zabbix::agent2::buffer_size %>
+<% } -%>
 
 ### Option: EnablePersistentBuffer
 #	Enable usage of local persistent storage for active items.
@@ -238,6 +294,9 @@ BufferSize=<%= $zabbix::agent2::buffer_size %>
 # Range: 0-1
 # Default:
 # EnablePersistentBuffer=0
+<% if $zabbix::agent2::enable_persistent_buffer { -%>
+EnablePersistentBuffer=<%= $zabbix::agent2::enable_persistent_buffer %>
+<% } -%>
 
 ### Option: PersistentBufferPeriod
 #	Zabbix Agent2 will keep data for this time period in case of no
@@ -248,6 +307,9 @@ BufferSize=<%= $zabbix::agent2::buffer_size %>
 # Range: 1m-365d
 # Default:
 # PersistentBufferPeriod=1h
+<% if $zabbix::agent2::persistent_buffer_period { -%>
+PersistentBufferPeriod=<%= $zabbix::agent2::persistent_buffer_period %>
+<% } -%>
 
 ### Option: PersistentBufferFile
 #	Full filename. Zabbix Agent2 will keep SQLite database in this file.
@@ -256,6 +318,9 @@ BufferSize=<%= $zabbix::agent2::buffer_size %>
 # Mandatory: no
 # Default:
 # PersistentBufferFile=
+<% if $zabbix::agent2::persistent_buffer_file { -%>
+PersistentBufferFile=<%= $zabbix::agent2::persistent_buffer_file %>
+<% } -%>
 
 ############ ADVANCED PARAMETERS #################
 
@@ -271,6 +336,11 @@ BufferSize=<%= $zabbix::agent2::buffer_size %>
 # Mandatory: no
 # Range:
 # Default:
+<% if $zabbix::agent2::alias { -%>
+<% $zabbix::agent2::alias.each |$key| { -%>
+Alias=<%= $key %>
+<% } -%>
+<% } -%>
 
 ### Option: Timeout
 #	Spend no more than Timeout seconds on processing
@@ -279,8 +349,9 @@ BufferSize=<%= $zabbix::agent2::buffer_size %>
 # Range: 1-30
 # Default:
 # Timeout=3
-
+<% if $zabbix::agent2::timeout { -%>
 Timeout=<%= $zabbix::agent2::timeout %>
+<% } -%>
 
 ### Option: Include
 #	You may include individual files or all files in a directory in the configuration file.
@@ -291,6 +362,11 @@ Timeout=<%= $zabbix::agent2::timeout %>
 # Include=
 
 Include=<%= $zabbix::agent2::zabbix_agent2_d %>/*.conf
+<% if $zabbix::agent2::include { -%>
+<% $zabbix::agent2::include.each |$path| { -%>
+Include=<%= $path %>
+<% } -%>
+<% } -%>
 
 # Include=/usr/local/etc/zabbix_agent2.userparams.conf
 # Include=/usr/local/etc/zabbix_agent2.conf.d/
@@ -303,6 +379,9 @@ Include=<%= $zabbix::agent2::zabbix_agent2_d %>/*.conf
 # Range: 1-30
 # Default: <Global timeout>
 # PluginTimeout=
+<% if $zabbix::agent2::plugin_timeout { -%>
+PluginTimeout=<%= $zabbix::agent2::plugin_timeout %>
+<% } -%>
 
 ### Option:PluginSocket
 #	Path to unix socket for external plugin communications.
@@ -311,9 +390,9 @@ Include=<%= $zabbix::agent2::zabbix_agent2_d %>/*.conf
 # Default:/tmp/agent.plugin.sock
 # PluginSocket=
 
-<%- if $zabbix::agent2::plugin_socket { -%>
+<% if $zabbix::agent2::plugin_socket { -%>
 PluginSocket=<%= $zabbix::agent2::plugin_socket %>
-<%- } -%>
+<% } -%>
 
 ####### USER-DEFINED MONITORED PARAMETERS #######
 
@@ -329,6 +408,9 @@ PluginSocket=<%= $zabbix::agent2::plugin_socket %>
 # Range: 0-1
 # Default:
 # UnsafeUserParameters=0
+<% if $zabbix::agent2::unsafe_user_parameters { -%>
+UnsafeUserParameters=<%= $zabbix::agent2::unsafe_user_parameters %>
+<% } -%>
 
 ### Option: UserParameter
 #	User-defined parameter to monitor. There can be several user-defined parameters.
@@ -338,6 +420,11 @@ PluginSocket=<%= $zabbix::agent2::plugin_socket %>
 # Mandatory: no
 # Default:
 # UserParameter=
+<% if $zabbix::agent2::user_parameter { -%>
+<% $zabbix::agent2::user_parameter.each |$user_param| { -%>
+UserParameter=<%= $user_param['key'] %>,<%= $user_param['shell_command'] %>
+<% } -%>
+<% } -%>
 
 ### Option: UserParameterDir
 #	Directory to execute UserParameter commands from. Only one entry is allowed.
@@ -348,6 +435,9 @@ PluginSocket=<%= $zabbix::agent2::plugin_socket %>
 # Mandatory: no
 # Default:
 # UserParameterDir=
+<% if $zabbix::agent2::user_parameter_dir { -%>
+UserParameterDir=<%= $zabbix::agent2::user_parameter_dir %>
+<% } -%>
 
 ### Option: ControlSocket
 #	The control socket, used to send runtime commands with '-R' option.
@@ -356,9 +446,9 @@ PluginSocket=<%= $zabbix::agent2::plugin_socket %>
 # Default:
 # ControlSocket=
 
-<%- if $zabbix::agent2::control_socket { -%>
+<% if $zabbix::agent2::control_socket { -%>
 ControlSocket=<%= $zabbix::agent2::control_socket %>
-<%- } -%>
+<% } -%>
 
 ####### TLS-RELATED PARAMETERS #######
 
@@ -372,6 +462,11 @@ ControlSocket=<%= $zabbix::agent2::control_socket %>
 # Mandatory: yes, if TLS certificate or PSK parameters are defined (even for 'unencrypted' connection)
 # Default:
 # TLSConnect=unencrypted
+<% if $zabbix::agent2::tls_connect =~ Array { -%>
+TLSConnect=<%= $zabbix::agent2::tls_connect.flatten.join(',') %>
+<% } elsif $zabbix::agent2::tls_connect { -%>
+TLSConnect=<%= $zabbix::agent2::tls_connect %>
+<% } -%>
 
 ### Option: TLSAccept
 #	What incoming connections to accept.
@@ -383,6 +478,11 @@ ControlSocket=<%= $zabbix::agent2::control_socket %>
 # Mandatory: yes, if TLS certificate or PSK parameters are defined (even for 'unencrypted' connection)
 # Default:
 # TLSAccept=unencrypted
+<% if $zabbix::agent2::tls_accept =~ Array { -%>
+TLSAccept=<%= $zabbix::agent2::tls_accept.flatten.join(',') %>
+<% } elsif $zabbix::agent2::tls_accept { -%>
+TLSAccept=<%= $zabbix::agent2::tls_accept %>
+<% } -%>
 
 ### Option: TLSCAFile
 #	Full pathname of a file containing the top-level CA(s) certificates for
@@ -391,6 +491,9 @@ ControlSocket=<%= $zabbix::agent2::control_socket %>
 # Mandatory: no
 # Default:
 # TLSCAFile=
+<% if $zabbix::agent2::tls_ca_file { -%>
+TLSCAFile=<%= $zabbix::agent2::tls_ca_file %>
+<% } -%>
 
 ### Option: TLSCRLFile
 #	Full pathname of a file containing revoked certificates.
@@ -398,6 +501,9 @@ ControlSocket=<%= $zabbix::agent2::control_socket %>
 # Mandatory: no
 # Default:
 # TLSCRLFile=
+<% if $zabbix::agent2::tls_crl_file { -%>
+TLSCRLFile=<%= $zabbix::agent2::tls_crl_file %>
+<% } -%>
 
 ### Option: TLSServerCertIssuer
 #		Allowed server certificate issuer.
@@ -405,6 +511,9 @@ ControlSocket=<%= $zabbix::agent2::control_socket %>
 # Mandatory: no
 # Default:
 # TLSServerCertIssuer=
+<% if $zabbix::agent2::tls_server_cert_issuer { -%>
+TLSServerCertIssuer=<%= $zabbix::agent2::tls_server_cert_issuer %>
+<% } -%>
 
 ### Option: TLSServerCertSubject
 #		Allowed server certificate subject.
@@ -412,6 +521,9 @@ ControlSocket=<%= $zabbix::agent2::control_socket %>
 # Mandatory: no
 # Default:
 # TLSServerCertSubject=
+<% if $zabbix::agent2::tls_server_cert_subject { -%>
+TLSServerCertSubject=<%= $zabbix::agent2::tls_server_cert_subject %>
+<% } -%>
 
 ### Option: TLSCertFile
 #	Full pathname of a file containing the agent certificate or certificate chain.
@@ -419,6 +531,9 @@ ControlSocket=<%= $zabbix::agent2::control_socket %>
 # Mandatory: no
 # Default:
 # TLSCertFile=
+<% if $zabbix::agent2::tls_cert_file { -%>
+TLSCertFile=<%= $zabbix::agent2::tls_cert_file %>
+<% } -%>
 
 ### Option: TLSKeyFile
 #	Full pathname of a file containing the agent private key.
@@ -426,6 +541,9 @@ ControlSocket=<%= $zabbix::agent2::control_socket %>
 # Mandatory: no
 # Default:
 # TLSKeyFile=
+<% if $zabbix::agent2::tls_key_file { -%>
+TLSKeyFile=<%= $zabbix::agent2::tls_key_file %>
+<% } -%>
 
 ### Option: TLSPSKIdentity
 #	Unique, case sensitive string used to identify the pre-shared key.
@@ -433,6 +551,9 @@ ControlSocket=<%= $zabbix::agent2::control_socket %>
 # Mandatory: no
 # Default:
 # TLSPSKIdentity=
+<% if $zabbix::agent2::tls_psk_identity { -%>
+TLSPSKIdentity=<%= $zabbix::agent2::tls_psk_identity %>
+<% } -%>
 
 ### Option: TLSPSKFile
 #	Full pathname of a file containing the pre-shared key.
@@ -440,6 +561,9 @@ ControlSocket=<%= $zabbix::agent2::control_socket %>
 # Mandatory: no
 # Default:
 # TLSPSKFile=
+<% if $zabbix::agent2::tls_psk_file { -%>
+TLSPSKFile=<%= $zabbix::agent2::tls_psk_file %>
+<% } -%>
 
 ####### PLUGIN-SPECIFIC PARAMETERS #######
 
@@ -451,6 +575,13 @@ ControlSocket=<%= $zabbix::agent2::control_socket %>
 # Mandatory: no
 # Range:
 # Default:
+<% if $zabbix::agent2::plugins { -%>
+<% $zabbix::agent2::plugins.each |$plugin_name, $plugin_params| { -%>
+<% $plugin_params.each |$param, $value| { -%>
+Plugins.<%= $plugin_name %>.<%= $param %>=<%= $value %>
+<% } -%>
+<% } -%>
+<% } -%>
 
 ### Option: Plugins.Log.MaxLinesPerSecond
 #	Maximum number of new lines the agent will send per second to Zabbix Server
@@ -462,6 +593,9 @@ ControlSocket=<%= $zabbix::agent2::control_socket %>
 # Range: 1-1000
 # Default:
 # Plugins.Log.MaxLinesPerSecond=20
+<% if $zabbix::agent2::plugins_log_max_lines_per_second { -%>
+Plugins.Log.MaxLinesPerSecond=<%= $zabbix::agent2::plugins_log_max_lines_per_second %>
+<% } -%>
 
 ### Option: AllowKey
 #	Allow execution of item keys matching pattern.
@@ -471,6 +605,11 @@ ControlSocket=<%= $zabbix::agent2::control_socket %>
 #	If no AllowKey or DenyKey rules defined, all keys are allowed.
 #
 # Mandatory: no
+<% if $zabbix::agent2::allow_key { -%>
+<% $zabbix::agent2::allow_key.each |$key| { -%>
+AllowKey=<%= $key %>
+<% } -%>
+<% } -%>
 
 ### Option: DenyKey
 #	Deny execution of items keys matching pattern.
@@ -483,6 +622,11 @@ ControlSocket=<%= $zabbix::agent2::control_socket %>
 # Mandatory: no
 # Default:
 # DenyKey=system.run[*]
+<% if $zabbix::agent2::deny_key { -%>
+<% $zabbix::agent2::deny_key.each |$key| { -%>
+DenyKey=<%= $key %>
+<% } -%>
+<% } -%>
 
 ### Option: Plugins.SystemRun.LogRemoteCommands
 #	Enable logging of executed shell commands as warnings.
@@ -492,6 +636,9 @@ ControlSocket=<%= $zabbix::agent2::control_socket %>
 # Mandatory: no
 # Default:
 # Plugins.SystemRun.LogRemoteCommands=0
+<% if $zabbix::agent2::plugins_system_run_log_remote_commands { -%>
+Plugins.SystemRun.LogRemoteCommands=<%= $zabbix::agent2::plugins_system_run_log_remote_commands %>
+<% } -%>
 
 ### Option: ForceActiveChecksOnStart
 #	Perform active checks immediately after restart for first received configuration.
@@ -501,6 +648,11 @@ ControlSocket=<%= $zabbix::agent2::control_socket %>
 # Range: 0-1
 # Default:
 # ForceActiveChecksOnStart=0
+<% if $zabbix::agent2::force_active_checks_on_start { -%>
+ForceActiveChecksOnStart=<%= $zabbix::agent2::force_active_checks_on_start %>
+<% } -%>
 
 # Include configuration files for plugins
+<% if $zabbix::agent2::plugins_d { -%>
 Include=<%= $zabbix::agent2::plugins_d %>/*.conf
+<% } -%>

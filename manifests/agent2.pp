@@ -20,18 +20,72 @@ class zabbix::agent2 (
   Stdlib::Absolutepath $zabbix_agent2_conf     = '/etc/zabbix/zabbix_agent2.conf',
   String               $zabbix_agent2_conf_epp = 'zabbix/agent2/zabbix_agent2.conf.epp',
   Stdlib::Absolutepath $plugins_d              = '/etc/zabbix/zabbix_agent2.d/plugins.d',
-  Stdlib::Absolutepath $log_file               = '/var/log/zabbix/zabbix_agent2.log',
-  Stdlib::Absolutepath $pid_file               = '/var/run/zabbix/zabbix_agent2.pid',
-  Optional[String]     $plugin_socket          = undef,
-  Optional[String]     $control_socket         = undef,
-  Optional[String]     $host_metadata          = undef,
-  String               $server_name            = '127.0.0.1',
-  String               $server_active          = '127.0.0.1',
-  Integer              $buffer_send            = 5,
-  Integer              $buffer_size            = 100,
-  String               $host_name              = $facts['networking']['fqdn'],
-  Integer              $timeout                = 30,
-
+  # General parameters
+  Optional[Stdlib::Absolutepath]              $pid_file      = '/var/run/zabbix/zabbix_agent2.pid',
+  Optional[Enum['system', 'file', 'console']] $log_type      = undef,
+  Optional[Stdlib::Absolutepath]              $log_file      = '/var/log/zabbix/zabbix_agent2.log',
+  Optional[Integer[0,1024]]                   $log_file_size = 0,
+  Optional[Integer[0,5]]                      $debug_level   = undef,
+  Optional[Stdlib::IP::Address]               $source_ip     = undef,
+  # Passive checks related
+  Optional[Variant[Stdlib::Host, Array[Stdlib::Host,1]]]               $server = '127.0.0.1',
+  Optional[Integer[1024,32767]]                                        $listen_port = undef,
+  Optional[Variant[Stdlib::IP::Address, Array[Stdlib::IP::Address,1]]] $listen_ip = undef,
+  Optional[Integer[1024,32767]]                                        $status_port = undef,
+  # Active checks related
+  Optional[Variant[String[1], Array[String[1]]]]         $server_active            = '127.0.0.1',
+  Optional[Variant[String[1], Array[String[1]]]]         $hostname                 = $facts['networking']['fqdn'],
+  Optional[String[1,255]]                                $hostname_item            = undef,
+  Optional[Variant[String[1,255], Array[String[1,255]]]] $host_metadata            = undef,
+  Optional[String[1,255]]                                $host_metadata_item       = undef,
+  Optional[String[1,255]]                                $host_interface           = undef,
+  Optional[String[1,255]]                                $host_interface_item      = undef,
+  Optional[Integer[60,3600]]                             $refresh_active_checks    = undef,
+  Optional[Integer[1,3600]]                              $buffer_send              = undef,
+  Optional[Integer[2,65535]]                             $buffer_size              = undef,
+  Optional[Integer[0,1]]                                 $enable_persistent_buffer = undef,
+  Optional[String]                                       $persistent_buffer_period = undef,
+  Optional[Stdlib::Absolutepath]                         $persistent_buffer_file   = undef,
+  # Advanced parameters
+  Optional[Array[String]]               $alias          = undef,
+  Optional[Integer[1,30]]               $timeout        = undef,
+  Optional[Array[Stdlib::Absolutepath]] $include        = undef,
+  Optional[Integer[1,30]]               $plugin_timeout = undef,
+  Optional[Stdlib::Absolutepath]        $plugin_socket  = '/run/zabbix/agent.plugin.sock',
+  # User-defined monitored parameters
+  Optional[Integer[0,1]]         $unsafe_user_parameters = undef,
+  Optional[Array[Struct[{
+    key           => String[1],
+    shell_command => String[1],
+  }]]]                           $user_parameter         = undef,
+  Optional[Stdlib::Absolutepath] $user_parameter_dir     = undef,
+  Optional[Stdlib::Absolutepath] $control_socket         = '/run/zabbix/agent.sock',
+  # TLS-related parameters
+  Optional[Variant[Enum['unencrypted', 'psk', 'cert'],
+    Array[Enum['unencrypted', 'psk', 'cert'],1]]]      $tls_connect             = undef,
+  Optional[Variant[Enum['unencrypted', 'psk', 'cert'],
+    Array[Enum['unencrypted', 'psk', 'cert'],1]]]      $tls_accept              = undef,
+  Optional[Stdlib::Absolutepath]                       $tls_ca_file             = undef,
+  Optional[Stdlib::Absolutepath]                       $tls_crl_file            = undef,
+  Optional[String]                                     $tls_server_cert_issuer  = undef,
+  Optional[String]                                     $tls_server_cert_subject = undef,
+  Optional[Stdlib::Absolutepath]                       $tls_cert_file           = undef,
+  Optional[Stdlib::Absolutepath]                       $tls_key_file            = undef,
+  Optional[String]                                     $tls_psk_identity        = undef,
+  Optional[Stdlib::Absolutepath]                       $tls_psk_file            = undef,
+  # Plugin-specific parameters
+  Optional[Hash[
+    String[1],
+    Hash[
+      String[1],
+      String[1]
+    ]
+  ]]                        $plugins                                = undef,
+  Optional[Integer[1,1000]] $plugins_log_max_lines_per_second       = undef,
+  Optional[Array[String]]   $allow_key                              = undef,
+  Optional[Array[String]]   $deny_key                               = undef,
+  Optional[Integer[0,1]]    $plugins_system_run_log_remote_commands = undef,
+  Optional[Integer[0,1]]    $force_active_checks_on_start           = undef,
 ) {
   package { $legacy_agent:
     ensure => $legacy_agent_ensure,
@@ -95,6 +149,13 @@ class zabbix::agent2 (
   group { 'zabbix':
     ensure  => present,
     require => Package[$package],
+  }
+
+  # if log_type is 'file' log_file must be specified
+  if $log_type == 'file' {
+    unless $log_file {
+      fail('log_file must be specified when log_type is set to file')
+    }
   }
 
   include zabbix::agent2::plugin::ceph
