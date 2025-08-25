@@ -8,6 +8,8 @@ class zabbix::agent2 (
   String               $package_ensure         = present,
   String               $legacy_agent           = 'zabbix-agent',
   String               $legacy_agent_ensure    = purged,
+  String               $user                   = 'zabbix',
+  String               $group                  = 'zabbix',
   String               $service_name           = 'zabbix-agent2',
   String               $service_ensure         = running,
   Boolean              $service_enable         = true,
@@ -19,6 +21,8 @@ class zabbix::agent2 (
   Boolean              $file_purge             = true,
   Boolean              $file_force             = true,
   Stdlib::Filemode     $dir_mode               = '0755',
+  Stdlib::Absolutepath $conf_dir               = '/etc/zabbix',
+  Stdlib::Absolutepath $log_dir                = '/var/log/zabbix',
   Stdlib::Absolutepath $zabbix_agent2_d        = '/etc/zabbix/zabbix_agent2.d',
   Stdlib::Absolutepath $zabbix_agent2_conf     = '/etc/zabbix/zabbix_agent2.conf',
   String               $zabbix_agent2_conf_epp = 'zabbix/agent2/zabbix_agent2.conf.epp',
@@ -111,7 +115,15 @@ class zabbix::agent2 (
     subscribe => Service[$service_name],
   }
 
-  file { $zabbix_agent2_d:
+  file { $log_dir:
+    ensure  => directory,
+    owner   => $user,
+    group   => $group,
+    mode    => $dir_mode,
+    require => Package[$package_name],
+  }
+
+  file { $conf_dir:
     ensure  => directory,
     owner   => $file_owner,
     group   => $file_group,
@@ -120,6 +132,16 @@ class zabbix::agent2 (
     purge   => $file_purge,
     force   => $file_force,
     require => Package[$package_name],
+  }
+
+  file { $zabbix_agent2_d:
+    ensure  => directory,
+    owner   => $file_owner,
+    group   => $file_group,
+    mode    => $dir_mode,
+    recurse => $file_recurse,
+    purge   => $file_purge,
+    force   => $file_force,
   }
 
   $parameters = {
@@ -200,12 +222,13 @@ class zabbix::agent2 (
     comment    => 'Allow user zabbix to run sudo without tty',
   }
 
-  user { 'zabbix':
+  user { $user:
     ensure  => present,
+    gid     => $group,
     require => Package[$package_name],
   }
 
-  group { 'zabbix':
+  group { $group:
     ensure  => present,
     require => Package[$package_name],
   }
