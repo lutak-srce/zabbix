@@ -7,8 +7,8 @@
 class zabbix::agent2::plugin::mqtt {
   file { "${zabbix::agent2::plugins_d}/mqtt.conf":
     ensure  => file,
-    owner   => $zabbix::agent2::owner,
-    group   => $zabbix::agent2::group,
+    owner   => $zabbix::agent2::file_owner,
+    group   => $zabbix::agent2::file_group,
     mode    => $zabbix::agent2::file_mode,
     content => epp('zabbix/agent2/plugin/mqtt.conf.epp'),
     require => File[$zabbix::agent2::plugins_d],

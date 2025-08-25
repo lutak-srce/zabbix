@@ -11,8 +11,8 @@ class zabbix::agent2 (
   String               $service                = 'zabbix-agent2',
   String               $service_ensure         = 'running',
   Boolean              $service_enable         = true,
-  String               $owner                  = 'root',
-  String               $group                  = 'root',
+  String               $file_owner             = 'root',
+  String               $file_group             = 'root',
   Stdlib::Filemode     $file_mode              = '0644',
   Stdlib::Filemode     $dir_mode               = '0755',
   Boolean              $purge_conf_dirs        = true,
@@ -104,8 +104,8 @@ class zabbix::agent2 (
 
   file { $zabbix_agent2_d:
     ensure  => directory,
-    owner   => $owner,
-    group   => $group,
+    owner   => $file_owner,
+    group   => $file_group,
     mode    => $dir_mode,
     recurse => $purge_conf_dirs,
     purge   => $purge_conf_dirs,
@@ -115,8 +115,8 @@ class zabbix::agent2 (
 
   file { $zabbix_agent2_conf:
     ensure  => file,
-    owner   => $owner,
-    group   => $group,
+    owner   => $file_owner,
+    group   => $file_group,
     mode    => $file_mode,
     content => epp($zabbix_agent2_conf_epp),
     require => File[$zabbix_agent2_d],
@@ -125,8 +125,8 @@ class zabbix::agent2 (
 
   file { $plugins_d:
     ensure  => directory,
-    owner   => $owner,
-    group   => $group,
+    owner   => $file_owner,
+    group   => $file_group,
     mode    => $dir_mode,
     recurse => $purge_conf_dirs,
     purge   => $purge_conf_dirs,
