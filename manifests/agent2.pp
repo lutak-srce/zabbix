@@ -31,9 +31,9 @@ class zabbix::agent2 (
   Optional[Integer[0,5]]                      $debug_level   = undef,
   Optional[Stdlib::IP::Address]               $source_ip     = undef,
   # Passive checks related
-  Optional[Variant[Stdlib::Host, Array[Stdlib::Host,1]]]               $server = '127.0.0.1',
+  Optional[Variant[Stdlib::Host, Array[Stdlib::Host,1]]]               $server      = '127.0.0.1',
   Optional[Integer[1024,32767]]                                        $listen_port = undef,
-  Optional[Variant[Stdlib::IP::Address, Array[Stdlib::IP::Address,1]]] $listen_ip = undef,
+  Optional[Variant[Stdlib::IP::Address, Array[Stdlib::IP::Address,1]]] $listen_ip   = undef,
   Optional[Integer[1024,32767]]                                        $status_port = undef,
   # Active checks related
   Optional[Variant[String[1], Array[String[1]]]]         $server_active            = '127.0.0.1',
