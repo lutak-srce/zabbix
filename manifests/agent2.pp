@@ -19,7 +19,6 @@ class zabbix::agent2 (
   Boolean              $file_purge             = true,
   Boolean              $file_force             = true,
   Stdlib::Filemode     $dir_mode               = '0755',
-  Boolean              $purge_conf_dirs        = true,
   Stdlib::Absolutepath $zabbix_agent2_d        = '/etc/zabbix/zabbix_agent2.d',
   Stdlib::Absolutepath $zabbix_agent2_conf     = '/etc/zabbix/zabbix_agent2.conf',
   String               $zabbix_agent2_conf_epp = 'zabbix/agent2/zabbix_agent2.conf.epp',
