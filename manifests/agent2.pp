@@ -11,6 +11,7 @@ class zabbix::agent2 (
   String               $service                = 'zabbix-agent2',
   String               $service_ensure         = 'running',
   Boolean              $service_enable         = true,
+  String               $file_ensure            = present,
   String               $file_owner             = 'root',
   String               $file_group             = 'root',
   Stdlib::Filemode     $file_mode              = '0644',
@@ -114,7 +115,7 @@ class zabbix::agent2 (
   }
 
   file { $zabbix_agent2_conf:
-    ensure  => file,
+    ensure  => $file_ensure,
     owner   => $file_owner,
     group   => $file_group,
     mode    => $file_mode,
