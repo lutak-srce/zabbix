@@ -5,11 +5,11 @@
 #
 class zabbix::agent2 (
   String               $package_name           = 'zabbix-agent2',
-  String               $package_ensure         = 'present',
+  String               $package_ensure         = present,
   String               $legacy_agent           = 'zabbix-agent',
-  String               $legacy_agent_ensure    = 'purged',
+  String               $legacy_agent_ensure    = purged,
   String               $service_name           = 'zabbix-agent2',
-  String               $service_ensure         = 'running',
+  String               $service_ensure         = running,
   Boolean              $service_enable         = true,
   String               $file_ensure            = present,
   String               $file_owner             = 'root',
