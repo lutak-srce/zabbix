@@ -13,7 +13,6 @@ class zabbix::agent2::plugin::mqtt (
     group   => $zabbix::agent2::file_group,
     mode    => $zabbix::agent2::file_mode,
     content => epp('zabbix/agent2/plugin/mqtt.conf.epp'),
-    require => File[$zabbix::agent2::plugins_d],
     notify  => Service[$zabbix::agent2::service],
   }
 }

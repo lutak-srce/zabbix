@@ -120,7 +120,6 @@ class zabbix::agent2 (
     group   => $file_group,
     mode    => $file_mode,
     content => epp($zabbix_agent2_conf_epp),
-    require => File[$zabbix_agent2_d],
     notify  => Service[$service],
   }
 
@@ -132,7 +131,6 @@ class zabbix::agent2 (
     recurse => $purge_conf_dirs,
     purge   => $purge_conf_dirs,
     force   => $purge_conf_dirs,
-    require => File[$zabbix_agent2_d],
   }
 
   # enable zabbix plugins to run sudo
