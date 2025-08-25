@@ -13,7 +13,7 @@ class zabbix::agent2::plugin::docker (
     group   => $zabbix::agent2::file_group,
     mode    => $zabbix::agent2::file_mode,
     content => epp('zabbix/agent2/plugin/docker.conf.epp'),
-    notify  => Service[$zabbix::agent2::service],
+    notify  => Service[$zabbix::agent2::service_name],
   }
 }
 

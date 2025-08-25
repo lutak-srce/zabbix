@@ -13,6 +13,6 @@ class zabbix::agent2::plugin::mysql (
     group   => $zabbix::agent2::file_group,
     mode    => $zabbix::agent2::file_mode,
     content => epp('zabbix/agent2/plugin/mysql.conf.epp'),
-    notify  => Service[$zabbix::agent2::service],
+    notify  => Service[$zabbix::agent2::service_name],
   }
 }

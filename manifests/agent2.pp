@@ -4,17 +4,20 @@
 # This module manages zabbix agent variant 2
 #
 class zabbix::agent2 (
-  String               $package                = 'zabbix-agent2',
-  String               $version                = 'present',
+  String               $package_name           = 'zabbix-agent2',
+  String               $package_ensure         = 'present',
   String               $legacy_agent           = 'zabbix-agent',
   String               $legacy_agent_ensure    = 'purged',
-  String               $service                = 'zabbix-agent2',
+  String               $service_name           = 'zabbix-agent2',
   String               $service_ensure         = 'running',
   Boolean              $service_enable         = true,
   String               $file_ensure            = present,
   String               $file_owner             = 'root',
   String               $file_group             = 'root',
   Stdlib::Filemode     $file_mode              = '0644',
+  Boolean              $file_recurse           = true,
+  Boolean              $file_purge             = true,
+  Boolean              $file_force             = true,
   Stdlib::Filemode     $dir_mode               = '0755',
   Boolean              $purge_conf_dirs        = true,
   Stdlib::Absolutepath $zabbix_agent2_d        = '/etc/zabbix/zabbix_agent2.d',
@@ -90,14 +93,14 @@ class zabbix::agent2 (
 ) {
   package { $legacy_agent:
     ensure => $legacy_agent_ensure,
-    before => Package[$package],
+    before => Package[$package_name],
   }
 
-  package { $package:
-    ensure => $version,
+  package { $package_name:
+    ensure => $package_ensure,
   }
 
-  service { $service:
+  service { $service_name:
     ensure  => $service_ensure,
     enable  => $service_enable,
   }
@@ -107,10 +110,10 @@ class zabbix::agent2 (
     owner   => $file_owner,
     group   => $file_group,
     mode    => $dir_mode,
-    recurse => $purge_conf_dirs,
-    purge   => $purge_conf_dirs,
-    force   => $purge_conf_dirs,
-    require => Package[$package],
+    recurse => $file_recurse,
+    purge   => $file_purge,
+    force   => $file_force,
+    require => Package[$package_name],
   }
 
   file { $zabbix_agent2_conf:
@@ -119,7 +122,7 @@ class zabbix::agent2 (
     group   => $file_group,
     mode    => $file_mode,
     content => epp($zabbix_agent2_conf_epp),
-    notify  => Service[$service],
+    notify  => Service[$service_name],
   }
 
   file { $plugins_d:
@@ -127,9 +130,9 @@ class zabbix::agent2 (
     owner   => $file_owner,
     group   => $file_group,
     mode    => $dir_mode,
-    recurse => $purge_conf_dirs,
-    purge   => $purge_conf_dirs,
-    force   => $purge_conf_dirs,
+    recurse => $file_recurse,
+    purge   => $file_purge,
+    force   => $file_force,
   }
 
   # enable zabbix plugins to run sudo
@@ -141,12 +144,12 @@ class zabbix::agent2 (
 
   user { 'zabbix':
     ensure  => present,
-    require => Package[$package],
+    require => Package[$package_name],
   }
 
   group { 'zabbix':
     ensure  => present,
-    require => Package[$package],
+    require => Package[$package_name],
   }
 
   # if log_type is 'file' log_file must be specified
