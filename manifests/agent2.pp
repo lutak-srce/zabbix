@@ -158,6 +158,7 @@ class zabbix::agent2 (
     }
   }
 
+  # include config files of inbuilt or dependant plugins
   include zabbix::agent2::plugin::ceph
   include zabbix::agent2::plugin::docker
   include zabbix::agent2::plugin::memcached
