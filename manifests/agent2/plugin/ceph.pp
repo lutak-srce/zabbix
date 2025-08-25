@@ -17,12 +17,19 @@ class zabbix::agent2::plugin::ceph (
     }]
   ]]                                 $sessions             = undef,
 ) {
+  $parameters = {
+    'insecure_skip_verify' => $insecure_skip_verify,
+    'keep_alive'           => $keep_alive,
+    'timeout'              => $timeout,
+    'sessions'             => $sessions,
+  }
+
   file { "${zabbix::agent2::plugins_d}/ceph.conf":
     ensure  => $file_ensure,
     owner   => $zabbix::agent2::file_owner,
     group   => $zabbix::agent2::file_group,
     mode    => $zabbix::agent2::file_mode,
-    content => epp('zabbix/agent2/plugin/ceph.conf.epp'),
+    content => epp('zabbix/agent2/plugin/ceph.conf.epp', $parameters),
     notify  => Service[$zabbix::agent2::service_name],
   }
 }
