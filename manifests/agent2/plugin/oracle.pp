@@ -5,7 +5,7 @@
 #   include zabbix::agent2::plugin::oracle
 #
 class zabbix::agent2::plugin::oracle (
-  $file_ensure = $zabbix::agent::file_ensure,
+  $file_ensure = $zabbix::agent2::file_ensure,
 ) {
   file { "${zabbix::agent2::plugins_d}/oracle.conf":
     ensure  => $file_ensure,

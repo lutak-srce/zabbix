@@ -5,7 +5,7 @@
 #   include zabbix::agent2::plugin::mysql
 #
 class zabbix::agent2::plugin::mysql (
-  $file_ensure = $zabbix::agent::file_ensure,
+  $file_ensure = $zabbix::agent2::file_ensure,
 ) {
   file { "${zabbix::agent2::plugins_d}/mysql.conf":
     ensure  => $file_ensure,

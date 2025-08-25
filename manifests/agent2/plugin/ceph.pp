@@ -5,7 +5,7 @@
 #   include zabbix::agent2::plugin::ceph
 #
 class zabbix::agent2::plugin::ceph (
-                                     $file_ensure          = $zabbix::agent::file_ensure,
+                                     $file_ensure          = $zabbix::agent2::file_ensure,
   Optional[Boolean]                  $insecure_skip_verify = undef,
   Optional[Integer[60,900]]          $keep_alive           = undef,
   Optional[Integer[1,30]]            $timeout              = undef,
