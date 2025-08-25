@@ -362,11 +362,6 @@ Timeout=<%= $zabbix::agent2::timeout %>
 # Include=
 
 Include=<%= $zabbix::agent2::zabbix_agent2_d %>/*.conf
-<% if $zabbix::agent2::include { -%>
-<% $zabbix::agent2::include.each |$path| { -%>
-Include=<%= $path %>
-<% } -%>
-<% } -%>
 
 # Include=/usr/local/etc/zabbix_agent2.userparams.conf
 # Include=/usr/local/etc/zabbix_agent2.conf.d/

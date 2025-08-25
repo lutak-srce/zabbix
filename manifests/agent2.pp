@@ -52,7 +52,6 @@ class zabbix::agent2 (
   # Advanced parameters
   Optional[Array[String]]               $alias          = undef,
   Optional[Integer[1,30]]               $timeout        = undef,
-  Optional[Array[Stdlib::Absolutepath]] $include        = undef,
   Optional[Integer[1,30]]               $plugin_timeout = undef,
   Optional[Stdlib::Absolutepath]        $plugin_socket  = '/run/zabbix/agent.plugin.sock',
   # User-defined monitored parameters
