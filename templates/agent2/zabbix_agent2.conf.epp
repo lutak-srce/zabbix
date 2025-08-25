@@ -10,8 +10,8 @@
 # Default:
 # PidFile=/tmp/zabbix_agent2.pid
 
-<% if $zabbix::agent2::pid_file { -%>
-PidFile=<%= $zabbix::agent2::pid_file %>
+<% if $pid_file { -%>
+PidFile=<%= $pid_file %>
 <% } -%>
 
 ### Option: LogType
@@ -23,8 +23,8 @@ PidFile=<%= $zabbix::agent2::pid_file %>
 # Mandatory: no
 # Default:
 # LogType=file
-<% if $zabbix::agent2::log_type { -%>
-LogType=<%= $zabbix::agent2::log_type %>
+<% if $log_type { -%>
+LogType=<%= $log_type %>
 <% } -%>
 
 ### Option: LogFile
@@ -34,8 +34,8 @@ LogType=<%= $zabbix::agent2::log_type %>
 # Default:
 # LogFile=/tmp/zabbix_agent2.log
 
-<% if $zabbix::agent2::log_file { -%>
-LogFile=<%= $zabbix::agent2::log_file %>
+<% if $log_file { -%>
+LogFile=<%= $log_file %>
 <% } -%>
 
 ### Option: LogFileSize
@@ -47,8 +47,8 @@ LogFile=<%= $zabbix::agent2::log_file %>
 # Default:
 # LogFileSize=1
 
-<% if $zabbix::agent2::log_file_size { -%>
-LogFileSize=<%= $zabbix::agent2::log_file_size %>
+<% if $log_file_size { -%>
+LogFileSize=<%= $log_file_size %>
 <% } -%>
 
 ### Option: DebugLevel
@@ -64,8 +64,8 @@ LogFileSize=<%= $zabbix::agent2::log_file_size %>
 # Range: 0-5
 # Default:
 # DebugLevel=3
-<% if $zabbix::agent2::debug_level { -%>
-DebugLevel=<%= $zabbix::agent2::debug_level %>
+<% if $debug_level { -%>
+DebugLevel=<%= $debug_level %>
 <% } -%>
 
 ### Option: SourceIP
@@ -74,8 +74,8 @@ DebugLevel=<%= $zabbix::agent2::debug_level %>
 # Mandatory: no
 # Default:
 # SourceIP=
-<% if $zabbix::agent2::source_ip { -%>
-SourceIP=<%= $zabbix::agent2::source_ip %>
+<% if $source_ip { -%>
+SourceIP=<%= $source_ip %>
 <% } -%>
 
 ##### Passive checks related
@@ -94,10 +94,10 @@ SourceIP=<%= $zabbix::agent2::source_ip %>
 # Default:
 # Server=
 
-<% if $zabbix::agent2::server =~ Array { -%>
-Server=<%= $zabbix::agent2::server.flatten.join(',') %>
-<% } elsif $zabbix::agent2::server { -%>
-Server=<%= $zabbix::agent2::server %>
+<% if $server =~ Array { -%>
+Server=<%= $server.flatten.join(',') %>
+<% } elsif $server { -%>
+Server=<%= $server %>
 <% } -%>
 
 ### Option: ListenPort
@@ -107,8 +107,8 @@ Server=<%= $zabbix::agent2::server %>
 # Range: 1024-32767
 # Default:
 # ListenPort=10050
-<% if $zabbix::agent2::listen_port { -%>
-ListenPort=<%= $zabbix::agent2::listen_port %>
+<% if $listen_port { -%>
+ListenPort=<%= $listen_port %>
 <% } -%>
 
 ### Option: ListenIP
@@ -118,10 +118,10 @@ ListenPort=<%= $zabbix::agent2::listen_port %>
 # Mandatory: no
 # Default:
 # ListenIP=0.0.0.0
-<% if $zabbix::agent2::listen_ip =~ Array { -%>
-ListenIP=<%= $zabbix::agent2::listen_ip.flatten.join(',') %>
-<% } elsif $zabbix::agent2::listen_ip { -%>
-ListenIP=<%= $zabbix::agent2::listen_ip %>
+<% if $listen_ip =~ Array { -%>
+ListenIP=<%= $listen_ip.flatten.join(',') %>
+<% } elsif $listen_ip { -%>
+ListenIP=<%= $listen_ip %>
 <% } -%>
 
 ### Option: StatusPort
@@ -131,8 +131,8 @@ ListenIP=<%= $zabbix::agent2::listen_ip %>
 # Range: 1024-32767
 # Default:
 # StatusPort=
-<% if $zabbix::agent2::status_port { -%>
-StatusPort=<%= $zabbix::agent2::status_port %>
+<% if $status_port { -%>
+StatusPort=<%= $status_port %>
 <% } -%>
 
 ##### Active checks related
@@ -162,10 +162,10 @@ StatusPort=<%= $zabbix::agent2::status_port %>
 # Default:
 # ServerActive=
 
-<% if $zabbix::agent2::server_active =~ Array { -%>
-ServerActive=<%= $zabbix::agent2::server_active.flatten.join(',') %>
-<% } elsif $zabbix::agent2::server_active { -%>
-ServerActive=<%= $zabbix::agent2::server_active %>
+<% if $server_active =~ Array { -%>
+ServerActive=<%= $server_active.flatten.join(',') %>
+<% } elsif $server_active { -%>
+ServerActive=<%= $server_active %>
 <% } -%>
 
 ### Option: Hostname
@@ -177,10 +177,10 @@ ServerActive=<%= $zabbix::agent2::server_active %>
 # Default:
 # Hostname=
 
-<% if $zabbix::agent2::hostname =~ Array { -%>
-Hostname=<%= $zabbix::agent2::hostname.flatten.join(',') %>
-<% } elsif $zabbix::agent2::hostname { -%>
-Hostname=<%= $zabbix::agent2::hostname %>
+<% if $hostname =~ Array { -%>
+Hostname=<%= $hostname.flatten.join(',') %>
+<% } elsif $hostname { -%>
+Hostname=<%= $hostname %>
 <% } -%>
 
 ### Option: HostnameItem
@@ -190,8 +190,8 @@ Hostname=<%= $zabbix::agent2::hostname %>
 # Mandatory: no
 # Default:
 # HostnameItem=system.hostname
-<% if $zabbix::agent2::hostname_item { -%>
-HostnameItem=<%= $zabbix::agent2::hostname_item %>
+<% if $hostname_item { -%>
+HostnameItem=<%= $hostname_item %>
 <% } -%>
 
 ### Option: HostMetadata
@@ -204,10 +204,10 @@ HostnameItem=<%= $zabbix::agent2::hostname_item %>
 # Range: 0-255 characters
 # Default:
 # HostMetadata=
-<% if $zabbix::agent2::host_metadata =~ Array { -%>
-HostMetadata=<%= $zabbix::agent2::host_metadata.flatten.join(',') %>
-<% } elsif $zabbix::agent2::host_metadata { -%>
-HostMetadata=<%= $zabbix::agent2::host_metadata %>
+<% if $host_metadata =~ Array { -%>
+HostMetadata=<%= $host_metadata.flatten.join(',') %>
+<% } elsif $host_metadata { -%>
+HostMetadata=<%= $host_metadata %>
 <% } -%>
 
 ### Option: HostMetadataItem
@@ -220,8 +220,8 @@ HostMetadata=<%= $zabbix::agent2::host_metadata %>
 # Mandatory: no
 # Default:
 # HostMetadataItem=
-<% if $zabbix::agent2::host_metadata_item { -%>
-HostMetadataItem=<%= $zabbix::agent2::host_metadata_item %>
+<% if $host_metadata_item { -%>
+HostMetadataItem=<%= $host_metadata_item %>
 <% } -%>
 
 ### Option: HostInterface
@@ -234,8 +234,8 @@ HostMetadataItem=<%= $zabbix::agent2::host_metadata_item %>
 # Range: 0-255 characters
 # Default:
 # HostInterface=
-<% if $zabbix::agent2::host_interface { -%>
-HostInterface=<%= $zabbix::agent2::host_interface %>
+<% if $host_interface { -%>
+HostInterface=<%= $host_interface %>
 <% } -%>
 
 ### Option: HostInterfaceItem
@@ -248,8 +248,8 @@ HostInterface=<%= $zabbix::agent2::host_interface %>
 # Mandatory: no
 # Default:
 # HostInterfaceItem=
-<% if $zabbix::agent2::host_interface_item { -%>
-HostInterfaceItem=<%= $zabbix::agent2::host_interface_item %>
+<% if $host_interface_item { -%>
+HostInterfaceItem=<%= $host_interface_item %>
 <% } -%>
 
 ### Option: RefreshActiveChecks
@@ -259,8 +259,8 @@ HostInterfaceItem=<%= $zabbix::agent2::host_interface_item %>
 # Range: 60-3600
 # Default:
 # RefreshActiveChecks=120
-<% if $zabbix::agent2::refresh_active_checks { -%>
-RefreshActiveChecks=<%= $zabbix::agent2::refresh_active_checks %>
+<% if $refresh_active_checks { -%>
+RefreshActiveChecks=<%= $refresh_active_checks %>
 <% } -%>
 
 ### Option: BufferSend
@@ -270,8 +270,8 @@ RefreshActiveChecks=<%= $zabbix::agent2::refresh_active_checks %>
 # Range: 1-3600
 # Default:
 # BufferSend=5
-<% if $zabbix::agent2::buffer_send { -%>
-BufferSend=<%= $zabbix::agent2::buffer_send %>
+<% if $buffer_send { -%>
+BufferSend=<%= $buffer_send %>
 <% } -%>
 
 ### Option: BufferSize
@@ -283,8 +283,8 @@ BufferSend=<%= $zabbix::agent2::buffer_send %>
 # Range: 2-65535
 # Default:
 # BufferSize=100
-<% if $zabbix::agent2::buffer_size { -%>
-BufferSize=<%= $zabbix::agent2::buffer_size %>
+<% if $buffer_size { -%>
+BufferSize=<%= $buffer_size %>
 <% } -%>
 
 ### Option: EnablePersistentBuffer
@@ -294,8 +294,8 @@ BufferSize=<%= $zabbix::agent2::buffer_size %>
 # Range: 0-1
 # Default:
 # EnablePersistentBuffer=0
-<% if $zabbix::agent2::enable_persistent_buffer { -%>
-EnablePersistentBuffer=<%= $zabbix::agent2::enable_persistent_buffer %>
+<% if $enable_persistent_buffer { -%>
+EnablePersistentBuffer=<%= $enable_persistent_buffer %>
 <% } -%>
 
 ### Option: PersistentBufferPeriod
@@ -307,8 +307,8 @@ EnablePersistentBuffer=<%= $zabbix::agent2::enable_persistent_buffer %>
 # Range: 1m-365d
 # Default:
 # PersistentBufferPeriod=1h
-<% if $zabbix::agent2::persistent_buffer_period { -%>
-PersistentBufferPeriod=<%= $zabbix::agent2::persistent_buffer_period %>
+<% if $persistent_buffer_period { -%>
+PersistentBufferPeriod=<%= $persistent_buffer_period %>
 <% } -%>
 
 ### Option: PersistentBufferFile
@@ -318,8 +318,8 @@ PersistentBufferPeriod=<%= $zabbix::agent2::persistent_buffer_period %>
 # Mandatory: no
 # Default:
 # PersistentBufferFile=
-<% if $zabbix::agent2::persistent_buffer_file { -%>
-PersistentBufferFile=<%= $zabbix::agent2::persistent_buffer_file %>
+<% if $persistent_buffer_file { -%>
+PersistentBufferFile=<%= $persistent_buffer_file %>
 <% } -%>
 
 ############ ADVANCED PARAMETERS #################
@@ -336,8 +336,8 @@ PersistentBufferFile=<%= $zabbix::agent2::persistent_buffer_file %>
 # Mandatory: no
 # Range:
 # Default:
-<% if $zabbix::agent2::alias { -%>
-<% $zabbix::agent2::alias.each |$key| { -%>
+<% if $alias { -%>
+<% $alias.each |$key| { -%>
 Alias=<%= $key %>
 <% } -%>
 <% } -%>
@@ -349,8 +349,8 @@ Alias=<%= $key %>
 # Range: 1-30
 # Default:
 # Timeout=3
-<% if $zabbix::agent2::timeout { -%>
-Timeout=<%= $zabbix::agent2::timeout %>
+<% if $timeout { -%>
+Timeout=<%= $timeout %>
 <% } -%>
 
 ### Option: Include
@@ -361,7 +361,7 @@ Timeout=<%= $zabbix::agent2::timeout %>
 # Default:
 # Include=
 
-Include=<%= $zabbix::agent2::zabbix_agent2_d %>/*.conf
+Include=<%= $zabbix_agent2_d %>/*.conf
 
 # Include=/usr/local/etc/zabbix_agent2.userparams.conf
 # Include=/usr/local/etc/zabbix_agent2.conf.d/
@@ -374,8 +374,8 @@ Include=<%= $zabbix::agent2::zabbix_agent2_d %>/*.conf
 # Range: 1-30
 # Default: <Global timeout>
 # PluginTimeout=
-<% if $zabbix::agent2::plugin_timeout { -%>
-PluginTimeout=<%= $zabbix::agent2::plugin_timeout %>
+<% if $plugin_timeout { -%>
+PluginTimeout=<%= $plugin_timeout %>
 <% } -%>
 
 ### Option:PluginSocket
@@ -385,8 +385,8 @@ PluginTimeout=<%= $zabbix::agent2::plugin_timeout %>
 # Default:/tmp/agent.plugin.sock
 # PluginSocket=
 
-<% if $zabbix::agent2::plugin_socket { -%>
-PluginSocket=<%= $zabbix::agent2::plugin_socket %>
+<% if $plugin_socket { -%>
+PluginSocket=<%= $plugin_socket %>
 <% } -%>
 
 ####### USER-DEFINED MONITORED PARAMETERS #######
@@ -403,8 +403,8 @@ PluginSocket=<%= $zabbix::agent2::plugin_socket %>
 # Range: 0-1
 # Default:
 # UnsafeUserParameters=0
-<% if $zabbix::agent2::unsafe_user_parameters { -%>
-UnsafeUserParameters=<%= $zabbix::agent2::unsafe_user_parameters %>
+<% if $unsafe_user_parameters { -%>
+UnsafeUserParameters=<%= $unsafe_user_parameters %>
 <% } -%>
 
 ### Option: UserParameter
@@ -415,8 +415,8 @@ UnsafeUserParameters=<%= $zabbix::agent2::unsafe_user_parameters %>
 # Mandatory: no
 # Default:
 # UserParameter=
-<% if $zabbix::agent2::user_parameter { -%>
-<% $zabbix::agent2::user_parameter.each |$user_param| { -%>
+<% if $user_parameter { -%>
+<% $user_parameter.each |$user_param| { -%>
 UserParameter=<%= $user_param['key'] %>,<%= $user_param['shell_command'] %>
 <% } -%>
 <% } -%>
@@ -430,8 +430,8 @@ UserParameter=<%= $user_param['key'] %>,<%= $user_param['shell_command'] %>
 # Mandatory: no
 # Default:
 # UserParameterDir=
-<% if $zabbix::agent2::user_parameter_dir { -%>
-UserParameterDir=<%= $zabbix::agent2::user_parameter_dir %>
+<% if $user_parameter_dir { -%>
+UserParameterDir=<%= $user_parameter_dir %>
 <% } -%>
 
 ### Option: ControlSocket
@@ -441,8 +441,8 @@ UserParameterDir=<%= $zabbix::agent2::user_parameter_dir %>
 # Default:
 # ControlSocket=
 
-<% if $zabbix::agent2::control_socket { -%>
-ControlSocket=<%= $zabbix::agent2::control_socket %>
+<% if $control_socket { -%>
+ControlSocket=<%= $control_socket %>
 <% } -%>
 
 ####### TLS-RELATED PARAMETERS #######
@@ -457,10 +457,10 @@ ControlSocket=<%= $zabbix::agent2::control_socket %>
 # Mandatory: yes, if TLS certificate or PSK parameters are defined (even for 'unencrypted' connection)
 # Default:
 # TLSConnect=unencrypted
-<% if $zabbix::agent2::tls_connect =~ Array { -%>
-TLSConnect=<%= $zabbix::agent2::tls_connect.flatten.join(',') %>
-<% } elsif $zabbix::agent2::tls_connect { -%>
-TLSConnect=<%= $zabbix::agent2::tls_connect %>
+<% if $tls_connect =~ Array { -%>
+TLSConnect=<%= $tls_connect.flatten.join(',') %>
+<% } elsif $tls_connect { -%>
+TLSConnect=<%= $tls_connect %>
 <% } -%>
 
 ### Option: TLSAccept
@@ -473,10 +473,10 @@ TLSConnect=<%= $zabbix::agent2::tls_connect %>
 # Mandatory: yes, if TLS certificate or PSK parameters are defined (even for 'unencrypted' connection)
 # Default:
 # TLSAccept=unencrypted
-<% if $zabbix::agent2::tls_accept =~ Array { -%>
-TLSAccept=<%= $zabbix::agent2::tls_accept.flatten.join(',') %>
-<% } elsif $zabbix::agent2::tls_accept { -%>
-TLSAccept=<%= $zabbix::agent2::tls_accept %>
+<% if $tls_accept =~ Array { -%>
+TLSAccept=<%= $tls_accept.flatten.join(',') %>
+<% } elsif $tls_accept { -%>
+TLSAccept=<%= $tls_accept %>
 <% } -%>
 
 ### Option: TLSCAFile
@@ -486,8 +486,8 @@ TLSAccept=<%= $zabbix::agent2::tls_accept %>
 # Mandatory: no
 # Default:
 # TLSCAFile=
-<% if $zabbix::agent2::tls_ca_file { -%>
-TLSCAFile=<%= $zabbix::agent2::tls_ca_file %>
+<% if $tls_ca_file { -%>
+TLSCAFile=<%= $tls_ca_file %>
 <% } -%>
 
 ### Option: TLSCRLFile
@@ -496,8 +496,8 @@ TLSCAFile=<%= $zabbix::agent2::tls_ca_file %>
 # Mandatory: no
 # Default:
 # TLSCRLFile=
-<% if $zabbix::agent2::tls_crl_file { -%>
-TLSCRLFile=<%= $zabbix::agent2::tls_crl_file %>
+<% if $tls_crl_file { -%>
+TLSCRLFile=<%= $tls_crl_file %>
 <% } -%>
 
 ### Option: TLSServerCertIssuer
@@ -506,8 +506,8 @@ TLSCRLFile=<%= $zabbix::agent2::tls_crl_file %>
 # Mandatory: no
 # Default:
 # TLSServerCertIssuer=
-<% if $zabbix::agent2::tls_server_cert_issuer { -%>
-TLSServerCertIssuer=<%= $zabbix::agent2::tls_server_cert_issuer %>
+<% if $tls_server_cert_issuer { -%>
+TLSServerCertIssuer=<%= $tls_server_cert_issuer %>
 <% } -%>
 
 ### Option: TLSServerCertSubject
@@ -516,8 +516,8 @@ TLSServerCertIssuer=<%= $zabbix::agent2::tls_server_cert_issuer %>
 # Mandatory: no
 # Default:
 # TLSServerCertSubject=
-<% if $zabbix::agent2::tls_server_cert_subject { -%>
-TLSServerCertSubject=<%= $zabbix::agent2::tls_server_cert_subject %>
+<% if $tls_server_cert_subject { -%>
+TLSServerCertSubject=<%= $tls_server_cert_subject %>
 <% } -%>
 
 ### Option: TLSCertFile
@@ -526,8 +526,8 @@ TLSServerCertSubject=<%= $zabbix::agent2::tls_server_cert_subject %>
 # Mandatory: no
 # Default:
 # TLSCertFile=
-<% if $zabbix::agent2::tls_cert_file { -%>
-TLSCertFile=<%= $zabbix::agent2::tls_cert_file %>
+<% if $tls_cert_file { -%>
+TLSCertFile=<%= $tls_cert_file %>
 <% } -%>
 
 ### Option: TLSKeyFile
@@ -536,8 +536,8 @@ TLSCertFile=<%= $zabbix::agent2::tls_cert_file %>
 # Mandatory: no
 # Default:
 # TLSKeyFile=
-<% if $zabbix::agent2::tls_key_file { -%>
-TLSKeyFile=<%= $zabbix::agent2::tls_key_file %>
+<% if $tls_key_file { -%>
+TLSKeyFile=<%= $tls_key_file %>
 <% } -%>
 
 ### Option: TLSPSKIdentity
@@ -546,8 +546,8 @@ TLSKeyFile=<%= $zabbix::agent2::tls_key_file %>
 # Mandatory: no
 # Default:
 # TLSPSKIdentity=
-<% if $zabbix::agent2::tls_psk_identity { -%>
-TLSPSKIdentity=<%= $zabbix::agent2::tls_psk_identity %>
+<% if $tls_psk_identity { -%>
+TLSPSKIdentity=<%= $tls_psk_identity %>
 <% } -%>
 
 ### Option: TLSPSKFile
@@ -556,8 +556,8 @@ TLSPSKIdentity=<%= $zabbix::agent2::tls_psk_identity %>
 # Mandatory: no
 # Default:
 # TLSPSKFile=
-<% if $zabbix::agent2::tls_psk_file { -%>
-TLSPSKFile=<%= $zabbix::agent2::tls_psk_file %>
+<% if $tls_psk_file { -%>
+TLSPSKFile=<%= $tls_psk_file %>
 <% } -%>
 
 ####### PLUGIN-SPECIFIC PARAMETERS #######
@@ -570,8 +570,8 @@ TLSPSKFile=<%= $zabbix::agent2::tls_psk_file %>
 # Mandatory: no
 # Range:
 # Default:
-<% if $zabbix::agent2::plugins { -%>
-<% $zabbix::agent2::plugins.each |$plugin_name, $plugin_params| { -%>
+<% if $plugins { -%>
+<% $plugins.each |$plugin_name, $plugin_params| { -%>
 <% $plugin_params.each |$param, $value| { -%>
 Plugins.<%= $plugin_name %>.<%= $param %>=<%= $value %>
 <% } -%>
@@ -588,8 +588,8 @@ Plugins.<%= $plugin_name %>.<%= $param %>=<%= $value %>
 # Range: 1-1000
 # Default:
 # Plugins.Log.MaxLinesPerSecond=20
-<% if $zabbix::agent2::plugins_log_max_lines_per_second { -%>
-Plugins.Log.MaxLinesPerSecond=<%= $zabbix::agent2::plugins_log_max_lines_per_second %>
+<% if $plugins_log_max_lines_per_second { -%>
+Plugins.Log.MaxLinesPerSecond=<%= $plugins_log_max_lines_per_second %>
 <% } -%>
 
 ### Option: AllowKey
@@ -600,8 +600,8 @@ Plugins.Log.MaxLinesPerSecond=<%= $zabbix::agent2::plugins_log_max_lines_per_sec
 #	If no AllowKey or DenyKey rules defined, all keys are allowed.
 #
 # Mandatory: no
-<% if $zabbix::agent2::allow_key { -%>
-<% $zabbix::agent2::allow_key.each |$key| { -%>
+<% if $allow_key { -%>
+<% $allow_key.each |$key| { -%>
 AllowKey=<%= $key %>
 <% } -%>
 <% } -%>
@@ -617,8 +617,8 @@ AllowKey=<%= $key %>
 # Mandatory: no
 # Default:
 # DenyKey=system.run[*]
-<% if $zabbix::agent2::deny_key { -%>
-<% $zabbix::agent2::deny_key.each |$key| { -%>
+<% if $deny_key { -%>
+<% $deny_key.each |$key| { -%>
 DenyKey=<%= $key %>
 <% } -%>
 <% } -%>
@@ -631,8 +631,8 @@ DenyKey=<%= $key %>
 # Mandatory: no
 # Default:
 # Plugins.SystemRun.LogRemoteCommands=0
-<% if $zabbix::agent2::plugins_system_run_log_remote_commands { -%>
-Plugins.SystemRun.LogRemoteCommands=<%= $zabbix::agent2::plugins_system_run_log_remote_commands %>
+<% if $plugins_system_run_log_remote_commands { -%>
+Plugins.SystemRun.LogRemoteCommands=<%= $plugins_system_run_log_remote_commands %>
 <% } -%>
 
 ### Option: ForceActiveChecksOnStart
@@ -643,11 +643,11 @@ Plugins.SystemRun.LogRemoteCommands=<%= $zabbix::agent2::plugins_system_run_log_
 # Range: 0-1
 # Default:
 # ForceActiveChecksOnStart=0
-<% if $zabbix::agent2::force_active_checks_on_start { -%>
-ForceActiveChecksOnStart=<%= $zabbix::agent2::force_active_checks_on_start %>
+<% if $force_active_checks_on_start { -%>
+ForceActiveChecksOnStart=<%= $force_active_checks_on_start %>
 <% } -%>
 
 # Include configuration files for plugins
-<% if $zabbix::agent2::plugins_d { -%>
-Include=<%= $zabbix::agent2::plugins_d %>/*.conf
+<% if $plugins_d { -%>
+Include=<%= $plugins_d %>/*.conf
 <% } -%>
