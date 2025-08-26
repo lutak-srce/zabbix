@@ -13,6 +13,7 @@ class zabbix::agent2::service {
   exec { "check is ${zabbix::agent2::service_name} active":
     command   => "${zabbix::agent2::health_check} ${zabbix::agent2::service_name}",
     unless    => "${zabbix::agent2::health_check} ${zabbix::agent2::service_name}",
+    subscribe => Service[$zabbix::agent2::service_name],
   }
 
 }
