@@ -94,56 +94,6 @@ class zabbix::agent2 (
   Optional[Integer[0,1]]    $plugins_system_run_log_remote_commands = undef,
   Optional[Integer[0,1]]    $force_active_checks_on_start           = undef,
 ) {
-  package { $legacy_agent:
-    ensure => $legacy_agent_ensure,
-    before => Package[$package_name],
-  }
-
-  package { $package_name:
-    ensure => $package_ensure,
-  }
-
-  service { $service_name:
-    ensure  => $service_ensure,
-    enable  => $service_enable,
-  }
-
-  # Service health check executed on service events
-  exec { "check is ${service_name} active":
-    command   => "${health_check} ${service_name}",
-    unless    => "${health_check} ${service_name}",
-    subscribe => Service[$service_name],
-  }
-
-  file { $log_dir:
-    ensure  => directory,
-    owner   => $user,
-    group   => $group,
-    mode    => $dir_mode,
-    require => Package[$package_name],
-  }
-
-  file { $conf_dir:
-    ensure  => directory,
-    owner   => $file_owner,
-    group   => $file_group,
-    mode    => $dir_mode,
-    recurse => $file_recurse,
-    purge   => $file_purge,
-    force   => $file_force,
-    require => Package[$package_name],
-  }
-
-  file { $zabbix_agent2_d:
-    ensure  => directory,
-    owner   => $file_owner,
-    group   => $file_group,
-    mode    => $dir_mode,
-    recurse => $file_recurse,
-    purge   => $file_purge,
-    force   => $file_force,
-  }
-
   $parameters = {
     pid_file                               => $pid_file,
     log_type                               => $log_type,
@@ -196,43 +146,6 @@ class zabbix::agent2 (
     plugins_d                              => $plugins_d,
   }
 
-  file { $zabbix_agent2_conf:
-    ensure  => $file_ensure,
-    owner   => $file_owner,
-    group   => $file_group,
-    mode    => $file_mode,
-    content => epp($zabbix_agent2_conf_epp, $parameters),
-    notify  => Service[$service_name],
-  }
-
-  file { $plugins_d:
-    ensure  => directory,
-    owner   => $file_owner,
-    group   => $file_group,
-    mode    => $dir_mode,
-    recurse => $file_recurse,
-    purge   => $file_purge,
-    force   => $file_force,
-  }
-
-  # enable zabbix plugins to run sudo
-  ::sudoers::requiretty { 'zabbix_notty':
-    requiretty => false,
-    user       => 'zabbix',
-    comment    => 'Allow user zabbix to run sudo without tty',
-  }
-
-  user { $user:
-    ensure  => present,
-    gid     => $group,
-    require => Package[$package_name],
-  }
-
-  group { $group:
-    ensure  => present,
-    require => Package[$package_name],
-  }
-
   # if log_type is 'file' log_file must be specified
   if $log_type == 'file' {
     unless $log_file {
@@ -240,16 +153,13 @@ class zabbix::agent2 (
     }
   }
 
-  # include config files of inbuilt or dependant plugins
-  include zabbix::agent2::plugin::ceph
-  include zabbix::agent2::plugin::docker
-  include zabbix::agent2::plugin::memcached
-  include zabbix::agent2::plugin::modbus
-  include zabbix::agent2::plugin::mongodb
-  include zabbix::agent2::plugin::mqtt
-  include zabbix::agent2::plugin::mysql
-  include zabbix::agent2::plugin::oracle
-  include zabbix::agent2::plugin::postgresql
-  include zabbix::agent2::plugin::redis
-  include zabbix::agent2::plugin::smart
+  contain zabbix::agent2::purge
+  contain zabbix::agent2::install
+  contain zabbix::agent2::config
+  contain zabbix::agent2::service
+
+  Class['zabbix::agent2::purge']
+  -> Class['zabbix::agent2::install']
+  -> Class['zabbix::agent2::config']
+  ~> Class['zabbix::agent2::service']
 }
