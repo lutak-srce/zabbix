@@ -48,13 +48,6 @@ class zabbix::agent2::config {
     content => epp($zabbix::agent2::zabbix_agent2_conf_epp, $zabbix::agent2::parameters),
   }
 
-  # enable zabbix plugins to run sudo
-  ::sudoers::requiretty { 'zabbix_notty':
-    requiretty => false,
-    user       => 'zabbix',
-    comment    => 'Allow user zabbix to run sudo without tty',
-  }
-
   user { $zabbix::agent2::user:
     ensure  => present,
     gid     => $zabbix::agent2::group,
