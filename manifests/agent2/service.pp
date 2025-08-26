@@ -6,8 +6,8 @@
 #
 class zabbix::agent2::service {
   service { $zabbix::agent2::service_name:
-    ensure  => $zabbix::agent2::service_ensure,
-    enable  => $zabbix::agent2::service_enable,
+    ensure => $zabbix::agent2::service_ensure,
+    enable => $zabbix::agent2::service_enable,
   }
 
   exec { "check is ${zabbix::agent2::service_name} active":
