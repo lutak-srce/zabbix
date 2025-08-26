@@ -6,8 +6,8 @@
 class zabbix::agent2 (
   String               $package_name           = 'zabbix-agent2',
   String               $package_ensure         = present,
-  String               $legacy_agent           = 'zabbix-agent',
-  String               $legacy_agent_ensure    = purged,
+  String               $zabbix_agent           = 'zabbix-agent',
+  String               $zabbix_agent_ensure    = purged,
   String               $user                   = 'zabbix',
   String               $group                  = 'zabbix',
   String               $service_name           = 'zabbix-agent2',
