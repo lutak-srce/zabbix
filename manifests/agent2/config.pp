@@ -4,11 +4,10 @@
 # @api private
 #
 class zabbix::agent2::config {
-  file { $zabbix::agent2::log_dir:
-    ensure  => directory,
-    owner   => $zabbix::agent2::user,
-    group   => $zabbix::agent2::group,
-    mode    => $zabbix::agent2::dir_mode,
+  if $zabbix::agent2::log_type == 'file' {
+    unless $zabbix::agent2::log_file {
+      fail('log_file must be specified when log_type is set to file')
+    }
   }
 
   file { $zabbix::agent2::conf_dir:
@@ -22,16 +21,6 @@ class zabbix::agent2::config {
   }
 
   file { $zabbix::agent2::zabbix_agent2_d:
-    ensure  => directory,
-    owner   => $zabbix::agent2::file_owner,
-    group   => $zabbix::agent2::file_group,
-    mode    => $zabbix::agent2::dir_mode,
-    recurse => $zabbix::agent2::file_recurse,
-    purge   => $zabbix::agent2::file_purge,
-    force   => $zabbix::agent2::file_force,
-  }
-
-  file { $zabbix::agent2::plugins_d:
     ensure  => directory,
     owner   => $zabbix::agent2::file_owner,
     group   => $zabbix::agent2::file_group,
@@ -100,16 +89,16 @@ class zabbix::agent2::config {
     content => epp($zabbix::agent2::zabbix_agent2_conf_epp, $parameters),
   }
 
-  user { $zabbix::agent2::user:
-    ensure  => present,
-    gid     => $zabbix::agent2::group,
+  file { $zabbix::agent2::plugins_d:
+    ensure  => directory,
+    owner   => $zabbix::agent2::file_owner,
+    group   => $zabbix::agent2::file_group,
+    mode    => $zabbix::agent2::dir_mode,
+    recurse => $zabbix::agent2::file_recurse,
+    purge   => $zabbix::agent2::file_purge,
+    force   => $zabbix::agent2::file_force,
   }
 
-  group { $zabbix::agent2::group:
-    ensure  => present,
-  }
-
-  # include config files of inbuilt or dependant plugins
   contain zabbix::agent2::plugin::ceph
   contain zabbix::agent2::plugin::docker
   contain zabbix::agent2::plugin::memcached

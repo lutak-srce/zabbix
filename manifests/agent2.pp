@@ -94,13 +94,6 @@ class zabbix::agent2 (
   Optional[Integer[0,1]]    $plugins_system_run_log_remote_commands = undef,
   Optional[Integer[0,1]]    $force_active_checks_on_start           = undef,
 ) {
-  # if log_type is 'file' log_file must be specified
-  if $log_type == 'file' {
-    unless $log_file {
-      fail('log_file must be specified when log_type is set to file')
-    }
-  }
-
   contain zabbix::agent2::purge
   contain zabbix::agent2::install
   contain zabbix::agent2::config
