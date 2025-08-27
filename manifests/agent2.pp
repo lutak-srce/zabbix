@@ -27,7 +27,7 @@ class zabbix::agent2 (
   Stdlib::Absolutepath $zabbix_agent2_conf     = '/etc/zabbix/zabbix_agent2.conf',
   String               $zabbix_agent2_conf_epp = 'zabbix/agent2/zabbix_agent2.conf.epp',
   Stdlib::Absolutepath $plugins_d              = '/etc/zabbix/zabbix_agent2.d/plugins.d',
-  String               $health_check           = '/usr/bin/systemctl is-active',
+  String               $is_service_active_cmd  = '/usr/bin/systemctl is-active',
   # General parameters
   Stdlib::Absolutepath                        $pid_file      = '/var/run/zabbix/zabbix_agent2.pid',
   Optional[Enum['system', 'file', 'console']] $log_type      = undef,
