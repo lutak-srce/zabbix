@@ -99,10 +99,12 @@ class zabbix::agent2 (
   contain zabbix::agent2::postinstall
   contain zabbix::agent2::config
   contain zabbix::agent2::service
+  contain zabbix::agent2::servicehealth
 
   Class['zabbix::agent2::purge']
   -> Class['zabbix::agent2::install']
   -> Class['zabbix::agent2::postinstall']
   -> Class['zabbix::agent2::config']
   ~> Class['zabbix::agent2::service']
+  ~> Class['zabbix::agent2::servicehealth']
 }
