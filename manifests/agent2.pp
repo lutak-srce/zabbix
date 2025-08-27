@@ -58,7 +58,7 @@ class zabbix::agent2 (
   Optional[Array[String]] $alias          = undef,
   Optional[Integer[1,30]] $timeout        = undef,
   Optional[Integer[1,30]] $plugin_timeout = undef,
-  Stdlib::Absolutepath    $plugin_socket  = '/run/zabbix/agent.plugin.sock',
+  Stdlib::Absolutepath    $plugin_socket  = '/var/run/zabbix/agent.plugin.sock',
   # User-defined monitored parameters
   Optional[Integer[0,1]]         $unsafe_user_parameters = undef,
   Optional[Array[Struct[{
@@ -66,7 +66,7 @@ class zabbix::agent2 (
     shell_command => String[1],
   }]]]                           $user_parameter         = undef,
   Optional[Stdlib::Absolutepath] $user_parameter_dir     = undef,
-  Stdlib::Absolutepath           $control_socket         = '/run/zabbix/agent.sock',
+  Stdlib::Absolutepath           $control_socket         = '/var/run/zabbix/agent.sock',
   # TLS-related parameters
   Optional[Variant[Enum['unencrypted', 'psk', 'cert'],
     Array[Enum['unencrypted', 'psk', 'cert'],1]]]      $tls_connect             = undef,
