@@ -94,14 +94,14 @@ class zabbix::agent2 (
   Optional[Integer[0,1]]    $plugins_system_run_log_remote_commands = undef,
   Optional[Integer[0,1]]    $force_active_checks_on_start           = undef,
 ) {
-  contain zabbix::agent2::purge
+  contain zabbix::agent2::preinstall
   contain zabbix::agent2::install
   contain zabbix::agent2::postinstall
   contain zabbix::agent2::config
   contain zabbix::agent2::service
   contain zabbix::agent2::servicehealth
 
-  Class['zabbix::agent2::purge']
+  Class['zabbix::agent2::preinstall']
   -> Class['zabbix::agent2::install']
   -> Class['zabbix::agent2::postinstall']
   -> Class['zabbix::agent2::config']
