@@ -4,12 +4,6 @@
 # @api private
 #
 class zabbix::agent2::config {
-  if $zabbix::agent2::log_type == 'file' {
-    unless $zabbix::agent2::log_file {
-      fail('log_file must be specified when log_type is set to file')
-    }
-  }
-
   file { $zabbix::agent2::conf_dir:
     ensure  => directory,
     owner   => $zabbix::agent2::file_owner,
