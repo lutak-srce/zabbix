@@ -89,7 +89,7 @@ SourceIP=<%= $source_ip %>
 # Server=
 
 <% if $server =~ Array { -%>
-Server=<%= $server.flatten.join(',') %>
+Server=<%= $server.unique.flatten.join(',') %>
 <% } else { -%>
 Server=<%= $server %>
 <% } -%>
@@ -157,7 +157,7 @@ StatusPort=<%= $status_port %>
 # ServerActive=
 
 <% if $server_active =~ Array { -%>
-ServerActive=<%= $server_active.flatten.join(',') %>
+ServerActive=<%= $server_active.unique.flatten.join(',') %>
 <% } else { -%>
 ServerActive=<%= $server_active %>
 <% } -%>
