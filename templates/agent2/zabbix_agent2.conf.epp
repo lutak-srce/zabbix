@@ -178,7 +178,7 @@ ServerActive=<%= $server_active %>
 # Hostname=
 
 <% if $hostname =~ Array { -%>
-Hostname=<%= $hostname.flatten.join(',') %>
+Hostname=<%= $hostname.unique.flatten.join(',') %>
 <% } elsif $hostname { -%>
 Hostname=<%= $hostname %>
 <% } -%>
