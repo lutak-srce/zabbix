@@ -460,9 +460,7 @@ ControlSocket=<%= $control_socket %>
 # Mandatory: yes, if TLS certificate or PSK parameters are defined (even for 'unencrypted' connection)
 # Default:
 # TLSConnect=unencrypted
-<% if $tls_connect =~ Array { -%>
-TLSConnect=<%= $tls_connect.flatten.join(',') %>
-<% } elsif $tls_connect { -%>
+<% if $tls_connect { -%>
 TLSConnect=<%= $tls_connect %>
 <% } -%>
 

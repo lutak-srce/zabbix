@@ -93,8 +93,7 @@ class zabbix::agent2 (
   Optional[Stdlib::Absolutepath] $control_socket         = undef,
 
   # TLS-related parameters
-  Optional[Variant[Enum['unencrypted', 'psk', 'cert'],
-    Array[Enum['unencrypted', 'psk', 'cert'],1]]]      $tls_connect             = undef,
+  Optional[Enum['unencrypted', 'psk', 'cert']]         $tls_connect             = undef,
   Optional[Variant[Enum['unencrypted', 'psk', 'cert'],
     Array[Enum['unencrypted', 'psk', 'cert'],1]]]      $tls_accept              = undef,
   Optional[Stdlib::Absolutepath]                       $tls_ca_file             = undef,
