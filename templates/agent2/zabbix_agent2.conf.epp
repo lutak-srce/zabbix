@@ -10,9 +10,7 @@
 # Default:
 # PidFile=/tmp/zabbix_agent2.pid
 
-<% if $pid_file { -%>
 PidFile=<%= $pid_file %>
-<% } -%>
 
 ### Option: LogType
 #	Specifies where log messages are written to:
@@ -34,9 +32,7 @@ LogType=<%= $log_type %>
 # Default:
 # LogFile=/tmp/zabbix_agent2.log
 
-<% if $log_file { -%>
 LogFile=<%= $log_file %>
-<% } -%>
 
 ### Option: LogFileSize
 #	Maximum size of log file in MB.
@@ -47,9 +43,7 @@ LogFile=<%= $log_file %>
 # Default:
 # LogFileSize=1
 
-<% if $log_file_size { -%>
 LogFileSize=<%= $log_file_size %>
-<% } -%>
 
 ### Option: DebugLevel
 #	Specifies debug level:
@@ -96,7 +90,7 @@ SourceIP=<%= $source_ip %>
 
 <% if $server =~ Array { -%>
 Server=<%= $server.flatten.join(',') %>
-<% } elsif $server { -%>
+<% } else { -%>
 Server=<%= $server %>
 <% } -%>
 
@@ -164,7 +158,7 @@ StatusPort=<%= $status_port %>
 
 <% if $server_active =~ Array { -%>
 ServerActive=<%= $server_active.flatten.join(',') %>
-<% } elsif $server_active { -%>
+<% } else { -%>
 ServerActive=<%= $server_active %>
 <% } -%>
 
@@ -179,7 +173,7 @@ ServerActive=<%= $server_active %>
 
 <% if $hostname =~ Array { -%>
 Hostname=<%= $hostname.unique.flatten.join(',') %>
-<% } elsif $hostname { -%>
+<% } else { -%>
 Hostname=<%= $hostname %>
 <% } -%>
 
@@ -388,9 +382,7 @@ PluginTimeout=<%= $plugin_timeout %>
 # Default:/tmp/agent.plugin.sock
 # PluginSocket=
 
-<% if $plugin_socket { -%>
 PluginSocket=<%= $plugin_socket %>
-<% } -%>
 
 ####### USER-DEFINED MONITORED PARAMETERS #######
 
