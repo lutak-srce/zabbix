@@ -66,7 +66,7 @@ class zabbix::agent2 (
   Variant[String[1], Array[String[1]]]                   $server_active            = '127.0.0.1',
   Variant[String[1], Array[String[1]]]                   $hostname                 = $facts['networking']['fqdn'],
   Optional[String[1,255]]                                $hostname_item            = undef,
-  Optional[Variant[String[1,255], Array[String[1,255]]]] $host_metadata            = undef,
+  Optional[Variant[String[0,255], Array[String]]]        $host_metadata            = undef,
   Optional[String[1,255]]                                $host_metadata_item       = undef,
   Optional[String[1,255]]                                $host_interface           = undef,
   Optional[String[1,255]]                                $host_interface_item      = undef,

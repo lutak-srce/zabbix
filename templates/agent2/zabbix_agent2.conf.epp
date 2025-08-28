@@ -205,7 +205,10 @@ HostnameItem=<%= $hostname_item %>
 # Default:
 # HostMetadata=
 <% if $host_metadata =~ Array { -%>
-HostMetadata=<%= $host_metadata.flatten.join(',') %>
+  <%- if $host_metadata.flatten.join(', ').length > 255 { -%>
+  <% fail("HostMetadata should be no more than 255 characters!") -%>
+  <% } -%>
+HostMetadata=<%= $host_metadata.flatten.join(', ') %>
 <% } elsif $host_metadata { -%>
 HostMetadata=<%= $host_metadata %>
 <% } -%>
