@@ -90,7 +90,7 @@ class zabbix::agent2 (
     shell_command => String[1],
   }]]]                           $user_parameter         = undef,
   Optional[Stdlib::Absolutepath] $user_parameter_dir     = undef,
-  Stdlib::Absolutepath           $control_socket         = '/var/run/zabbix/agent.sock',
+  Optional[Stdlib::Absolutepath] $control_socket         = undef,
 
   # TLS-related parameters
   Optional[Variant[Enum['unencrypted', 'psk', 'cert'],
