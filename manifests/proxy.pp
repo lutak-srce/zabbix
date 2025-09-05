@@ -101,7 +101,7 @@ class zabbix::proxy (
 
 #  # autoload configs from zabbix::server::configs from hiera
 #  if ( $autoload_configs == true ) {
-#    $zabbix_config_rules = hiera_hash('zabbix::server::configs', {})
+#    $zabbix_config_rules = lookup('zabbix::server::configs', {})
 #    create_resources(::zabbix::server::config, $zabbix_config_rules)
 #  }
 
