@@ -98,7 +98,7 @@ class zabbix::agent (
 
   # autoload configs from zabbix::agent::configs from hiera
   if ( $autoload_configs == true ) {
-    $zabbix_agent_config_rules = lookup('zabbix::agent::configs', {})
+    $zabbix_agent_config_rules = lookup('zabbix::agent::configs', Hash, {'strategy' => 'deep', 'merge_hash_arrays' => true}, {})
     create_resources(::zabbix::agent::config, $zabbix_agent_config_rules)
   }
 
