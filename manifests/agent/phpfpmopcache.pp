@@ -1,9 +1,9 @@
 #
-# = Class: zabbix::agent::phpfpm
+# = Class: zabbix::agent::phpfpmopcache
 #
-# This module installs Zabbix php-fpm sensor
+# This module installs Zabbix php-fpm-opcache sensor
 #
-class zabbix::agent::phpfpm (
+class zabbix::agent::phpfpmopcache (
   $dir_zabbix_agentd_confd = $::zabbix::agent::dir_zabbix_agentd_confd,
   $dir_zabbix_agent_libdir = $::zabbix::agent::dir_zabbix_agent_libdir,
 ) inherits zabbix::agent {
