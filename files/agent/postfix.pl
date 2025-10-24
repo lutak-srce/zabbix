@@ -25,7 +25,8 @@ use strict;
 use warnings;
 
 # zabbix path
-my $zabbix_sender="/usr/bin/zabbix_sender";
+chomp(my $zabbix_sender=`which zabbix_sender 2>/dev/null`);
+#my $zabbix_sender="/usr/bin/zabbix_sender";
 my $zabbix_confd="/etc/zabbix/zabbix_agentd.conf";
 my $send_file="/var/tmp/zabbixSenderFilePostfix";
 my $zabbix_send_command="$zabbix_sender -c $zabbix_confd -i $send_file";
@@ -62,26 +63,29 @@ sub append0 {
 # postfix access data
 my $postfixlog="/var/log/mail.log";
 my $postfixstate="/tmp/zabbix-postfix-offset";
-my $logtail="/usr/sbin/logtail";
-my $pflogsumm="/usr/sbin/pflogsumm";
+chomp(my $logtail=`which logtail 2>/dev/null`);
+#my $logtail="/usr/sbin/logtail";
+chomp(my $pflogsumm=`which pflogsumm 2>/dev/null`;)
+#my $pflogsumm="/usr/sbin/pflogsumm";
 
 # generate command
-my $report_cmd = "$logtail -f$postfixlog -o$postfixstate | $pflogsumm -h 0 -u 0 --bounce_detail=0 --deferral_detail=0 --reject_detail=0 --no_no_msg_size --smtpd_warning_detail=0";
+my $report_cmd = "$logtail -f$postfixlog -o$postfixstate | $pflogsumm -h 0 -u 0 --ignore-case --no_no_msg_size --detail=0";
 my $output = qx($report_cmd);
+#print $output;
 
 # get data
 my %data;
-$data{'postfix.received'} = $1 if ($output =~ / +(\d+) +received/);
-$data{'postfix.delivered'} = $1 if ($output =~ / +(\d+) +delivered/);
-$data{'postfix.forwarded'} = $1 if ($output =~ / +(\d+) +forwarded/);
-$data{'postfix.deferred'} = $1 if ($output =~ / +(\d+) +deferred/);
-$data{'postfix.bounced'} = $1 if ($output =~ / +(\d+) +bounced/);
-$data{'postfix.rejected'} = $1 if ($output =~ / +(\d+) +rejected/);
-$data{'postfix.rejectwarnings'} = $1 if ($output =~ / +(\d+) +reject warnings/);
-$data{'postfix.held'} = $1 if ($output =~ / +(\d+) +held/);
-$data{'postfix.discarded'} = $1 if ($output =~ / +(\d+) +discarded/);
-$data{'postfix.bytesreceived'} = $1 if ($output =~ / +(\d+) +bytes received/);
-$data{'postfix.bytesdelivered'} = $1 if ($output =~ / +(\d+) +bytes delivered/);
+$data{'postfix.received'} = $1 if ($output =~ / +(\d+) +received/) || 0;
+$data{'postfix.delivered'} = $1 if ($output =~ / +(\d+) +delivered/) || 0;
+$data{'postfix.forwarded'} = $1 if ($output =~ / +(\d+) +forwarded/) || 0;
+$data{'postfix.deferred'} = $1 if ($output =~ / +(\d+) +deferred/) || 0;
+$data{'postfix.bounced'} = $1 if ($output =~ / +(\d+) +bounced/) || 0;
+$data{'postfix.rejected'} = $1 if ($output =~ / +(\d+) +rejected/) || 0;
+$data{'postfix.rejectwarnings'} = $1 if ($output =~ / +(\d+) +reject warnings/) || 0;
+$data{'postfix.held'} = $1 if ($output =~ / +(\d+) +held/) || 0;
+$data{'postfix.discarded'} = $1 if ($output =~ / +(\d+) +discarded/) || 0;
+$data{'postfix.bytesreceived'} = $1 if ($output =~ / +(\d+) +bytes received/) || 0;
+$data{'postfix.bytesdelivered'} = $1 if ($output =~ / +(\d+) +bytes delivered/) || 0;
 
 # find out length of mailque
 my $mailq = qx("/usr/bin/mailq");
@@ -93,8 +97,9 @@ $data{'postfix.mailqueue'} = $i;
 
 # write data to variable
 foreach my $key (keys %data){
-  $inputString .= $hostname ." ". $key ." ". $data{$key} ."\n" if($data{$key}); #$server ." ". $hostname ." ". $port
+  $inputString .= $hostname ." ". $key ." ". $data{$key} ."\n" if($data{$key}) ne ''; 
 }
+#print $inputString;
 
 # write everything to file
 open FH, ">", $send_file or die("Can not open file $send_file!");
