@@ -63,10 +63,10 @@ sub append0 {
 # postfix access data
 my $postfixlog="/var/log/mail.log";
 my $postfixstate="/tmp/zabbix-postfix-offset";
-chomp(my $logtail=`which logtail 2>/dev/null`);
-#my $logtail="/usr/sbin/logtail";
-chomp(my $pflogsumm=`which pflogsumm 2>/dev/null`;)
-#my $pflogsumm="/usr/sbin/pflogsumm";
+my $logtail="/usr/sbin/logtail";
+#chomp(my $logtail=`which logtail 2>/dev/null`);
+my $pflogsumm="/usr/sbin/pflogsumm";
+#chomp(my $pflogsumm=`which pflogsumm 2>/dev/null`;)
 
 # generate command
 my $report_cmd = "$logtail -f$postfixlog -o$postfixstate | $pflogsumm -h 0 -u 0 --ignore-case --no_no_msg_size --detail=0";
