@@ -1,6 +1,5 @@
 <?php
 // Zabbix GUI configuration file
-global $DB;
 
 $DB["TYPE"]		= '<% if @db == 'pgsql' then %>POSTGRESQL<% else %><%= @db.upcase %><% end %>';
 $DB["SERVER"]		= '<%= @dbhost %>';
@@ -8,13 +7,25 @@ $DB["PORT"]		= '<%= @dbport %>';
 $DB["DATABASE"]		= '<%= @dbname %>';
 $DB["USER"]		= '<%= @dbuser %>';
 $DB["PASSWORD"]		= '<%= @dbpass %>';
-// SCHEMA is relevant only for IBM_DB2 database
-$DB["SCHEMA"]		= '';
-$DB["DOUBLE_IEEE754"]		= '<%= @double %>';
 
+// Schema name. Used for PostgreSQL.
+$DB["SCHEMA"]		= '';
+
+// Used for TLS connection.
+//$DB['ENCRYPTION']		= false;
+//$DB['KEY_FILE']			= '';
+//$DB['CERT_FILE']		= '';
+//$DB['CA_FILE']			= '';
+//$DB['VERIFY_HOST']		= false;
+//$DB['CIPHER_LIST']		= '';
+
+// Uncomment and set to desired values to override Zabbix hostname/IP and port.
 $ZBX_SERVER		= '<%= @server_host %>';
 $ZBX_SERVER_PORT	= '<%= @server_port %>';
 $ZBX_SERVER_NAME	= '<%= @server_name %>';
 
 $IMAGE_FORMAT_DEFAULT	= <%= @image_format %>;
+
+// If set to false, support for HTTP authentication will be disabled.
+// $ALLOW_HTTP_AUTH = true;
 ?>
