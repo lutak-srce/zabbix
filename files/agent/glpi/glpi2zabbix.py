@@ -553,7 +553,7 @@ class Zabbix:
         Remove host groups which are left empty.
         """
         try:
-            hostgroups_with_hosts = self.server.hostgroup.get(real_hosts=1)
+            hostgroups_with_hosts = self.server.hostgroup.get(with_hosts=True)
 
         except ZabbixAPIException as e:
             self.logger.warning(
