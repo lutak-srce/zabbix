@@ -471,6 +471,24 @@ class Zabbix:
                     d.get('hostid') for d in self.hosts
                     if d.get('name') == item['name']
                 ][0]
+                #Check host flags → skip if discovered (flags = 4)
+                try:
+                    zabbix_host_info = self.server.host.get(
+                    hostids=zabbix_host_id,
+                    output=["flags"]
+                )[0]
+                except ZabbixAPIException as e:
+                    self.logger.warning(
+                        f"Zabbix: Skipping host {item['name']}: unable to read host flags: {str(e)}"
+                )
+                    continue
+
+                if int(zabbix_host_info.get("flags", 0)) == 4:
+                    self.logger.info(
+                        f"Zabbix: Skipping host {item['name']} because it is discovered (flags = 4)"
+                )
+                    continue
+                    
                 glpi_hostgroup = set()
                 if 'groups_name' in item.keys():
                     glpi_hostgroup.add(item['groups_name'])
