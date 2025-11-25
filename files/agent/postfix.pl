@@ -49,15 +49,30 @@ local $SIG{TERM} = sub {
 
 alarm 25;
 
-# function to add zeros
-sub append0 {
-  my $tmp=shift;
-  $tmp =~ s/\.//;
-  $tmp =~ s/K/0/i;
-  $tmp =~ s/M/0000/i;
-  $tmp =~ s/G/0000000/i;
-  $tmp =~ s/T/0000000000/i;
-  $tmp;
+# convert to bytes
+sub to_bytes {
+    my $val = shift;
+
+    # Remove whitespace
+    $val =~ s/^\s+|\s+$//g;
+
+    # Match number + optional unit
+    if ($val =~ /^([\d.]+)\s*([KMGTP]?)/i) {
+        my ($num, $unit) = ($1, uc($2));
+
+        my %mult = (
+            ''  => 1,
+            'K' => 1024,
+            'M' => 1024**2,
+            'G' => 1024**3,
+            'T' => 1024**4,
+        );
+
+        return int($num * $mult{$unit});
+    }
+
+    # Return original if it didn't match
+    return $val;
 }
 
 # postfix access data
@@ -84,8 +99,8 @@ $data{'postfix.rejected'} = $1 if ($output =~ / +(\d+) +rejected/) || 0;
 $data{'postfix.rejectwarnings'} = $1 if ($output =~ / +(\d+) +reject warnings/) || 0;
 $data{'postfix.held'} = $1 if ($output =~ / +(\d+) +held/) || 0;
 $data{'postfix.discarded'} = $1 if ($output =~ / +(\d+) +discarded/) || 0;
-$data{'postfix.bytesreceived'} = $1 if ($output =~ / +(\d+) +bytes received/) || 0;
-$data{'postfix.bytesdelivered'} = $1 if ($output =~ / +(\d+) +bytes delivered/) || 0;
+if ($output =~ / +(\d+[KMGT]?) +bytes received/i) { $data{'postfix.bytesreceived'} = to_bytes($1); }
+if ($output =~ / +(\d+[KMGT]?) +bytes delivered/i) { $data{'postfix.bytesdelivered'} = to_bytes($1); }
 
 # find out length of mailque
 my $mailq = qx("/usr/bin/mailq");
