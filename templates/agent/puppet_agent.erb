@@ -67,7 +67,12 @@ def read_puppet_yaml(file_name):
             # Workaround for antique puppet releases
             line = re.sub(r"^" + spaces_to_trim, '', line)
 
-            m = re.match(r"^([^ ]+):", line)
+            m = re.match(r"^([^ ]+): (.+)$", line)
+            if m:
+                key = m.group(1)
+                read_dict[key] = m.group(2)
+                continue
+            m = re.match(r"^([^ ]+):$", line)
             if m:
                 key = m.group(1)
                 read_dict[key] = {}
@@ -115,16 +120,14 @@ if "resources" in dict_state:
 for run_report_file in possible_run_report:
     if os.path.exists(run_report_file):
         try:
-            with open(run_report_file) as report_data:
-                for line in report_data:
-                    m = re.match(r"^environment: (.+)$", line)
-                    if m:
-                        dict_state["environment"] = m.group(1)
-                        break
+            dict_report = read_puppet_yaml(run_report_file)
         except Exception as e:
-            dict_state["environment"] = "unknown"
-            pass
+            dict_state["report_file"] = "ERROR: unable to load : %s / %s " % (str(e), run_report_file)
         break
+
+dict_state["status"] = dict_report["status"]
+dict_state["cached_catalog_status"] = dict_report["cached_catalog_status"]
+dict_state["environment"] = dict_report["environment"]
 
 if len(sys.argv) == 2:
     print(dict_state[sys.argv[1]])
