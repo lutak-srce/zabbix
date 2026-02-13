@@ -301,15 +301,19 @@ class GLPI:
             computers = response.json()
 
             for computer in computers:
+                host_id = computer["id"]
+                response_one = requests.get(f"{self.url}/Computer/{host_id}", headers=self.headers)
+                response_one.raise_for_status()
+                host = response_one.json()
                 computer.update({
                     "computertypes_name": self._get_name_from_key(
                         i=computer["computertypes_id"], items=self.computertypes
                     ),
                     "groups_name": self._get_name_from_key(
-                        i=computer["groups_id"], items=self.groups
+                        i=host["groups_id"][0] if host["groups_id"] else None, items=self.groups
                     ),
                     "groups_name_tech": self._get_name_from_key(
-                        i=computer["groups_id_tech"], items=self.groups
+                        i=host["groups_id_tech"][0] if host["groups_id_tech"] else None, items=self.groups
                     )
                 })
 
@@ -488,7 +492,7 @@ class Zabbix:
                         f"Zabbix: Skipping host {item['name']} because it is discovered (flags = 4)"
                 )
                     continue
-                    
+
                 glpi_hostgroup = set()
                 if 'groups_name' in item.keys():
                     glpi_hostgroup.add(item['groups_name'])
