@@ -1065,10 +1065,10 @@ def main():
         # remove empty user groups
         zabbix.delete_usergroups()
 
-        logger.info('logging out of Zabbix API')
+        logger.info('Logging out of Zabbix API')
         zabbix.logout()
 
-        logger.info('OK')
+        logger.info('OK - done')
         sys.exit(0)
 
     except (ZabbixException, GLPIException) as e:
