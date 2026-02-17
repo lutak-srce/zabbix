@@ -295,25 +295,25 @@ class GLPI:
                 f"{self.url}/Computer", headers=self.headers, params=self.params
             )
             response.raise_for_status()
+            computers = response.json()
+
+            response_gi = requests.get(f"{self.url}/Group_Item", headers=self.headers, params=self.params)
+            response_gi.raise_for_status()
+            group_items = response_gi.json()
 
             zabbix_host_names = [host["name"] for host in zabbix_host]
 
-            computers = response.json()
-
             for computer in computers:
-                host_id = computer["id"]
-                response_one = requests.get(f"{self.url}/Computer/{host_id}", headers=self.headers)
-                response_one.raise_for_status()
-                host = response_one.json()
+                computer_groups = [gi for gi in group_items if computer.get('id') == gi.get('items_id') and gi.get('itemtype') == 'Computer']
                 computer.update({
                     "computertypes_name": self._get_name_from_key(
                         i=computer["computertypes_id"], items=self.computertypes
                     ),
                     "groups_name": self._get_name_from_key(
-                        i=host["groups_id"][0] if host["groups_id"] else None, items=self.groups
+                        i=next((gi.get('groups_id') for gi in computer_groups if gi.get('type') == 1), None), items=self.groups
                     ),
                     "groups_name_tech": self._get_name_from_key(
-                        i=host["groups_id_tech"][0] if host["groups_id_tech"] else None, items=self.groups
+                        i=next((gi.get('groups_id') for gi in computer_groups if gi.get('type') == 2), None), items=self.groups
                     )
                 })
 
@@ -585,7 +585,7 @@ class Zabbix:
         else:
             # some groups SHOULD NOT be deleted
             not_deletable = \
-                ['Templates', 'Hypervisors', 'Virtual machines'] + \
+                ['Templates', 'Discovered hosts', 'Hypervisors', 'Virtual Machines'] + \
                 [
                     g.get('name') for g in self.hostgroups
                     if re.search('template', g.get('name'), re.IGNORECASE)
@@ -609,8 +609,7 @@ class Zabbix:
 
                     except ZabbixAPIException as e:
                         self.logger.warning(
-                            f"Zabbix: Unable to delete host group "
-                            f"{item['name']}: {str(e)}"
+                            f"Zabbix: Unable to delete host group {item['name']}: {str(e)}"
                         )
                         continue
 
