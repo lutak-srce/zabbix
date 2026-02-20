@@ -1030,7 +1030,6 @@ def main():
         glpi_users = glpi.get_users()
         glpi_users_with_usergroups = glpi.get_users_usergroups()
         glpi_usergroups = glpi.get_usergroups()
-
         glpi_hosts = glpi.get_hosts(zabbix_host=zabbix.hosts)
         glpi_hostgroups = glpi.get_hostgroups(zabbix_host=zabbix.hosts)
         glpi_computertypes = glpi.get_computertypes()
