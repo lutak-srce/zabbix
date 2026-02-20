@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 import argparse
 import logging
 import logging.handlers
@@ -240,9 +241,10 @@ class GLPI:
         if not self.usergroups:
             self.usergroups = self._get_usergroups()
 
-        groups_ids = [
-            item["groups_id"] for item in list(self.usergroups.values())[0]
-        ]
+        groups_ids = set()
+        for usergroups in list(self.usergroups.values()):
+            for group in usergroups:
+                groups_ids.add(group["groups_id"])
 
         return sorted([
             group["name"] for group in self.groups if group["id"] in groups_ids
@@ -1028,6 +1030,7 @@ def main():
         glpi_users = glpi.get_users()
         glpi_users_with_usergroups = glpi.get_users_usergroups()
         glpi_usergroups = glpi.get_usergroups()
+
         glpi_hosts = glpi.get_hosts(zabbix_host=zabbix.hosts)
         glpi_hostgroups = glpi.get_hostgroups(zabbix_host=zabbix.hosts)
         glpi_computertypes = glpi.get_computertypes()
@@ -1047,12 +1050,12 @@ def main():
         # removing empty host groups
         zabbix.remove_empty_hostgroups()
 
+        # creating usergroups
+        zabbix.create_usergroups(glpi_usergroups=glpi_usergroups)
+
         # update user groups with appropriate permission (if new host groups
         # have been created)
         zabbix.update_usergroups()
-
-        # creating usergroups
-        zabbix.create_usergroups(glpi_usergroups=glpi_usergroups)
 
         # creating new users and updating old ones, deleting the users which do
         # not exist on GLPI
