@@ -18,7 +18,7 @@ class zabbix::agent::gpu (
       Package['zabbix-agent'],
       File["${dir_zabbix_agent_libdir}/get_gpu_info"],
       File["${dir_zabbix_agent_libdir}/get_gpus_info.sh"],
-      Package['python35u'],
+      Package['python3'],
     ],
     notify  => Service['zabbix-agent'],
   }
